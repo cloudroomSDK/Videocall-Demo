@@ -1,0 +1,132 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:gravity="center_horizontal"
+    tools:context="./VideoActivity" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" >
+
+        <com.cloudroom.cloudroomvideosdk.VideoUIView
+            android:id="@+id/yuv_peer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter" />
+
+        <com.cloudroom.cloudroomvideosdk.VideoUIView
+            android:id="@+id/yuv_self"
+            android:layout_width="160dp"
+            android:layout_height="90dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitCenter" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="#BBFF6616"
+        android:gravity="center_vertical|center_horizontal"
+        android:padding="5dp"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/view_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal|bottom"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp" >
+
+        <Button
+            android:id="@+id/btn_hangup"
+            style="@style/CommonBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:onClick="onViewClick"
+            android:text="@string/exit_meeting" />
+
+        <Button
+            android:id="@+id/btn_start_svrrecord"
+            style="@style/CommonBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:onClick="onViewClick"
+            android:text="@string/start_svrrecord" />
+
+        <Button
+            android:id="@+id/btn_stop_svrrecord"
+            style="@style/CommonBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:onClick="onViewClick"
+            android:text="@string/stop_svrrecord" />
+
+        <Button
+            android:id="@+id/btn_camera"
+            style="@style/CommonBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:onClick="onViewClick"
+            android:text="@string/open_camera" />
+
+        <Button
+            android:id="@+id/btn_switchcamera"
+            style="@style/CommonBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:onClick="onViewClick"
+            android:text="@string/switch_camera"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btn_mic"
+            style="@style/CommonBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:onClick="onViewClick"
+            android:text="@string/open_mic" />
+
+        <Button
+            android:id="@+id/btn_setting"
+            style="@style/CommonBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:onClick="onViewClick"
+            android:text="@string/setting" />
+
+        <ProgressBar
+            android:id="@+id/pb_mic"
+            android:layout_width="20dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:indeterminateOnly="false"
+            android:max="10"
+            android:progress="0"
+            android:progressDrawable="@drawable/vertical_progress_shape" />
+    </LinearLayout>
+
+</RelativeLayout>

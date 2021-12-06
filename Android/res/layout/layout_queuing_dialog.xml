@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_color"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="10dp" >
+
+    <com.examples.common.TitleView
+        style="@style/TitleBar"
+        android:gravity="center_vertical"
+        app:titlebar_title_text="@string/queuing" />
+
+    <TextView
+        android:id="@+id/tv_wait_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/tv_queue_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/queue_time_bg"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:textColor="@color/queue_time"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/tv_queue_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_cancel_queue"
+        style="@style/CommonBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/cancel_queuing" />
+
+</LinearLayout>

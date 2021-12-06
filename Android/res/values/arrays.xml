@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="datenc_types">
+        <item>http</item>
+        <item>https(CA证书)</item>
+        <item>https(自签名SSL证书)</item>
+    </string-array>
+
+    <string-array name="videosizes">
+        <item>224*128</item>
+        <item>288*160</item>
+        <item>336*192</item>
+        <item>448*256</item>
+        <item>512*288</item>
+        <item>576*320</item>
+        <item>640*360</item>
+        <item>720*400</item>
+        <item>864*480</item>
+        <item>1024*576</item>
+        <item>1280*720</item>
+        <item>1920*1080</item>
+    </string-array>
+    <string-array name="videomodes">
+        <item>流畅优先</item>
+        <item>画质优先</item>
+    </string-array>
+    <string-array name="recsizes">
+        <item>448*256</item>
+        <item>512*288</item>
+        <item>576*320</item>
+        <item>640*360</item>
+        <item>720*400</item>
+        <item>864*480</item>
+        <item>1024*576</item>
+        <item>1280*720</item>
+    </string-array>
+    <string-array name="recbps">
+        <item>200</item>
+        <item>250</item>
+        <item>300</item>
+        <item>350</item>
+        <item>420</item>
+        <item>500</item>
+        <item>650</item>
+        <item>1000</item>
+    </string-array>
+    <string-array name="fps">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+    </string-array>
+    <string-array name="minquality">
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+    </string-array>
+    <string-array name="maxquality">
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+    </string-array>
+    <string-array name="videowhrates">
+        <item>16:9</item>
+        <item>4:3</item>
+        <item>1:1</item>
+    </string-array>
+
+</resources>

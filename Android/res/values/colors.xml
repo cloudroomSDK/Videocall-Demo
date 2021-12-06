@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="title_bg">#FF6616</color>
+    <color name="background_color">#FFFFFF</color>
+    <color name="bg_disable">#F25759</color>
+    <color name="btn_bg">#FF6616</color>
+    <color name="btn_select">#FF6616</color>
+    <color name="queue_time">#FF6B69</color>
+
+</resources>

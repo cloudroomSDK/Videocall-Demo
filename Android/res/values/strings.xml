@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">视频呼叫Demo</string>
+    <string name="cacel">取消</string>
+    <string name="ok">确定</string>
+    <string name="back">返回</string>
+    <string name="quit">退出</string>
+    <string name="login">登录</string>
+    <string name="prompt">提示</string>
+    <string name="logout">注销</string>
+    <string name="setting">设置</string>
+    <string name="resore">重置为默认</string>
+    <string name="save">保存</string>
+    <string name="login_success">登录成功</string>
+    <string name="login_fail">登录失败</string>
+    <string name="colon">：</string>
+    <string name="server_addr">服务器地址</string>
+    <string name="null_server">服务器不能为空</string>
+    <string name="account">App ID</string>
+    <string name="null_account">App ID不能为空</string>
+    <string name="pswd">App Secret</string>
+    <string name="null_pswd">App Secret不能为空</string>
+    <string name="datenc_type">通讯协议</string>
+    <string name="sdk_ver">SDK版本号：</string>
+    <string name="server_setting">服务器设置</string>
+    <string name="prompt_nickname">输入任意字符串</string>
+    <string name="null_nickname">昵称不能为空</string>
+    <string name="create_meet_fail">创建会话失败</string>
+    <string name="entering">正在连接会话中，请稍等……</string>
+    <string name="enter_success">成功进入会话</string>
+    <string name="enter_fail">进入会话失败</string>
+    <string name="open_camera">打开摄像头</string>
+    <string name="close_camera">关闭摄像头</string>
+    <string name="switch_camera">切换摄像头</string>
+    <string name="open_mic">打开麦克风</string>
+    <string name="close_mic">关闭麦克风</string>
+    <string name="mode_fluency">流畅优先</string>
+    <string name="mode_quality">画质优先</string>
+    <string name="video_whrate">视频比例</string>
+    <string name="media_started">影音共享已开启</string>
+    <string name="media_stopped">影音共享已结束</string>
+    <string name="meet_stopped">会话已结束</string>
+    <string name="meet_dropped">会话掉线</string>
+    <string name="video">视频</string>
+    <string name="resolution">分辨率：</string>
+    <string name="bitrate">码率（kbps）：</string>
+    <string name="up_limit">上传限制（Kb/s）:</string>
+    <string name="video_fps">帧率(6~20):</string>
+    <string name="video_quality">视频质量范围:\n值越大质量越差</string>
+    <string name="video_mode">视频模式:</string>
+    <string name="input_invalid">无效输入，请检查</string>
+    <string name="exit_meeting">挂断</string>
+
+    <!-- 呼叫 -->
+    <string name="choose_service">请选择业务</string>
+    <string name="restore_session">您有正在进行的会话，进入会话</string>
+    <string name="assign_uer">系统为您分配:%s</string>
+    <string name="accept">接受</string>
+    <string name="reject">拒绝</string>
+    <string name="queue_fail">排队失败</string>
+    <string name="queuing">正在排队……</string>
+    <string name="cancel_queuing">取消排队</string>
+    <string name="queuing_info">您正在排队等候  【 %s 】  服务中，已等待</string>
+    <string name="queuing_time" formatted="false">%2d分%2d秒</string>
+    <string name="queuing_pos">前面还有 %d 位用户</string>
+    <string name="call_accept">呼叫被接受</string>
+    <string name="call_in">收到呼叫</string>
+    <string name="call_hanguped">呼叫已被挂断</string>
+    <string name="service_prompt">坐席 【 %s 】 为您服务……</string>
+    <string name="meeting_prompt1">您正在和 【 %s 】 会话中</string>
+    <string name="meeting_prompt2">，通话时长：%s</string>
+    <string name="start_svrrecord">开始云端录制</string>
+    <string name="stop_svrrecord">结束云端录制</string>
+    <string name="starting_svrrecord">正在启动云端录制，请稍候……</string>
+    <string name="stoping_svrrecord">正在结束云端录制，请稍候……</string>
+	<string name="input_peer_userid">请输入对方ID</string>
+	<string name="call">呼叫</string>
+	<string name="calling">正在呼叫：%s</string>
+    <!-- 坐席 -->
+    <string name="user">客户</string>
+    <string name="server">坐席</string>
+    <string name="welcome">%s，欢迎您！</string>
+
+</resources>
