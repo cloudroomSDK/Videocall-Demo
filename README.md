@@ -2,7 +2,7 @@
 实现了一个带排队功能的视频客服场景示例，包括呼叫、排队、音视频沟通、屏幕共享、聊天功能。
 
 ## 支持的平台
-示例应用包含 Android, iOS, Windows 以及Web平台。
+本示例应用包含 Android, iOS, Windows 以及Web平台。
 
 展示了：
 - 在线状态
@@ -18,12 +18,12 @@
 - 云端录制
 - 拍照
 
-项目文件夹名称|平台|描述
----|---|---
-[Videocall-Demo-Android](./Android)|Android (Java)|Android 视频客服Demo (Java)
-[Videocall-Demo-iOS](./iOS)|iOS (Objective-C)|iOS 视频客服Demo （Objective-C）
-[Videocall-Demo-Windows](./Windows)|Windows|Windows 视频客服Demo
-[Videocall-Demo-Web](./Web)|Web|Web 视频客服Demo
+项目位置|平台|语言|SDK
+---|---|---|---
+[/Android](./Android)|Android|Java|[云屋RTC Android SDK](https://sdk.cloudroom.com/sdkdoc/Android/)
+[/iOS](./iOS)|iOS|Objective-C|[云屋RTC iOS SDK](https://sdk.cloudroom.com/sdkdoc/iOS/)
+[/Windows](./Windows)|Windows|C++|[云屋RTC Windows SDK](https://sdk.cloudroom.com/sdkdoc/Windows/)
+[/Web](./Web)|Web|JS|[云屋RTC Web SDK](https://sdk.cloudroom.com/sdkdoc/H5/)
 
 ## 联系我们
 - 更多示例见 [官方SDK示例](https://github.com/cloudroomSDK)
