@@ -1,0 +1,40 @@
+﻿<Window x:Class="VideoCall.Set"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="设置" Height="275" Width="400" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+
+    <Grid Height="auto">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="38*"/>
+            <ColumnDefinition Width="159*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="15*" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Height="26">服务器：</Label>
+        <TextBox Name="edtServer"  Grid.Column="1" Grid.Row="0" Height="26" HorizontalAlignment="Left" VerticalAlignment="Center" Width="280"></TextBox>
+
+        <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Height="26">协议类型：</Label>
+        <ComboBox Name="cbHttpType" Grid.Column="1" Grid.Row="1" Height="26" HorizontalAlignment="Left" VerticalAlignment="Center" Width="280">
+            <Label Content="http"/>
+            <Label Content="https"/>
+        </ComboBox>
+
+        <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Height="26">AppID：</Label>
+        <TextBox Name="edtAccount" Grid.Column="1" Grid.Row="2" Height="26" HorizontalAlignment="Left" VerticalAlignment="Center" Width="280"></TextBox>
+
+        <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" Height="26">AppSecret：</Label>
+        <PasswordBox Name="edtPassword"  Grid.Column="1" Grid.Row="3" Height="26" HorizontalAlignment="Left" VerticalAlignment="Center" Width="280" PasswordChanged="edtPassword_PasswordChanged"></PasswordBox>
+
+        <Button Name="btnDefault"  Grid.Column="1" Grid.Row="4" Margin="0,12,100,11"  HorizontalAlignment="Right" VerticalAlignment="Center" Width="80" Height="26" Click="btnSet_Clicked" Style="{StaticResource DarklightBtn}">恢复默认设置</Button>
+        <Button Name="btnSave"  Grid.Column="1" Grid.Row="4" Margin="0,12,30,11"  HorizontalAlignment="Right" VerticalAlignment="Center" Width="60" Height="26" Click="btnSave_Click" Style="{StaticResource HighlightBtn}">保存</Button>
+
+        <TextBlock Grid.Row="5" Grid.ColumnSpan="2" Margin="2,0,0,2" Foreground="Gray" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="15" Width="261">正式账号请联系云屋获取，电话：400-863-0755</TextBlock>
+    </Grid>
+</Window>

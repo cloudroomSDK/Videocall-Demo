@@ -1,0 +1,32 @@
+﻿<Window x:Class="VideoCall.ClientWin"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="客户" Height="510" Width="700" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" 
+        Closed="Window_Closed">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ScrollViewer.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="360*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Name ="tb_nickname" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" FontSize="16" Foreground="#3791E9">欢迎 ...</TextBlock>
+        <Button Name="btnLogout" Grid.Row ="0" Click="btnLogout_Click" Width="60" Height="26" HorizontalAlignment="Right" Margin="0,0,5,0" Background="Transparent">注销</Button>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Name="scrollViewer" Style="{DynamicResource for_scrollviewer}">                       
+            <WrapPanel Name="queues_panel" ItemWidth="680" ItemHeight="70" Width="{Binding ElementName=scrList, Path=Width, Mode=OneWay}" />
+        </ScrollViewer>
+
+        <Button Name="btnUpdate" Grid.Row ="0" Width="60" Height="26" HorizontalAlignment="Right" Margin="0,0,80,0" Click="btnUpdate_Click" Style="{StaticResource HighlightBtn}">刷新</Button>
+    </Grid>
+</Window>

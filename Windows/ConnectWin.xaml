@@ -1,0 +1,17 @@
+﻿<Window x:Class="VideoCall.ConnectWin"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="用户分配" Height="200" Width="350" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <Grid Height="150">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="Auto" Height="23" Margin="10" HorizontalAlignment="Center" Name="tb_desc"></TextBlock>
+        <Button Grid.Row="1" Grid.Column="0" Width="80" Height="26" Margin="0,0,120,0" Name="btnAccept" HorizontalAlignment="Right" Click="btnAccept_Click" Style="{StaticResource HighlightBtn}">接受</Button>
+        <Button Grid.Row="1" Grid.Column="0" Width="80" Height="26" Margin="0,0,20,0" Name="btnReject" HorizontalAlignment="Right" Background="LightGray" Click="btnReject_Click">拒绝</Button>
+    </Grid>
+</Window>
