@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TLn-h8-taB">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--BaseNavController-->
+        <scene sceneID="whO-P4-kkN">
+            <objects>
+                <navigationController id="TLn-h8-taB" userLabel="BaseNavController" customClass="BaseNavController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="kck-89-CPr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="T9Y-eE-Y3U" kind="relationship" relationship="rootViewController" id="BLE-0x-frR"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rHG-xV-Bi6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-938" y="108"/>
+        </scene>
+        <!--CustomerController-->
+        <scene sceneID="vTR-oQ-Mf4">
+            <objects>
+                <tableViewController storyboardIdentifier="CustomerController" id="T9Y-eE-Y3U" userLabel="CustomerController" customClass="CustomerController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="UJy-cL-EZ2" userLabel="tableView">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CustomerCell" rowHeight="70" id="8FM-la-kc4" userLabel="CustomerCell" customClass="CustomerCell">
+                                <rect key="frame" x="0.0" y="28" width="320" height="70"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8FM-la-kc4" id="yhl-Dc-8hd">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="69.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5tr-eE-RaX" userLabel="title">
+                                            <rect key="frame" x="16" y="0.0" width="288" height="39.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.18823529411764706" green="0.59999999999999998" blue="0.98431372549019602" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iJ7-f9-4co" userLabel="desc">
+                                            <rect key="frame" x="16" y="39.5" width="288" height="30"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="iJ7-f9-4co" firstAttribute="leading" secondItem="yhl-Dc-8hd" secondAttribute="leading" constant="16" id="Ann-ob-oIK"/>
+                                        <constraint firstItem="5tr-eE-RaX" firstAttribute="leading" secondItem="yhl-Dc-8hd" secondAttribute="leading" constant="16" id="FRi-sa-aS4"/>
+                                        <constraint firstItem="iJ7-f9-4co" firstAttribute="height" secondItem="5tr-eE-RaX" secondAttribute="height" multiplier="3:4" id="G5F-9t-GmD"/>
+                                        <constraint firstAttribute="trailing" secondItem="iJ7-f9-4co" secondAttribute="trailing" constant="16" id="SKi-yg-3kI"/>
+                                        <constraint firstItem="5tr-eE-RaX" firstAttribute="top" secondItem="yhl-Dc-8hd" secondAttribute="top" id="dud-k8-EPU"/>
+                                        <constraint firstItem="iJ7-f9-4co" firstAttribute="top" secondItem="5tr-eE-RaX" secondAttribute="bottom" id="eYc-tq-I6M"/>
+                                        <constraint firstAttribute="trailing" secondItem="5tr-eE-RaX" secondAttribute="trailing" constant="16" id="uqi-BE-Fjt"/>
+                                        <constraint firstAttribute="bottom" secondItem="iJ7-f9-4co" secondAttribute="bottom" id="yV9-kC-yIK"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="descLabel" destination="iJ7-f9-4co" id="Hdl-mC-mCO"/>
+                                    <outlet property="titleLabel" destination="5tr-eE-RaX" id="H43-hz-GG3"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="T9Y-eE-Y3U" id="suB-I4-FbD"/>
+                            <outlet property="delegate" destination="T9Y-eE-Y3U" id="nmN-II-HZQ"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="C0o-67-UCG" userLabel="title">
+                        <barButtonItem key="backBarButtonItem" title="返回" id="zw7-Lw-6uC"/>
+                        <barButtonItem key="leftBarButtonItem" tag="1" title="注销" id="96u-9E-0Be" userLabel="logoutBtn">
+                            <connections>
+                                <action selector="clickBarBtnForCustomer:" destination="T9Y-eE-Y3U" id="MJ7-eQ-uyd"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" tag="2" systemItem="refresh" id="d8T-Jq-X4c" userLabel="refreshBtn">
+                            <connections>
+                                <action selector="clickBarBtnForCustomer:" destination="T9Y-eE-Y3U" id="PhD-bx-t7j"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VFQ-8I-4cm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-201" y="107"/>
+        </scene>
+    </scenes>
+</document>
