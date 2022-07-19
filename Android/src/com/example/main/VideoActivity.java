@@ -3,7 +3,6 @@ package com.example.main;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -37,25 +36,26 @@ import com.cloudroom.cloudroomvideosdk.CloudroomVideoMgr;
 import com.cloudroom.cloudroomvideosdk.VideoUIView;
 import com.cloudroom.cloudroomvideosdk.model.ASTATUS;
 import com.cloudroom.cloudroomvideosdk.model.CRVIDEOSDK_ERR_DEF;
-import com.cloudroom.cloudroomvideosdk.model.MIXER_OUTPUT_TYPE;
+import com.cloudroom.cloudroomvideosdk.model.CRVIDEOSDK_MEETING_DROPPED_REASON;
 import com.cloudroom.cloudroomvideosdk.model.MIXER_STATE;
-import com.cloudroom.cloudroomvideosdk.model.MIXER_VCONTENT_TYPE;
 import com.cloudroom.cloudroomvideosdk.model.MemberInfo;
-import com.cloudroom.cloudroomvideosdk.model.MixerCfg;
-import com.cloudroom.cloudroomvideosdk.model.MixerCotent;
-import com.cloudroom.cloudroomvideosdk.model.MixerOutPutCfg;
-import com.cloudroom.cloudroomvideosdk.model.MixerOutputInfo;
 import com.cloudroom.cloudroomvideosdk.model.Size;
 import com.cloudroom.cloudroomvideosdk.model.UsrVideoId;
 import com.cloudroom.cloudroomvideosdk.model.UsrVideoInfo;
 import com.cloudroom.cloudroomvideosdk.model.VSTATUS;
 import com.cloudroom.cloudroomvideosdk.model.VideoCfg;
 import com.example.videocalldemo.R;
+import com.examples.common.MixerContentHelper;
 import com.examples.common.VideoSDKHelper;
 import com.examples.tool.CRLog;
 import com.examples.tool.Tools;
 import com.examples.tool.UITool;
 import com.examples.tool.UITool.ConfirmDialogCallback;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @SuppressLint({ "NewApi", "HandlerLeak", "ClickableViewAccessibility",
 		"DefaultLocale", "SimpleDateFormat" })
@@ -87,12 +87,14 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 	private ProgressBar mMicPB = null;
 	private View mOPtionsView = null;
 
+	private String mMixerID = null;
+
 	private final static int MSG_UPDATE_TIME = 10000;
 	private static final int MSG_HIDE_OPTION = 10002;
 
 	@Override
 	public boolean handleMessage(Message msg) {
-		// TODO Auto-generated method stub
+
 		switch (msg.what) {
 		case MSG_UPDATE_TIME:
 			updatePromptInfo();
@@ -113,7 +115,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 		@SuppressWarnings("deprecation")
 		@Override
 		public void enterMeetingRslt(CRVIDEOSDK_ERR_DEF code) {
-			// TODO Auto-generated method stub
+
 			UITool.hideProcessDialog(VideoActivity.this);
 			if (code != CRVIDEOSDK_ERR_DEF.CRVIDEOSDK_NOERR) {
 				VideoSDKHelper.getInstance().showToast(R.string.enter_fail,
@@ -136,14 +138,16 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 			updateMicBtn();
 
 			if (VideoSDKHelper.getInstance().bServer()) {
-				MIXER_STATE state = CloudroomVideoMeeting.getInstance()
-						.getSvrMixerState();
+				String allMixerInfo = CloudroomVideoMeeting.getInstance()
+						.getAllCloudMixerInfo();
+				JsonArray mixerList = new JsonParser().parse(allMixerInfo).getAsJsonArray();
+				boolean hasMixer = mixerList.size() > 0;
 				mStartSvrBtn
-						.setVisibility(state == MIXER_STATE.MIXER_NULL ? View.VISIBLE
-								: View.GONE);
-				mStopSvrBtn
-						.setVisibility(state == MIXER_STATE.MIXER_NULL ? View.GONE
+						.setVisibility(hasMixer ? View.GONE
 								: View.VISIBLE);
+				mStopSvrBtn
+						.setVisibility(hasMixer ? View.VISIBLE
+								: View.GONE);
 			}
 
 			// 默认使用前置摄像头
@@ -175,22 +179,21 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 		}
 
 		@Override
-		public void meetingDropped() {
-			// TODO Auto-generated method stub
-			VideoSDKHelper.getInstance().showToast(R.string.meet_dropped);
+		public void meetingDropped(CRVIDEOSDK_MEETING_DROPPED_REASON reason) {
+			VideoSDKHelper.getInstance().showToast(R.string.sys_dropped);
 			exitVideoCall();
 		}
 
 		@Override
 		public void meetingStopped() {
-			// TODO Auto-generated method stub
+
 			VideoSDKHelper.getInstance().showToast(R.string.meet_stopped);
 			exitVideoCall();
 		}
 
 		@Override
 		public void micEnergyUpdate(String userID, int oldLevel, int newLevel) {
-			// TODO Auto-generated method stub
+
 			String myUserID = CloudroomVideoMeeting.getInstance().getMyUserID();
 			if (myUserID.equals(userID)) {
 				mMicPB.setProgress(newLevel % mMicPB.getMax());
@@ -199,20 +202,20 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 
 		@Override
 		public void audioDevChanged() {
-			// TODO Auto-generated method stub
+
 			super.audioDevChanged();
 		}
 
 		@Override
 		public void audioStatusChanged(String userID, ASTATUS oldStatus,
 				ASTATUS newStatus) {
-			// TODO Auto-generated method stub
+
 			updateMicBtn();
 		}
 
 		@Override
 		public void defVideoChanged(String userID, short videoID) {
-			// TODO Auto-generated method stub
+
 			String myUserId = CloudroomVideoMeeting.getInstance().getMyUserID();
 			if (userID != null
 					&& (userID.equals(mPeerUserId) || userID.equals(myUserId))) {
@@ -275,25 +278,33 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 		}
 
 		@Override
-		public void svrMixerOutputInfo(MixerOutputInfo info) {
-			Log.d(TAG, "svrMixerOutputInfo state:" + info.state + " err:"
-					+ info.errCode);
+		public void createCloudMixerFailed(String mixerID, CRVIDEOSDK_ERR_DEF err) {
+			Log.d(TAG, "createCloudMixerFailed mixerID:" + mixerID + " err:" + err);
 		}
 
 		@Override
-		public void svrMixerStateChanged(String operatorID, MIXER_STATE state,
-				CRVIDEOSDK_ERR_DEF err) {
+		public void cloudMixerStateChanged(String operatorID, String mixerID, MIXER_STATE state, String exParam) {
 			if (!VideoSDKHelper.getInstance().bServer()) {
 				return;
 			}
-			Log.d(TAG, "svrMixerStateChanged state:" + state + " err:" + err);
+			Log.d(TAG, "cloudMixerStateChanged mixerID:" + mixerID + " state:" + state);
 			boolean recording = state != MIXER_STATE.MIXER_NULL;
 			mStartSvrBtn.setVisibility(recording ? View.GONE : View.VISIBLE);
 			mStopSvrBtn.setVisibility(recording ? View.VISIBLE : View.GONE);
 			if (state == MIXER_STATE.MIXER_NULL
-					|| state == MIXER_STATE.MIXER_RECORDING) {
+					|| state == MIXER_STATE.MIXER_RUNNING) {
 				UITool.hideProcessDialog(VideoActivity.this);
 			}
+		}
+
+		@Override
+		public void cloudMixerInfoChanged(String mixerID) {
+			Log.d(TAG, "cloudMixerInfoChanged mixerID:" + mixerID);
+		}
+
+		@Override
+		public void cloudMixerOutputInfoChanged(String mixerID, String jsonStr) {
+			Log.d(TAG, "cloudMixerOutputInfoChanged mixerID:" + mixerID);
 		}
 
 	};
@@ -301,27 +312,29 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 	private CRMgrCallback mMgrCallback = new CRMgrCallback() {
 
 		@Override
+		public void lineOff(CRVIDEOSDK_ERR_DEF sdkErr) {
+			VideoSDKHelper.getInstance().showToast(R.string.sys_dropped);
+			exitVideoCall();
+		}
+
+		@Override
 		public void hangupCallSuccess(String callID, String cookie) {
-			// TODO Auto-generated method stub
 			exitVideoCall();
 		}
 
 		@Override
 		public void notifyCallHungup(String callID, final String useExtDat) {
-			// TODO Auto-generated method stub
 			UITool.showMessageDialog(VideoActivity.this,
 					getString(R.string.call_hanguped),
 					new ConfirmDialogCallback() {
 
 						@Override
 						public void onOk() {
-							// TODO Auto-generated method stub
 							exitVideoCall();
 						}
 
 						@Override
 						public void onCancel() {
-							// TODO Auto-generated method stub
 							exitVideoCall();
 						}
 					});
@@ -332,9 +345,8 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 	 * 退出会话
 	 */
 	private void exitVideoCall() {
-		MIXER_STATE state = CloudroomVideoMeeting.getInstance()
-				.getSvrMixerState();
-		if (state == MIXER_STATE.MIXER_RECORDING) {
+		String info = CloudroomVideoMeeting.getInstance().getAllCloudMixerInfo();
+		if (!TextUtils.isEmpty(info)) {
 			stopSvrRecord();
 		}
 
@@ -347,7 +359,6 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -392,14 +403,12 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 		updateMicBtn();
 
 		int meetID = getIntent().getIntExtra("meetID", 0);
-		String password = getIntent().getStringExtra("password");
 		if (meetID > 0) {
-			VideoSDKHelper.getInstance().enterMeeting(meetID, password);
+			CloudroomVideoMeeting.getInstance().enterMeeting(meetID);
 			mMainHandler.post(new Runnable() {
 
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
 					showEntering();
 				}
 			});
@@ -416,7 +425,6 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		CloudroomVideoMeeting.getInstance()
 				.unregisterCallback(mMeetingCallback);
@@ -427,7 +435,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
+
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			return true;
 		}
@@ -436,7 +444,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
+
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			return true;
 		}
@@ -630,7 +638,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			// TODO Auto-generated method stub
+
 			String action = intent.getAction();
 			CRLog.debug(TAG, "HeadsetReceiver : " + action);
 			// 监听到耳机插拔事件，耳机插入不外放，耳机拔出使用外放
@@ -650,7 +658,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			// TODO Auto-generated method stub
+
 			int action = event.getAction();
 			switch (action) {
 			case MotionEvent.ACTION_DOWN:
@@ -697,7 +705,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		// TODO Auto-generated method stub
+
 		int action = event.getAction();
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
@@ -728,41 +736,33 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 	}
 
 	private void startSvrRecord() {
-		MixerCfg mixerCfg = new MixerCfg();
-		mixerCfg.dstResolution = RECORD_SIZE;
-
-		MixerOutPutCfg outputCfg = new MixerOutPutCfg();
+		JsonArray layoutConfig = getSvrRecContents(RECORD_SIZE);
+		JsonObject videoFileCfg = new JsonObject();
+		videoFileCfg.addProperty("vWidth", RECORD_SIZE.width);
+		videoFileCfg.addProperty("vHeight", RECORD_SIZE.height);
+		videoFileCfg.addProperty("vFps", 15);
+		// 录制文件名称
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 		Date date = new Date(System.currentTimeMillis());
-
 		String fileName = String.format("%s_Android.mp4", format.format(date));
 		String serverDir = fileName.substring(0, 10);
 		String serverPathFileName = "/" + serverDir + "/" + fileName;
-		// 录制文件名称
-		outputCfg.type = MIXER_OUTPUT_TYPE.MIXOT_FILE;
-		outputCfg.fileName = serverPathFileName;
-		outputCfg.isUploadOnRecording = true;
-		outputCfg.serverPathFileName = serverPathFileName;
-		// outputCfg.liveUrl = "rtmp://10.8.8.248:8511/live/100";
-		ArrayList<MixerCotent> contents = getSvrRecContents(mixerCfg.dstResolution);
+		videoFileCfg.addProperty("svrPathName", serverPathFileName);
 
-		HashMap<String, MixerCfg> mixerCfgs = new HashMap<String, MixerCfg>();
-		mixerCfgs.put(KEY_SVR_REC_MIXERID, mixerCfg);
+		videoFileCfg.add("layoutConfig", layoutConfig);
 
-		HashMap<String, ArrayList<MixerOutPutCfg>> mixerOutputCfgs = new HashMap<String, ArrayList<MixerOutPutCfg>>();
-		ArrayList<MixerOutPutCfg> outputCfgs = new ArrayList<MixerOutPutCfg>();
-		outputCfgs.add(outputCfg);
-		mixerOutputCfgs.put(KEY_SVR_REC_MIXERID, outputCfgs);
+		JsonObject mixerCfg = new JsonObject();
+		mixerCfg.add("videoFileCfg", videoFileCfg);
+		mixerCfg.addProperty("mode", 0);
 
-		HashMap<String, ArrayList<MixerCotent>> mixerContents = new HashMap<String, ArrayList<MixerCotent>>();
-		mixerContents.put(KEY_SVR_REC_MIXERID, contents);
-
-		CRVIDEOSDK_ERR_DEF errCode = CloudroomVideoMeeting.getInstance()
-				.startSvrMixer(mixerCfgs, mixerContents, mixerOutputCfgs);
-		if (errCode != CRVIDEOSDK_ERR_DEF.CRVIDEOSDK_NOERR) {
-			CRLog.debug(TAG, "startSvrMixer fail, errCode:" + errCode);
+		String mixerID = CloudroomVideoMeeting.getInstance().createCloudMixer(mixerCfg.toString());
+		if (TextUtils.isEmpty(mixerID)) {
+			CRLog.debug(TAG, "createCloudMixer fail");
 			return;
+		} else {
+			CRLog.debug(TAG, "createCloudMixer success, mixerID:" + mixerID);
 		}
+		mMixerID = mixerID;
 
 		mStartSvrBtn.setVisibility(View.GONE);
 		mStopSvrBtn.setVisibility(View.VISIBLE);
@@ -783,20 +783,22 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 		if (state == MIXER_STATE.MIXER_NULL) {
 			return;
 		}
-		ArrayList<MixerCotent> contents = getSvrRecContents(RECORD_SIZE);
-		HashMap<String, ArrayList<MixerCotent>> mixerContents = new HashMap<String, ArrayList<MixerCotent>>();
-		mixerContents.put(KEY_SVR_REC_MIXERID, contents);
-		CloudroomVideoMeeting.getInstance()
-				.updateSvrMixerContent(mixerContents);
+		JsonArray layoutConfig = getSvrRecContents(RECORD_SIZE);
+		JsonObject videoFileCfg = new JsonObject();
+		videoFileCfg.add("layoutConfig", layoutConfig);
+		JsonObject content = new JsonObject();
+		content.add("videoFileCfg", videoFileCfg);
+		CloudroomVideoMeeting.getInstance().updateCloudMixerContent(mMixerID, content.toString());
 	}
 
 	private void stopSvrRecord() {
-		CloudroomVideoMeeting.getInstance().stopSvrMixer();
+		CloudroomVideoMeeting.getInstance().destroyCloudMixer(mMixerID);
 		mStartSvrBtn.setVisibility(View.VISIBLE);
 		mStopSvrBtn.setVisibility(View.GONE);
+		mMixerID = null;
 	}
 
-	private ArrayList<MixerCotent> getSvrRecContents(Size recordSize) {
+	private JsonArray getSvrRecContents(Size recordSize) {
 		ArrayList<UsrVideoId> videos = CloudroomVideoMeeting.getInstance()
 				.getWatchableVideos();
 
@@ -812,7 +814,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 			}
 		}
 
-		ArrayList<MixerCotent> contents = new ArrayList<MixerCotent>();
+		JsonArray contents = new JsonArray();
 
 		// 录制区域为录制视频的大小
 		int recWidth = recordSize.width;
@@ -829,9 +831,9 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 		Rect videoRect = new Rect(0, 0, recWidth, recHeight);
 		if (peerVideoId != null) {
 			// 录制对端的摄像头
-			MixerCotent videoItem = MixerCotent.createVideoContent(mPeerUserId,
+			JsonObject videoItem = MixerContentHelper.createVideoContent(mPeerUserId,
 					peerVideoId.videoID, videoRect);
-			videoItem.bKeepAspectRatio = true;
+			videoItem.addProperty("keepAspectRatio", true);
 			// 添加到录制内容列表
 			contents.add(videoItem);
 
@@ -840,9 +842,9 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 		}
 		if (myVideoId != null) {
 			// 录制自己的摄像头
-			MixerCotent videoItem = MixerCotent.createVideoContent(myUserId,
+			JsonObject videoItem = MixerContentHelper.createVideoContent(myUserId,
 					myVideoId.videoID, videoRect);
-			videoItem.bKeepAspectRatio = true;
+			videoItem.addProperty("keepAspectRatio", true);
 			// 添加到录制内容列表
 			contents.add(videoItem);
 		}
@@ -851,8 +853,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 		// 添加录制时间戳
 		int timeHeight = (recWidth > recHeight ? recHeight : recWidth) / 12;
 		int timeWidth = timeHeight * 8;
-		contents.add(new MixerCotent(MIXER_VCONTENT_TYPE.MIXVTP_TIMESTAMP,
-				new Rect(0, 0, timeWidth, timeHeight)));
+		contents.add(MixerContentHelper.createTimeStampContent(new Rect(0, 0, timeWidth, timeHeight)));
 
 		return contents;
 	}

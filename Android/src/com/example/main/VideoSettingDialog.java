@@ -93,7 +93,7 @@ public class VideoSettingDialog extends Dialog {
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+
 		VideoCfg cfg = CloudroomVideoMeeting.getInstance().getVideoCfg();
 		initVideoCfgShow(cfg);
 		super.show();
@@ -137,7 +137,7 @@ public class VideoSettingDialog extends Dialog {
 
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
+
 			switch (v.getId()) {
 			case R.id.btn_cacel:
 				try {
@@ -166,7 +166,7 @@ public class VideoSettingDialog extends Dialog {
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view,
 				int position, long id) {
-			// TODO Auto-generated method stub
+
 			String[] minQualitys = getContext().getResources().getStringArray(
 					R.array.minquality);
 			String[] maxQualitys = getContext().getResources().getStringArray(
@@ -186,7 +186,7 @@ public class VideoSettingDialog extends Dialog {
 
 		@Override
 		public void onNothingSelected(AdapterView<?> arg0) {
-			// TODO Auto-generated method stub
+
 
 		}
 	};
@@ -196,7 +196,7 @@ public class VideoSettingDialog extends Dialog {
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view,
 				int position, long id) {
-			// TODO Auto-generated method stub
+
 			Spinner videoMinQuality = (Spinner) mContentView
 					.findViewById(R.id.btn_video_maxquality);
 			String[] minQualitys = getContext().getResources().getStringArray(
@@ -218,7 +218,7 @@ public class VideoSettingDialog extends Dialog {
 
 		@Override
 		public void onNothingSelected(AdapterView<?> parent) {
-			// TODO Auto-generated method stub
+
 
 		}
 	};

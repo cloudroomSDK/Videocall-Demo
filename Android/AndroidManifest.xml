@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.videocalldemo"
     android:versionCode="160"
-    android:versionName="4.3.38" >
+    android:versionName="4.3.53" >
 
     <application
         android:name="com.example.main.DemoApp"

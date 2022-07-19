@@ -15,6 +15,7 @@ import com.cloudroom.cloudroomvideosdk.CloudroomQueue;
 import com.cloudroom.cloudroomvideosdk.CloudroomVideoMeeting;
 import com.cloudroom.cloudroomvideosdk.CloudroomVideoMgr;
 import com.cloudroom.cloudroomvideosdk.model.CRVIDEOSDK_ERR_DEF;
+import com.cloudroom.cloudroomvideosdk.model.CRVIDEOSDK_MEETING_DROPPED_REASON;
 import com.cloudroom.cloudroomvideosdk.model.QueueInfo;
 import com.example.videocalldemo.R;
 import com.examples.tool.UITool;
@@ -53,7 +54,7 @@ public class VideoSDKHelper {
 		// 登陆失败
 		@Override
 		public void loginFail(CRVIDEOSDK_ERR_DEF sdkErr, String cookie) {
-			// TODO Auto-generated method stub
+			
 			mCallId = null;
 			mLoginUserID = null;
 			mBServer = false;
@@ -69,7 +70,7 @@ public class VideoSDKHelper {
 
 		@Override
 		public void lineOff(CRVIDEOSDK_ERR_DEF sdkErr) {
-			// TODO Auto-generated method stub
+			
 			mCallId = null;
 			mLoginUserID = null;
 			mBServer = false;
@@ -77,13 +78,13 @@ public class VideoSDKHelper {
 
 		@Override
 		public void notifyCallHungup(String callID, final String useExtDat) {
-			// TODO Auto-generated method stub
+			
 			mEnterTime = 0;
 		}
 
 		@Override
 		public void hangupCallSuccess(String callID, String cookie) {
-			// TODO Auto-generated method stub
+			
 			mEnterTime = 0;
 		}
 	};
@@ -92,7 +93,7 @@ public class VideoSDKHelper {
 
 		@Override
 		public void initQueueDatRslt(CRVIDEOSDK_ERR_DEF errCode, String cookie) {
-			// TODO Auto-generated method stub
+			
 			mQueueInfos.clear();
 			mQueueInfos.addAll(CloudroomQueue.getInstance().getAllQueueInfo());
 
@@ -107,25 +108,22 @@ public class VideoSDKHelper {
 
 		@Override
 		public void enterMeetingRslt(CRVIDEOSDK_ERR_DEF code) {
-			// TODO Auto-generated method stub
+			
 			if (code == CRVIDEOSDK_ERR_DEF.CRVIDEOSDK_NOERR) {
 				mBInMeeting = true;
 				mEnterTime = System.currentTimeMillis();
 			} else {
 				mBInMeeting = false;
-				mCurMeetId = 0;
 			}
 		}
 
 		@Override
-		public void meetingDropped() {
-			// TODO Auto-generated method stub
+		public void meetingDropped(CRVIDEOSDK_MEETING_DROPPED_REASON reason) {
 			mBInMeeting = false;
 		}
 
 		@Override
 		public void meetingStopped() {
-			// TODO Auto-generated method stub
 			mBInMeeting = false;
 		}
 
@@ -133,7 +131,6 @@ public class VideoSDKHelper {
 
 	private boolean mBInMeeting = false;
 	private String mLoginUserID = null;
-	private int mCurMeetId = 0;
 
 	public String getLoginUserID() {
 		return mLoginUserID;
@@ -141,10 +138,6 @@ public class VideoSDKHelper {
 
 	public boolean isInMeeting() {
 		return mBInMeeting;
-	}
-
-	public int getCurMeetId() {
-		return mCurMeetId;
 	}
 
 	private boolean mBServer = false;
@@ -175,12 +168,6 @@ public class VideoSDKHelper {
 
 	public ArrayList<Integer> getServiceQueues() {
 		return mServiceQueues;
-	}
-
-	public void enterMeeting(int meetId, String meetPsw) {
-		CloudroomVideoMeeting.getInstance().enterMeeting(meetId, meetPsw,
-				mLoginUserID, mLoginUserID);
-		mCurMeetId = meetId;
 	}
 
 	public String getErrStr(CRVIDEOSDK_ERR_DEF errCode) {

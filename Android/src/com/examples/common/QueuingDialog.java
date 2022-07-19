@@ -48,13 +48,13 @@ public class QueuingDialog extends Dialog implements Callback,
 
 		@Override
 		public void queuingInfoChanged(QueuingInfo queuingInfo) {
-			// TODO Auto-generated method stub
+
 			updateQueuingDialog(queuingInfo);
 		}
 
 		@Override
 		public void stopQueuingRslt(CRVIDEOSDK_ERR_DEF errCode, String cookie) {
-			// TODO Auto-generated method stub
+
 			dismiss();
 		}
 
@@ -64,7 +64,7 @@ public class QueuingDialog extends Dialog implements Callback,
 
 		@Override
 		public void acceptCallSuccess(String callID, String cookie) {
-			// TODO Auto-generated method stub
+
 			dismiss();
 		}
 
@@ -73,7 +73,7 @@ public class QueuingDialog extends Dialog implements Callback,
 	// 消息处理函数
 	@Override
 	public boolean handleMessage(Message msg) {
-		// TODO Auto-generated method stub
+
 		switch (msg.what) {
 		case MSG_UPDATE_QUEUINGDIALOG:
 			// 排队信息变动
@@ -127,7 +127,7 @@ public class QueuingDialog extends Dialog implements Callback,
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+
 				// 停止更新排队时间
 				mMainHandler.removeMessages(MSG_UPDATE_QUEUINGDIALOG);
 				// 取消排队
@@ -139,7 +139,7 @@ public class QueuingDialog extends Dialog implements Callback,
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+
 		super.show();
 		// 接受管理消息
 		CloudroomVideoMgr.getInstance().registerCallback(mMgrCallback);
@@ -149,7 +149,7 @@ public class QueuingDialog extends Dialog implements Callback,
 
 	@Override
 	public void onDismiss(DialogInterface dialog) {
-		// TODO Auto-generated method stub
+
 		mMainHandler.removeMessages(MSG_UPDATE_QUEUINGDIALOG);
 		// 取消接受管理消息
 		CloudroomVideoMgr.getInstance().unregisterCallback(mMgrCallback);

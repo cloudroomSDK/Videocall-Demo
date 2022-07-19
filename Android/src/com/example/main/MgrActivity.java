@@ -67,7 +67,7 @@ public class MgrActivity extends BaseActivity {
 
 		@Override
 		public void lineOff(CRVIDEOSDK_ERR_DEF sdkErr) {
-			// TODO Auto-generated method stub
+			
 			VideoSDKHelper.getInstance().showToast("掉线",
 					(CRVIDEOSDK_ERR_DEF) sdkErr);
 			finish();
@@ -75,14 +75,14 @@ public class MgrActivity extends BaseActivity {
 
 		@Override
 		public void createMeetingFail(CRVIDEOSDK_ERR_DEF sdkErr, String cookie) {
-			// TODO Auto-generated method stub
+			
 			mAcceptAssignUser = false;
 			mAssignUserInfo = null;
 		}
 
 		@Override
 		public void createMeetingSuccess(MeetInfo meetInfo, String cookie) {
-			// TODO Auto-generated method stub
+			
 			if (mAcceptAssignUser && mAssignUserInfo != null) {
 				CloudroomVideoMgr.getInstance().call(mAssignUserInfo.usrID,
 						meetInfo, "", TAG);
@@ -93,7 +93,7 @@ public class MgrActivity extends BaseActivity {
 		@Override
 		public void notifyCallIn(String callID, MeetInfo meetInfo,
 				String callerID, String param) {
-			// TODO Auto-generated method stub
+			
 			Log.d(TAG, "notifyCallIn callID:" + callID + " callerID:"
 					+ callerID + " param:" + param);
 			// 提示收到呼叫
@@ -107,18 +107,18 @@ public class MgrActivity extends BaseActivity {
 			// 保存对方用户ID
 			VideoActivity.mPeerUserId = callerID;
 
-			// 进入会议
-			enterVideo(meetInfo.ID, meetInfo.pswd);
+			// 进入房间
+			enterVideo(meetInfo.ID);
 		}
 
 		@Override
 		public void notifyCallAccepted(String callID, MeetInfo meetInfo,
 				String useExtDat) {
-			// TODO Auto-generated method stub
+			
 			VideoSDKHelper.getInstance().showToast(R.string.call_accept);
 
 			VideoSDKHelper.getInstance().setCallId(callID);
-			enterVideo(meetInfo.ID, meetInfo.pswd);
+			enterVideo(meetInfo.ID);
 			if (callID.equals(mCallingID)) {
 				UITool.hideProcessDialog(MgrActivity.this);
 				mCallingID = null;
@@ -128,18 +128,18 @@ public class MgrActivity extends BaseActivity {
 		@Override
 		public void acceptCallFail(String callID, CRVIDEOSDK_ERR_DEF sdkErr,
 				String cookie) {
-			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public void acceptCallSuccess(String callID, String cookie) {
-			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public void callFail(String callID, CRVIDEOSDK_ERR_DEF sdkErr,
 				String cookie) {
-			// TODO Auto-generated method stub
+			
 			if (callID.equals(mCallingID)) {
 				UITool.hideProcessDialog(MgrActivity.this);
 				mCallingID = null;
@@ -148,13 +148,13 @@ public class MgrActivity extends BaseActivity {
 
 		@Override
 		public void callSuccess(String callID, String cookie) {
-			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public void notifyCallRejected(String callID,
 				CRVIDEOSDK_ERR_DEF reason, String useExtDat) {
-			// TODO Auto-generated method stub
+			
 			if (callID.equals(mCallingID)) {
 				UITool.hideProcessDialog(MgrActivity.this);
 				mCallingID = null;
@@ -167,7 +167,7 @@ public class MgrActivity extends BaseActivity {
 
 		@Override
 		public void initQueueDatRslt(CRVIDEOSDK_ERR_DEF errCode, String cookie) {
-			// TODO Auto-generated method stub
+			
 			// 更新队列ListView
 			mAdapter.notifyDataSetChanged();
 
@@ -194,20 +194,20 @@ public class MgrActivity extends BaseActivity {
 						"VideoSessionInfo:" + sessionInfo.peerID);
 
 				// 进入视频
-				enterVideo(sessionInfo.meetingID, sessionInfo.meetingPswd);
+				enterVideo(sessionInfo.meetingID);
 			}
 		}
 
 		@Override
 		public void queueStatusChanged(QueueStatus queStatus) {
-			// TODO Auto-generated method stub
+			
 			// 更新列表
 			mAdapter.notifyDataSetChanged();
 		}
 
 		@Override
 		public void startQueuingRslt(CRVIDEOSDK_ERR_DEF errCode, String cookie) {
-			// TODO Auto-generated method stub
+			
 			// 排队成功显示排队界面
 			if (errCode == CRVIDEOSDK_ERR_DEF.CRVIDEOSDK_NOERR) {
 				QueuingInfo queuingInfo = CloudroomQueue.getInstance()
@@ -223,7 +223,7 @@ public class MgrActivity extends BaseActivity {
 
 		@Override
 		public void cancelAssignUser(int queID, String usrID) {
-			// TODO Auto-generated method stub
+			
 			if (mAssignDailog != null) {
 				mAssignDailog.dismiss();
 				mAssignDailog = null;
@@ -232,14 +232,14 @@ public class MgrActivity extends BaseActivity {
 
 		@Override
 		public void autoAssignUser(UserInfo usr) {
-			// TODO Auto-generated method stub
+			
 			assignUser(usr);
 		}
 
 		@Override
 		public void reqAssignUserRslt(CRVIDEOSDK_ERR_DEF sdkErr, UserInfo usr,
 				String cookie) {
-			// TODO Auto-generated method stub
+			
 			if (sdkErr == CRVIDEOSDK_ERR_DEF.CRVIDEOSDK_NOERR && usr != null) {
 				mAcceptAssignUser = true;
 				mAssignUserInfo = usr;
@@ -252,7 +252,7 @@ public class MgrActivity extends BaseActivity {
 		@Override
 		public void startServiceRslt(int queID, CRVIDEOSDK_ERR_DEF sdkErr,
 				String cookie) {
-			// TODO Auto-generated method stub
+			
 			if (sdkErr == CRVIDEOSDK_ERR_DEF.CRVIDEOSDK_NOERR) {
 				ArrayList<Integer> services = VideoSDKHelper.getInstance()
 						.getServiceQueues();
@@ -265,7 +265,7 @@ public class MgrActivity extends BaseActivity {
 		@Override
 		public void stopServiceRslt(int queID, CRVIDEOSDK_ERR_DEF sdkErr,
 				String cookie) {
-			// TODO Auto-generated method stub
+			
 			if (sdkErr != CRVIDEOSDK_ERR_DEF.CRVIDEOSDK_NOERR) {
 				return;
 			}
@@ -278,7 +278,7 @@ public class MgrActivity extends BaseActivity {
 		@Override
 		public void responseAssignUserRslt(CRVIDEOSDK_ERR_DEF sdkErr,
 				String cookie) {
-			// TODO Auto-generated method stub
+			
 			if (mAcceptAssignUser) {
 				CloudroomVideoMgr.getInstance().createMeeting(
 						mAssignUserInfo.usrID, false);
@@ -291,7 +291,7 @@ public class MgrActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+		
 		super.onCreate(savedInstanceState);
 		// 根据是坐席还是用户显示不同的布局（实际开发可使用不同界面实现）
 		boolean bServer = VideoSDKHelper.getInstance().bServer();
@@ -324,7 +324,7 @@ public class MgrActivity extends BaseActivity {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
+		
 		super.onResume();
 		// 每次进入界面刷新队列状态
 		CloudroomQueue.getInstance().refreshAllQueueStatus();
@@ -332,7 +332,7 @@ public class MgrActivity extends BaseActivity {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
+		
 		super.onDestroy();
 		// 取消接受管理消息
 		CloudroomVideoMgr.getInstance().unregisterCallback(mMgrCallback);
@@ -353,7 +353,7 @@ public class MgrActivity extends BaseActivity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
+		
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			return true;
 		}
@@ -362,7 +362,7 @@ public class MgrActivity extends BaseActivity {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
+		
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			showExitDialog();
 			return true;
@@ -379,30 +379,22 @@ public class MgrActivity extends BaseActivity {
 
 			@Override
 			public void onOk() {
-				// TODO Auto-generated method stub
+				
 				// 退出程序
 				DemoApp.getInstance().terminalApp();
 			}
 
 			@Override
 			public void onCancel() {
-				// TODO Auto-generated method stub
+				
 
 			}
 		});
 	}
 
-	/**
-	 * 进入视频界面
-	 * 
-	 * @param mode
-	 * @param meetID
-	 * @param meetPswd
-	 */
-	private void enterVideo(int meetID, String meetPswd) {
+	private void enterVideo(int meetID) {
 		Intent intent = new Intent(MgrActivity.this, VideoActivity.class);
 		intent.putExtra("meetID", meetID);
-		intent.putExtra("password", meetPswd);
 		startActivity(intent);
 	}
 
@@ -414,7 +406,7 @@ public class MgrActivity extends BaseActivity {
 
 					@Override
 					public void onInput(String userID) {
-						// TODO Auto-generated method stub
+						
 						if (TextUtils.isEmpty(userID)) {
 							VideoSDKHelper.getInstance().showToast(
 									R.string.input_peer_userid);
@@ -431,7 +423,7 @@ public class MgrActivity extends BaseActivity {
 
 					@Override
 					public void onCancel() {
-						// TODO Auto-generated method stub
+						
 
 					}
 				});
@@ -450,7 +442,7 @@ public class MgrActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
+				
 				// 用户点击列表，开始排队
 				QueueInfo info = VideoSDKHelper.getInstance().getQueueInfos()
 						.get(position);
@@ -469,7 +461,7 @@ public class MgrActivity extends BaseActivity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
+			
 			if (convertView == null) {
 				convertView = getLayoutInflater().inflate(
 						R.layout.layout_user_item, null);
@@ -519,7 +511,7 @@ public class MgrActivity extends BaseActivity {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
-						// TODO Auto-generated method stub
+						
 						// 设置免打扰状态
 						mGetNextUserBTN.setEnabled(!isChecked);
 						mGetNextUserBTN.setClickable(!isChecked);
@@ -537,7 +529,7 @@ public class MgrActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
+				
 				// 坐席点击列表，开始服务点击的队列
 				QueueInfo info = VideoSDKHelper.getInstance().getQueueInfos()
 						.get(position);
@@ -595,14 +587,14 @@ public class MgrActivity extends BaseActivity {
 
 					@Override
 					public void onDismiss(DialogInterface dialog) {
-						// TODO Auto-generated method stub
+						
 						mAssignDailog = null;
 					}
 				}).setPositiveButton(R.string.accept, new OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
+						
 						// Log.d(TAG, "assignUser setPositiveButton ");
 						Log.d(TAG, "assignUser:" + user.usrID);
 						mAcceptAssignUser = true;
@@ -613,7 +605,7 @@ public class MgrActivity extends BaseActivity {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
+						
 						mAcceptAssignUser = false;
 						CloudroomQueue.getInstance().rejectAssignUser(
 								mAssignUserInfo.queID, mAssignUserInfo.usrID,
@@ -632,7 +624,7 @@ public class MgrActivity extends BaseActivity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
+			
 			if (convertView == null) {
 				convertView = getLayoutInflater().inflate(
 						R.layout.layout_server_item, null);

@@ -29,7 +29,7 @@ public class DemoApp extends Application {
 
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
+
 		super.onCreate();
 
 		mInstance = this;
@@ -57,7 +57,6 @@ public class DemoApp extends Application {
 		String sdkVer = CloudroomVideoSDK.getInstance()
 				.GetCloudroomVideoSDKVer();
 		Log.d(TAG, "CloudroomVideoSDKVer:" + sdkVer);
-
 
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(this);
@@ -154,7 +153,7 @@ public class DemoApp extends Application {
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
+
 			android.os.Process.killProcess(android.os.Process.myPid());
 		}
 	};

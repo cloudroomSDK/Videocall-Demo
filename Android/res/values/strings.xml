@@ -17,10 +17,10 @@
     <string name="colon">：</string>
     <string name="server_addr">服务器地址</string>
     <string name="null_server">服务器不能为空</string>
-    <string name="account">App ID</string>
-    <string name="null_account">App ID不能为空</string>
-    <string name="pswd">App Secret</string>
-    <string name="null_pswd">App Secret不能为空</string>
+    <string name="appid">App ID</string>
+    <string name="null_appid">App ID不能为空</string>
+    <string name="appsecret">App Secret</string>
+    <string name="null_appsecret">App Secret不能为空</string>
     <string name="datenc_type">通讯协议</string>
     <string name="sdk_ver">SDK版本号：</string>
     <string name="server_setting">服务器设置</string>
@@ -41,7 +41,7 @@
     <string name="media_started">影音共享已开启</string>
     <string name="media_stopped">影音共享已结束</string>
     <string name="meet_stopped">会话已结束</string>
-    <string name="meet_dropped">会话掉线</string>
+    <string name="sys_dropped">系统掉线</string>
     <string name="video">视频</string>
     <string name="resolution">分辨率：</string>
     <string name="bitrate">码率（kbps）：</string>

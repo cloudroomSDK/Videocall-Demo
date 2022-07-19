@@ -42,7 +42,7 @@ public class LoginActivity extends BaseActivity {
 		// 登陆失败
 		@Override
 		public void loginFail(CRVIDEOSDK_ERR_DEF sdkErr, String cookie) {
-			// TODO Auto-generated method stub
+			
 			// 登录按钮设置为可用
 			mLoginBtn.setClickable(true);
 			mLoginBtn.setEnabled(true);
@@ -57,7 +57,7 @@ public class LoginActivity extends BaseActivity {
 		// 登陆成功
 		@Override
 		public void loginSuccess(String usrID, String cookie) {
-			// TODO Auto-generated method stub
+			
 			CRLog.debug(TAG, "onLoginSuccess");
 			// 登录按钮设置为可用
 			mLoginBtn.setClickable(true);
@@ -109,7 +109,7 @@ public class LoginActivity extends BaseActivity {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
+		
 		super.onDestroy();
 		// 清空登录相关处理对象
 		CloudroomVideoMgr.getInstance().unregisterCallback(mLoginCallback);
@@ -156,10 +156,10 @@ public class LoginActivity extends BaseActivity {
 		String server = sharedPreferences.getString(SettingActivity.KEY_SERVER,
 				SettingActivity.DEFAULT_SERVER);
 		// 获取配置的账号密码
-		String authAccount = sharedPreferences.getString(
-				SettingActivity.KEY_ACCOUNT, SettingActivity.DEFAULT_ACCOUNT);
-		String authPswd = sharedPreferences.getString(SettingActivity.KEY_PSWD,
-				SettingActivity.DEFAULT_PSWD);
+		String appID = sharedPreferences.getString(
+				SettingActivity.KEY_APPID, SettingActivity.DEFAULT_APPID);
+		String appSecret = sharedPreferences.getString(SettingActivity.KEY_APPSECRET,
+				SettingActivity.DEFAULT_APPSECRET);
 		// 获取输入的昵称
 		String nickName = mNicknameEditText.getText().toString();
 
@@ -168,13 +168,14 @@ public class LoginActivity extends BaseActivity {
 			VideoSDKHelper.getInstance().showToast(R.string.null_server);
 			return;
 		}
-		// 检查账号密码是否为空
-		if (TextUtils.isEmpty(authAccount)) {
-			VideoSDKHelper.getInstance().showToast(R.string.null_account);
+		// APPID是否为空
+		if (TextUtils.isEmpty(appID)) {
+			VideoSDKHelper.getInstance().showToast(R.string.null_appid);
 			return;
 		}
-		if (TextUtils.isEmpty(authPswd)) {
-			VideoSDKHelper.getInstance().showToast(R.string.null_pswd);
+		// APPSECRET是否为空
+		if (TextUtils.isEmpty(appSecret)) {
+			VideoSDKHelper.getInstance().showToast(R.string.null_appsecret);
 			return;
 		}
 		// 检查昵称是否为空
@@ -182,7 +183,7 @@ public class LoginActivity extends BaseActivity {
 			VideoSDKHelper.getInstance().showToast(R.string.null_nickname);
 			return;
 		}
-		doLogin(server, authAccount, authPswd, nickName, nickName);
+		doLogin(server, appID, appSecret, nickName, nickName);
 
 		// 登录过程中登录按钮不可用
 		mLoginBtn.setClickable(false);
@@ -201,9 +202,9 @@ public class LoginActivity extends BaseActivity {
 		loginDat.nickName = nickName;
 		// 第三方账号
 		loginDat.privAcnt = privAcnt;
-		// 登录账号，使用开通SDK的账号
+		// 使用开通SDK的APPID
 		loginDat.authAcnt = authAcnt;
-		// 登录密码必须做MD5处理
+		// APPSECRET必须做MD5处理
 		loginDat.authPswd = authPswd;
 
 		String cookie = mRadioGroup.getCheckedRadioButtonId() == R.id.btn_user ? "user"
@@ -214,7 +215,7 @@ public class LoginActivity extends BaseActivity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
+		
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			return true;
 		}
@@ -223,7 +224,7 @@ public class LoginActivity extends BaseActivity {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
+		
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			showExitDialog();
 			return true;
@@ -238,14 +239,14 @@ public class LoginActivity extends BaseActivity {
 
 			@Override
 			public void onOk() {
-				// TODO Auto-generated method stub
+				
 				// 退出程序
 				DemoApp.getInstance().terminalApp();
 			}
 
 			@Override
 			public void onCancel() {
-				// TODO Auto-generated method stub
+				
 
 			}
 		});

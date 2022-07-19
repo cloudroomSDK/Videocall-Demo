@@ -53,11 +53,11 @@
     <string name="CRVIDEOSDK_ERR_USER_NOT_FOUND">用户不存在</string>
     <string name="CRVIDEOSDK_ERR_REFUSE">对方拒接</string>
 
-    <string name="CRVIDEOSDK_MEETNOTEXIST">会议不存在或已结束</string>
-    <string name="CRVIDEOSDK_AUTHERROR">会议密码不正确</string>
-    <string name="CRVIDEOSDK_MEMBEROVERFLOWERROR">会议终端数量已满（购买的license不够)</string>
-    <string name="CRVIDEOSDK_RESOURCEALLOCATEERROR">分配会议资源失败</string>
-    <string name="CRVIDEOSDK_MEETROOMLOCKED">会议已加锁</string>
+    <string name="CRVIDEOSDK_MEETNOTEXIST">房间不存在或已结束</string>
+    <string name="CRVIDEOSDK_AUTHERROR">房间密码不正确</string>
+    <string name="CRVIDEOSDK_MEMBEROVERFLOWERROR">房间终端数量已满（购买的license不够)</string>
+    <string name="CRVIDEOSDK_RESOURCEALLOCATEERROR">分配房间资源失败</string>
+    <string name="CRVIDEOSDK_MEETROOMLOCKED">房间已加锁</string>
     <string name="CRVIDEOSDK_BALANCELESSERROR">余额不足</string>
     <string name="CRVIDEOSDK_SEVICE_NOTENABLED">业务权限未开启</string>
     <string name="CRVIDEOSDK_ALREADYLOGIN">不能再次登录</string>
