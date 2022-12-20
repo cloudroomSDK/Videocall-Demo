@@ -159,7 +159,7 @@ typedef NS_ENUM(NSInteger, LoginBtnType)
     
     UIColor *color = [UIColor colorWithRed:77/255.0 green:94/255.0 blue:117/255.0 alpha:1.0];
     [_nicknameTextField setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"请输入昵称" attributes:@{NSForegroundColorAttributeName: color}]];
-    [_nicknameTextField setCustomDoneTarget:self action:@selector(hasDone:)];
+//    [_nicknameTextField setCustomDoneTarget:self action:@selector(hasDone:)];
     
     [_loginBtn.layer setCornerRadius:4];
     [_loginBtn.layer masksToBounds];

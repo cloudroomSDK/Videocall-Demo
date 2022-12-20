@@ -270,6 +270,7 @@ typedef NS_ENUM(NSInteger, ServerBarBtnType)
 - (void)createMeetingSuccess:(MeetInfo *)meetInfo cookie:(NSString *)cookie
 {
     [[CloudroomVideoMgr shareInstance] call:_peerID meetInfo:meetInfo param:nil cookie:cookie];
+    //[[CloudroomVideoMgr shareInstance] callByMeetingID:_peerID meetInfo:meetInfo usrExtDat:nil cookie:cookie];
 }
 
 - (void)createMeetingFail:(CRVIDEOSDK_ERR_DEF)sdkErr cookie:(NSString *)cookie
