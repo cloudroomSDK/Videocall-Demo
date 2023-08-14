@@ -18,7 +18,7 @@ namespace VideoCall
             this.Owner = parent;
             ShowInTaskbar = false;
 
-            IniFile iniFile = new IniFile(Directory.GetCurrentDirectory() + "/CloudroomVideoSDK.ini");  //获取当前根目录
+            IniFile iniFile = new IniFile(Directory.GetCurrentDirectory() + "/VideoCall.ini");  //获取当前根目录
             edtServer.Text = iniFile.ReadValue("Cfg", "LastServer", "sdk.cloudroom.com");
             cbHttpType.SelectedIndex = Convert.ToInt32(iniFile.ReadValue("Cfg", "HttpType", "1"));
             edtAccount.Text = iniFile.ReadValue("Cfg", "LastAccount", "默认AppID");
@@ -68,7 +68,7 @@ namespace VideoCall
 
         private void save2File()
         {
-            IniFile iniFile = new IniFile(Directory.GetCurrentDirectory() + "/CloudroomVideoSDK.ini");  //获取当前根目录
+            IniFile iniFile = new IniFile(Directory.GetCurrentDirectory() + "/VideoCall.ini");  //获取当前根目录
             iniFile.WriteValue("Cfg", "LastServer", edtServer.Text);
             iniFile.WriteValue("Cfg", "HttpType", cbHttpType.SelectedIndex.ToString());
 

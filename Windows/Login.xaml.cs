@@ -29,7 +29,7 @@ namespace VideoCall
             InitializeComponent();
             initVideoCallDelegate();
 
-            IniFile iniFile = new IniFile(Directory.GetCurrentDirectory() + "/CloudroomVideoSDK.ini");  //获取当前根目录
+            IniFile iniFile = new IniFile(Directory.GetCurrentDirectory() + "/VideoCall.ini");  //获取当前根目录
             edtNickname.Text = iniFile.ReadValue("Cfg", "LastUser", "");
             string role = iniFile.ReadValue("Cfg", "lastRole", "0");
             cmbRole.SelectedIndex = Convert.ToInt32(role);
@@ -224,7 +224,7 @@ namespace VideoCall
 
             //sdk参数
             JObject sdkParamJson = new JObject();
-            IniFile iniFile = new IniFile(Directory.GetCurrentDirectory() + "/CloudroomVideoSDK.ini");  //获取当前根目录
+            IniFile iniFile = new IniFile(Directory.GetCurrentDirectory() + "/VideoCall.ini");  //获取当前根目录
             int httpType = Convert.ToInt32(iniFile.ReadValue("Cfg", "HttpType", "1"));
             if (httpType == 0)
             {
