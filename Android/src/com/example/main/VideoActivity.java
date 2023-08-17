@@ -216,13 +216,13 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 		@Override
 		public void defVideoChanged(String userID, short videoID) {
 
-			String myUserId = CloudroomVideoMeeting.getInstance().getMyUserID();
-			if (userID != null
-					&& (userID.equals(mPeerUserId) || userID.equals(myUserId))) {
-				// 更新观看视频
-				updateWatchVideos();
-				updateSvrRecContents();
-			}
+//			String myUserId = CloudroomVideoMeeting.getInstance().getMyUserID();
+//			if (userID != null
+//					&& (userID.equals(mPeerUserId) || userID.equals(myUserId))) {
+//				// 更新观看视频
+//				updateWatchVideos();
+//				updateSvrRecContents();
+//			}
 		}
 
 		@Override
@@ -460,9 +460,9 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 		UsrVideoId[] wVideos = { null, null };
 		for (UsrVideoId usrVideoId : videos) {
 			if (usrVideoId.userId.equals(myUserId)) {
-				wVideos[0] = usrVideoId;
+				wVideos[0] = new UsrVideoId(usrVideoId.userId, (short) -1);
 			} else if (wVideos[1] == null) {
-				wVideos[1] = usrVideoId;
+				wVideos[1] = new UsrVideoId(usrVideoId.userId, (short) -1);
 			}
 		}
 		mSelfGLSV.setUsrVideoId(wVideos[0]);
@@ -808,9 +808,9 @@ public class VideoActivity extends BaseActivity implements OnTouchListener,
 		UsrVideoId peerVideoId = null;
 		for (UsrVideoId usrVideoId : videos) {
 			if (usrVideoId.userId.equals(myUserId)) {
-				myVideoId = usrVideoId;
+				myVideoId = new UsrVideoId(usrVideoId.userId, (short) -1);
 			} else if (usrVideoId.userId.equals(mPeerUserId)) {
-				peerVideoId = usrVideoId;
+				peerVideoId = new UsrVideoId(usrVideoId.userId, (short) -1);
 			}
 		}
 

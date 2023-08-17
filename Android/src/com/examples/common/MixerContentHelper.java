@@ -3,7 +3,7 @@ package com.examples.common;
 import android.graphics.Color;
 import android.graphics.Rect;
 
-import com.cloudroom.tool.AndroidTool;
+import com.examples.tool.Tools;
 import com.google.gson.JsonObject;
 
 public class MixerContentHelper {
@@ -89,8 +89,8 @@ public class MixerContentHelper {
         JsonObject content = createBaseContent(10, rect);
         JsonObject param = new JsonObject();
         param.addProperty("text", text);
-        param.addProperty("color", AndroidTool.toHexEncoding(color));
-        param.addProperty("background", AndroidTool.toHexEncoding(backgroundColor));
+        param.addProperty("color", Tools.toHexEncoding(color));
+        param.addProperty("background", Tools.toHexEncoding(backgroundColor));
         param.addProperty("font-size", ""+fontSize);
         param.addProperty("text-margin", ""+textMargin);
         content.add("param", param);

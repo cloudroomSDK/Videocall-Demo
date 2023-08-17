@@ -22,8 +22,6 @@ import com.tencent.bugly.crashreport.CrashReport;
 public class DemoApp extends Application {
 
 	private static final String TAG = "DemoApp";
-	public static final String DEMO_FILE_DIR = Environment
-			.getExternalStorageDirectory().getAbsolutePath() + "/VideoCallDemo/";
 
 	private Handler mMainHandler = new Handler();
 
@@ -66,8 +64,6 @@ public class DemoApp extends Application {
 
 		// SDK初始化数据对象
 		SdkInitDat initDat = new SdkInitDat();
-		// 配置文件目录
-		initDat.sdkDatSavePath = DEMO_FILE_DIR;
         initDat.datEncType = datEncTypeInt >= 1 ? "1" : "0";
         if(datEncTypeInt == 1) {
             initDat.params.put("VerifyHttpsCert", "1");
