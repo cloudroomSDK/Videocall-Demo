@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "坐席端",
+    "usingComponents": {
+        "myModal": "../../components/myModal/myModal"
+    }
+}

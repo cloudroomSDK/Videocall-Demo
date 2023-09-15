@@ -1,0 +1,54 @@
+<!-- ----- 坐席队列页面开始 ----- -->
+<view class='queue_page_seat'>
+	<view class='queue_header'>
+		<text class='queue_logout' bindtap='logout'>注销</text>
+		<text>{{nickname}}，欢迎你！</text>
+		<text class='refresh_queue' bindtap='refreshQue'>刷新</text>
+	</view>
+	<view class='queue_list' scroll-y='true'>
+		<scroll-view class='queue_list_items' scroll-y='true'>
+			<view wx:for='{{queInfoObj}}' wx:for-index='key' wx:for-item='value' wx:key='key' class='queue_item'
+				bindtap='startService' data-queinfo='{{value}}'>
+				<view class='queue_info'>
+					<view class='queue_name'>
+						<text>{{value.name}}</text>
+					</view>
+					<view wx:if='{{value.isSvring!==undefined && value.isSvring}}' class="svring">正在服务...</view>
+					<view wx:if='{{value.isSvring!==undefined && !value.isSvring}}' class="nosvring">未服务</view>
+				</view>
+				<view class='queue_status'>
+					<view class='queue_num'>
+						<text>坐席人数：</text>
+						<text wx:if='{{value.agentNum !== undefined}}'>{{value.agentNum}}</text>
+					</view>
+					<view class='queue_num'>
+						<text>排队人数：</text>
+						<text wx:if='{{value.waitNum !== undefined}}'>{{value.waitNum}}</text>
+					</view>
+					<view class='queue_num'>
+						<text>会话人数：</text>
+						<text wx:if='{{value.srvNum !== undefined}}'>{{value.srvNum}}</text>
+					</view>
+				</view>
+			</view>
+		</scroll-view>
+	</view>
+	<view class='queue_seat_bottom'>
+		<view class='autoAssign' bindtap='tapAutoAssign'>
+			<image src='{{isAutoAssign?"/image/select_checked.png":"/image/select_default.png"}}'></image>
+			<text>自动分配</text>
+		</view>
+		<view class='right'>
+			<view class='btn' bindtap='popupCallInput'>
+				<text>呼叫</text>
+			</view>
+			<view class='btn' bindtap='nextClient'>
+				<text>下一位客户</text>
+			</view>
+		</view>
+	</view>
+</view>
+<!-- ----- 坐席队列页面结束 ----- -->
+
+<!-- 自定义模态框 -->
+<myModal id='modal'></myModal>

@@ -1,0 +1,36 @@
+<!-- 服务器设置界面开始 -->
+<view class='login_set' hidden='{{setPageHidden}}'>
+	<view class='set_header'>
+		<text>服务器设置</text>
+	</view>
+	<view class='set_box'>
+		<view class='set_server'>
+			<text>服务器：</text>
+			<input value='{{serverAddr}}' bindinput='svrAddrInput'></input>
+		</view>
+		<view class='set_AppID' wx:if='{{!useToken}}'>
+			<text space="emsp" class="text">AppID：</text>
+			<input value='{{AppID}}' placeholder="默认账号" bindinput='AppIDInput'></input>
+		</view>
+		<view class='set_AppSecret' wx:if='{{!useToken}}'>
+			<text space="emsp" class="text">AppSecret：</text>
+			<input password='true' value='{{AppSecret}}' type='text' bindinput='pswdInput'></input>
+		</view>
+		<view class="set_token" wx:if='{{useToken}}'>
+			<text space="emsp" class="text">Token：</text>
+			<textarea class="textarea" maxlength='-1' value="{{token}}" placeholder="请输入令牌" name="" id=""
+				bindinput='tokenInput'></textarea>
+		</view>
+	</view>
+	<view class="option">
+		<view class="item">
+			<text>动态令牌鉴权：</text>
+			<switch color='#ff6600' checked="{{useToken}}" bindchange="useTokenChange" />
+		</view>
+	</view>
+	<view class='set_button'>
+		<view id='resetBtn' bindtap='resetLoginCfg'>重置为默认</view>
+		<view id='saveBtn' bindtap='loginSetSave'>保存</view>
+	</view>
+</view>
+<!-- 服务器设置界面结束 -->

@@ -1,0 +1,27 @@
+<view hidden='{{!isShow}}'>
+	<view class="modal" style='z-index: {{zIndex}};'>
+		<!-- 对话框 -->
+		<view class='modal-content' wx:if='{{type === "toast"}}'>
+			<!-- <view class='modal-top'>
+        <view class='header'>{{modalTitle}}</view>
+      </view> -->
+			<view class='modal-body'>
+				<text> {{modalMsg}}</text>
+			</view>
+			<view class='modal-footer'>
+				<text class='cancle' wx:if="{{showCancel}}" catchtap='_cancelEvent' data-fn="{{cancel}}">取消</text>
+				<text class='sure' catchtap='_confirmEvent' data-fn="{{confirm}}">确定</text>
+			</view>
+		</view>
+		<!-- 输入框 -->
+		<view class='modal-content' wx:if='{{type === "input"}}'>
+			<view class='modal-body'>
+				<input type="text" placeholder="{{placeholder}}" bindinput="bindKeyInput" value="{{inputValue}}" />
+			</view>
+			<view class='modal-footer'>
+				<text class='cancle' wx:if="{{showCancel}}" catchtap='_cancelEvent' data-fn="{{cancel}}">取消</text>
+				<text class='sure' catchtap='_confirmEvent' data-fn="{{confirm}}">确定</text>
+			</view>
+		</view>
+	</view>
+</view>
