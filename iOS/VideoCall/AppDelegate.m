@@ -121,7 +121,7 @@
     
     // FIXME:WARNING: QApplication was not created in the main() thread.QObject::connect: No such slot MeetRecordImpl::slot_SetScreenShare(bool)
     SdkInitDat *sdkInitData = [[SdkInitDat alloc] init];
-    [sdkInitData setSdkDatSavePath:[PathUtil searchPathInCacheDir:@"CloudroomVideoSDK"]];
+    [sdkInitData setSdkDatSavePath:[PathUtil searchPathInCacheDir:@"CRVideoSDK"]];
     [sdkInitData setShowSDKLogConsole:NO];
     [sdkInitData.params setValue:@"0" forKey:@"HttpDataEncrypt"];
     CRVIDEOSDK_ERR_DEF error = [[CloudroomVideoSDK shareInstance] initSDK:sdkInitData];

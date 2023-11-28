@@ -201,7 +201,6 @@
 		C2ACC1CC1DE5330000AD90FA /* CustomerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerCell.h; sourceTree = "<group>"; };
 		C2ACC1CD1DE5330000AD90FA /* CustomerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomerCell.m; sourceTree = "<group>"; };
 		C2ACC1D01DE535C500AD90FA /* Customer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Customer.storyboard; sourceTree = "<group>"; };
-		C2AE25921DEEADE500F59D6F /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		C2AE25941DEEAE4200F59D6F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C2AE259A1DEEAEEB00F59D6F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C2AE259C1DEEAF0400F59D6F /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
@@ -223,7 +222,6 @@
 		C63F8FAF226FF68E005D1B33 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		C63F8FB1226FF695005D1B33 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		C63F8FB3226FF6B2005D1B33 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
-		C6F02DEE22EA8DE700AE5140 /* CloudroomVideoSDK_IOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CloudroomVideoSDK_IOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6F02DFF22EA912A00AE5140 /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bugly.framework; path = ../../Framework/Bugly.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -638,7 +636,6 @@
 			children = (
 				2173A96A268ABA5E005A9CEB /* CloudroomVideoSDK_IOS.framework */,
 				C6F02DFF22EA912A00AE5140 /* Bugly.framework */,
-				C6F02DEE22EA8DE700AE5140 /* CloudroomVideoSDK_IOS.framework */,
 				C63F8FB3226FF6B2005D1B33 /* VideoToolbox.framework */,
 				C63F8FB1226FF695005D1B33 /* CFNetwork.framework */,
 				C63F8FAF226FF68E005D1B33 /* CoreTelephony.framework */,
@@ -648,7 +645,6 @@
 				BC3BC6D421527C7700675A57 /* libiconv.tbd */,
 				C2AE26351DEEB5F500F59D6F /* libz.tbd */,
 				C2AE259C1DEEAF0400F59D6F /* libbz2.tbd */,
-				C2AE25921DEEADE500F59D6F /* libstdc++.tbd */,
 				C2AE26411DEEB7FB00F59D6F /* ExternalAccessory.framework */,
 				C2AE263B1DEEB7C500F59D6F /* MobileCoreServices.framework */,
 				C2AE25A21DEEB17B00F59D6F /* SystemConfiguration.framework */,
@@ -1069,7 +1065,7 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/VideoCall/VideoCall.pch";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = VideoCall/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				MARKETING_VERSION = 4.3.20;
@@ -1102,7 +1098,7 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/VideoCall/VideoCall.pch";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = VideoCall/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				MARKETING_VERSION = 4.3.20;
@@ -1110,7 +1106,7 @@
 				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cloudroom.VideoCall;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e23f9ce0-1713-4f71-bf46-4cb94010788e";
+				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "CloudRoom-elease";
 			};
 			name = Release;
