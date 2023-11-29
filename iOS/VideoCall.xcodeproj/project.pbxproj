@@ -109,6 +109,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		164A714D2B15D1DD00DAD72B /* AppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConfig.h; sourceTree = "<group>"; };
 		16DB90EC28D5CC1D0094ACF6 /* IQTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IQTextView.m; sourceTree = "<group>"; };
 		16DB90ED28D5CC1D0094ACF6 /* IQTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQTextView.h; sourceTree = "<group>"; };
 		16DB90EF28D5CC1D0094ACF6 /* IQUIView+IQKeyboardToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IQUIView+IQKeyboardToolbar.h"; sourceTree = "<group>"; };
@@ -408,6 +409,7 @@
 				C24A329E1DE2D9820038D9B1 /* Server */,
 				C24A329D1DE2D8E60038D9B1 /* Customer */,
 				C24A32991DE2D88C0038D9B1 /* Login */,
+				164A714D2B15D1DD00DAD72B /* AppConfig.h */,
 				C24A32691DE2D8400038D9B1 /* AppDelegate.h */,
 				C24A326A1DE2D8400038D9B1 /* AppDelegate.m */,
 				C274A8071DE41E0300202530 /* VideoCall.pch */,
