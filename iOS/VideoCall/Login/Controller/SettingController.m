@@ -135,9 +135,7 @@ typedef NS_ENUM(NSInteger, SettingBtnType)
     }
     
     // 不保存默认展示
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *accountCache = [userDefaults stringForKey:CallHelper_account];
-    if (accountCache.length <= 0 && [account isEqualToString:kAppIDDefaultShow]) {
+    if ([account isEqualToString:kAppIDDefaultShow] || [account isEqualToString:KDefaultAppID]) {
         account = nil;
         pswd = nil;
     }
