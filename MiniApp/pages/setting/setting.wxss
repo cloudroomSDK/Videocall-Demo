@@ -1,0 +1,115 @@
+/* 登录设置界面 开始 */
+.clearfix::after {
+    display: block;
+    height: 0;
+    clear: both;
+    content: ''
+}
+
+.login_set {
+    background-color: #fff;
+    /* color: #aaa; */
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #eee;
+}
+
+.login_set .set_header {
+    height: 80rpx;
+    width: 100%;
+    background-color: #f60;
+    color: #fff;
+    float: left;
+    line-height: 80rpx;
+    text-align: center;
+    font-size: 28rpx;
+}
+
+.login_set .set_header image {
+    width: 40rpx;
+    height: 40rpx;
+    position: absolute;
+    top: 20rpx;
+    left: 20rpx;
+}
+
+.login_set .set_box {
+    width: 80%;
+    border: 1px solid #ccc;
+    border-radius: 10rpx;
+    margin: 120rpx auto;
+}
+
+.login_set .set_box view {
+    border-bottom: 1px solid #ccc;
+    line-height: 80rpx;
+    padding-left: 20rpx;
+    color: #555;
+}
+
+.login_set .set_box view.set_AppSecret {
+    border: none;
+}
+
+.login_set .set_box text {
+    width: 150rpx;
+    float: left;
+    border-right: 1px solid #ccc;
+    text-align: right;
+    font-size: 28rpx;
+}
+
+.login_set .set_box input {
+    height: 80rpx;
+    line-height: 80rpx;
+    font-size: 28rpx;
+    padding-left: 20rpx;
+}
+
+.login_set .set_box .textarea {
+    width: auto;
+    overflow: hidden;
+    height: 400rpx;
+    line-height: 50rpx;
+}
+
+.login_set .set_token .text {
+    line-height: 400rpx;
+    height: 400rpx;
+}
+
+.login_set .option {
+    width: 80%;
+    margin: 0 auto 80rpx auto;
+}
+
+.login_set .set_button {
+    padding: 0 100rpx;
+    height: 100rpx;
+    color: #fff;
+}
+
+.login_set .set_button view {
+    width: 200rpx;
+    height: 80rpx;
+    float: left;
+    background-color: #f60;
+    border-radius: 10rpx;
+    line-height: 80rpx;
+    text-align: center;
+    font-size: 28rpx;
+}
+
+.login_set .set_button #resetBtn {
+    float: left;
+}
+
+.login_set .set_button #saveBtn {
+    float: right;
+}
+
+/* 登陆设置界面 结束 */

@@ -1,0 +1,139 @@
+<view class='meeting_page' bindtap='meetingTap'>
+	<view class='meeting_header {{showMenu?"showAnimate":""}}'>
+		<view class='meetingIdText'>房间号：{{meetInfo.ID}}</view>
+		<view>
+			<text>与 {{remoteUserInfo.nickname}} 会话中,时长:</text>
+			<text hidden='{{meetingTimer.hour>0?false:true}}'>{{meetingTimer.hour}}小时</text>
+			<text hidden='{{meetingTimer.min>0?false:true}}'>{{meetingTimer.min}}分</text>
+			<text>{{meetingTimer.sec}}秒</text>
+		</view>
+	</view>
+	<view class='meeting_toolbar {{showMenu?"showAnimate":""}}' catchtap='toolbarTap'>
+		<view class='item' bindtap='toggleSoundMode'>
+			<view class="img">
+				<image class='image' src="/image/contral/{{RTCAudioPlayer.soundMode==='speaker'?'hands_free_open':'hands_free_close'}}.png"></image>
+			</view>
+			<view class=''>{{RTCAudioPlayer.soundMode==='speaker'?'关':'开'}}免提</view>
+		</view>
+		<view class='item' bindtap='toggleMirror' data-curmirrorstatus="{{isMirror}}">
+			<view class="img">
+				<image class='image' src="/image/contral/mirror.png"></image>
+			</view>
+			<view class="">{{isMirror?'关闭':'开启'}}镜像</view>
+		</view>
+		<view class='item' bindtap='toggleBeautify'>
+			<view class="img">
+				<image class='image' src="/image/contral/beauty.png"></image>
+			</view>
+			<view class=''>{{!!isBeautify?'关美颜':'开美颜'}}</view>
+		</view>
+		<view class='item' bindtap='tapSwitchCam' data-status='{{!myCamStatus}}'>
+			<view class="img">
+				<image class='image' src="/image/contral/{{myCamStatus ? 'cam_open':'cam_close'}}.png"></image>
+			</view>
+			<view class=''>{{myCamStatus?'关摄像头':'开摄像头'}}</view>
+		</view>
+		<view class='item' bindtap='startRecord'>
+			<view class="img">
+				<image class='image' src="/image/contral/{{isRecording==0?'stopRecord':'startRecord'}}.png"></image>
+			</view>
+			<view wx:if='{{isRecording == 0}}'>开始录制</view>
+			<view wx:elif='{{isRecording == 1}}'>启动中</view>
+			<view wx:else>停止录制</view>
+		</view>
+		<view class='item' bindtap='tapSwitchMic' data-status='{{!myMicStatus}}'>
+			<view class="img">
+				<image class='image' src="/image/contral/{{myMicStatus?'mic_open':'mic_close'}}.png"></image>
+			</view>
+			<view class=''>{{myMicStatus?'关麦克风':'开麦克风'}}</view>
+		</view>
+		<view class='item' bindtap='tapToggleCam'>
+			<view class="img">
+				<image class='image' src="/image/contral/cam_toggle.png"></image>
+			</view>
+			<view class=''>切摄像头</view>
+		</view>
+		<view class='item' data-curstatue="{{definitionState}}" bindtap='toggleDefinition'>
+			
+			<block wx:if="{{definitionState === 0}}">
+				<view class="img">
+					<image class='image' src="/image/contral/definition_Fl.png"></image>
+				</view>
+				<view class=''>流畅</view>
+			</block>
+			<block wx:elif='{{definitionState === 1}}'>
+				<view class="img">
+					<image class='image' src="/image/contral/definition_sd.png"></image>
+				</view>
+				<view class=''>标清</view>
+			</block>
+			<block wx:else>
+				<view class="img">
+					<image class='image' src="/image/contral/definition_hd.png"></image>
+				</view>
+				<view class=''>高清</view>
+			</block>
+		</view>
+		<view class='item' bindtap='snapshot'>
+			<view class="img">
+				<image class='image' src="/image/contral/definition_sd.png"></image>
+			</view>
+			<view>拍照</view>
+		</view>
+		<view class='item' bindtap='closeCall'>
+			<view class="img">
+				<image class='image' src="/image/contral/hang_up.png"></image>
+			</view>
+			<view class=''>挂断</view>
+		</view>
+	</view>
+	<view wx:if='{{isRecording==2}}' class="RecordingText" catchtap='startRecord'><i class="circle"></i>录制中</view>
+
+	<view class='meeting_main'>
+		<view class="meet_media" wx:if='{{mediaLayout}}'>
+			<RTCVideoPlayer id="mediaPlayer" data-key="mediaPlayer" config='{{CRMediaPlayer}}' bindlongpress='longpressScreen'>
+				<!-- 标注组件 -->
+				<RTCScreenMarkV4 class='screenMarkUI' wx:if='{{CRMediaPlayer.type=="screen"}}' config='{{CRMediaPlayer}}'>
+				</RTCScreenMarkV4>
+			</RTCVideoPlayer>
+		</view>
+
+		<view class='meet_video {{mediaLayout?"mediaLayout":"noMedia"}}'>
+			<view class='videoitem {{isMySmallVideo ? "big" : "small"}}' style="left: {{smallVideoLeft}}rpx;top: {{smallVideoTop}}rpx" data-removable='{{!isMySmallVideo}}' catchtap='videoTap' bindtouchstart='videoTouchStart' bindtouchend='videoTouchEnd' bindtouchmove='videoTouchMove' data-removable='{{!isMySmallVideo}}'>
+				<!-- 视频播放组件 -->
+				<RTCVideoPlayer id="videoPlayer" data-key="videoPlayer" config='{{RTCVideoPlayer}}' bindlongpress='longpressScreen' >
+					<view class="bgc" wx:if="{{remoteUserInfo.videoStatus!==3}}">
+						<view class="text">摄像头未开启</view>
+					</view>
+					<view class='nickname'>{{remoteUserInfo.nickname}}</view>
+				</RTCVideoPlayer>
+			</view>
+			<view class='videoitem {{isMySmallVideo ? "small" : "big"}}' style="left: {{smallVideoLeft}}rpx;top: {{smallVideoTop}}rpx" data-removable='{{isMySmallVideo}}' catchtap='videoTap' bindtouchstart='videoTouchStart' bindtouchend='videoTouchEnd' bindtouchmove='videoTouchMove' data-removable='{{!!isMySmallVideo}}'>
+				<!-- 推流组件，麦克风声音也是从推流组件输出，就算只开启麦克风，也要渲染该组件 -->
+				<RTCVideoPusher id='videopusher' config='{{RTCVideoPusher}}'>
+					<view class="bgc" wx:if="{{myUserInfo.videoStatus!==3}}">
+						<view class="text">摄像头未开启</view>
+					</view>
+					<view class='nickname'>我</view>
+				</RTCVideoPusher>
+			</view>
+		</view>
+
+		<view class='meet_audio'>
+			<!-- 音频播放组件 -->
+			<RTCAudioPlayer config='{{RTCAudioPlayer}}' wx:if='{{RTCAudioPlayer}}'></RTCAudioPlayer>
+		</view>
+	</view>
+
+	<!-- 拍照框 -->
+	<view class='photo-box' wx:if='{{photoSrc}}'>
+		<view class='photo'>
+			<view class='close' catchtap='closePhoto'>x</view>
+			<image src="{{photoSrc}}" mode='aspectFit'/>
+		</view>
+		<view class='sava' catchtap='savaPhoto'>保存</view>
+	</view>
+</view>
+
+<!-- 自定义模态框 -->
+<myModal id='modal'></myModal>

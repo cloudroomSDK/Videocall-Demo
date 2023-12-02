@@ -7,11 +7,12 @@
 //
 
 #import "CallHelper.h"
+#import "AppConfig.h"
 
-static NSString * const CallHelper_server = @"server";
-static NSString * const CallHelper_account = @"account";
-static NSString * const CallHelper_pswd = @"pswd";
-static NSString * const CallHelper_nickname = @"nickname";
+NSString * const CallHelper_server = @"server";
+NSString * const CallHelper_account = @"account";
+NSString * const CallHelper_pswd = @"pswd";
+NSString * const CallHelper_nickname = @"nickname";
 NSString * const roler = @"roler";
 
 @interface CallHelper ()
@@ -60,14 +61,14 @@ static CallHelper *shareInstance;
 #pragma mark - public method
 - (void)writeAccount:(NSString *)account pswd:(NSString *)pswd server:(NSString *)server
 {
-    _account = account;
-    _pswd = pswd;
+    if (account.length > 0) _account = account;
+    if (pswd.length > 0) _pswd = pswd;
     _server = server;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:_account forKey:CallHelper_account];
-    [userDefaults setObject:_pswd forKey:CallHelper_pswd];
-    [userDefaults setObject:_server forKey:CallHelper_server];
+    [userDefaults setObject:account forKey:CallHelper_account];
+    [userDefaults setObject:pswd forKey:CallHelper_pswd];
+    [userDefaults setObject:server forKey:CallHelper_server];
     [userDefaults synchronize];
 }
 
@@ -91,7 +92,9 @@ static CallHelper *shareInstance;
 
 - (void)resetInfo;
 {
-    [self writeAccount:@"demo@cloudroom.com" pswd:@"123456" server:@"sdk.cloudroom.com"];
+    [self writeAccount:nil pswd:nil server:@"sdk.cloudroom.com"];
     [self readInfo];
+    _account = KDefaultAppID;
+    _pswd = KDefaultAppSecret;
 }
 @end

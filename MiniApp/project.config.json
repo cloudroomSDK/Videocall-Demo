@@ -1,0 +1,57 @@
+{
+  "description": "项目配置文件",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "preloadBackgroundData": false,
+    "minified": true,
+    "newFeature": true,
+    "coverView": true,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "scopeDataCheck": false,
+    "uglifyFileName": false,
+    "checkInvalidKey": true,
+    "checkSiteMap": true,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": true,
+    "useMultiFrameRuntime": true,
+    "useApiHook": true,
+    "useApiHostProcess": true,
+    "babelSetting": {
+      "ignore": [
+        "utils/RTCSDK/RTC_Miniapp_SDK.min.js"
+      ],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "useIsolateContext": false,
+    "userConfirmedBundleSwitch": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "disableUseStrict": false,
+    "showES6CompileOption": false,
+    "useCompilerPlugins": false,
+    "minifyWXML": true,
+    "condition": false
+  },
+  "compileType": "miniprogram",
+  "libVersion": "2.9.1",
+  "appid": "wx0049f26388e78432",
+  "projectname": "videoCall%20Demo",
+  "debug": true,
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
+}

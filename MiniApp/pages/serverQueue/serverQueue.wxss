@@ -1,0 +1,277 @@
+page {
+    display: block;
+    max-height: 100%;
+    color: #3e3e3e;
+    font-family: 'Microsoft YaHei';
+}
+
+/* 客户 队列界面 开始 */
+.queue_page_client {
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+}
+
+.queue_header {
+    height: 90rpx;
+    width: 100%;
+    z-index: 2;
+    background-color: #fff;
+    line-height: 90rpx;
+    text-align: center;
+    position: fixed;
+    font-size: 40rpx;
+    border-bottom: 1px solid #ddd;
+}
+
+.queue_header .queue_logout {
+    position: absolute;
+    left: 30rpx;
+    font-size: 34rpx;
+    color: #3791e9;
+}
+
+.queue_header .refresh_queue {
+    position: absolute;
+    right: 30rpx;
+    font-size: 34rpx;
+    color: #3791e9;
+}
+
+.queue_page_client .queue_list {
+    padding-top: 90rpx;
+    padding-bottom: 20rpx;
+    height: 100%;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+}
+
+.queue_page_client .queue_list .queue_list_items {
+    background-color: #f0f0f0;
+    height: 100%;
+    width: 100%;
+}
+
+.queue_page_client .queue_list .queue_list_items .queue_item {
+    min-height: 120rpx;
+    padding: 0 20rpx;
+    background-color: #fff;
+    margin-top: 20rpx;
+}
+
+.queue_page_client .queue_list .queue_item .queue_info {
+    width: 100%;
+    height: 60rpx;
+    line-height: 60rpx;
+    font-size: 28rpx;
+}
+
+.queue_page_client .queue_list .queue_item .queue_info .queue_name {
+    color: #4592ff;
+    float: left;
+    font-size: 28rpx;
+}
+
+.queue_page_client .queue_list .queue_item .queue_info .queue_waiting {
+    float: right;
+    color: #9e9e9e;
+}
+
+.queue_page_client .queue_list .queue_item .queue_desc {
+    min-height: 60rpx;
+    line-height: 40rpx;
+    font-size: 26rpx;
+    padding-top: 10rpx;
+    box-sizing: border-box;
+    /* background-color: #ccc; */
+}
+
+/* 客户 队列界面 结束 */
+
+/* 坐席 队列界面 开始 */
+
+.queue_page_seat {
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+}
+
+.queue_page_seat .queue_list {
+    height: 100%;
+    width: 100%;
+    padding-top: 90rpx;
+    padding-bottom: 120rpx;
+    font-size: 28rpx;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+}
+
+.queue_page_seat .queue_list .queue_list_items {
+    width: 100%;
+    height: 100%;
+    background-color: #f0f0f0;
+    overflow: auto;
+}
+
+.queue_page_seat .queue_list .queue_item {
+    min-height: 120rpx;
+    padding: 0 20rpx;
+    background-color: #fff;
+    margin-top: 20rpx;
+}
+
+.queue_page_seat .queue_list .queue_item .queue_info {
+    width: 100%;
+    height: 60rpx;
+    font-size: 28rpx;
+}
+
+.queue_page_seat .queue_list .queue_item .queue_info .queue_name {
+    float: left;
+    font-size: 32rpx;
+    color: #3792e8;
+}
+
+.queue_page_seat .queue_list .queue_item .queue_info .svring {
+    float: right;
+    font-size: 32rpx;
+    margin-right: 20rpx;
+    color: #f60;
+}
+
+.queue_page_seat .queue_list .queue_item .queue_info .nosvring {
+    float: right;
+    font-size: 32rpx;
+    margin-right: 20rpx;
+    color: #4592ff;
+}
+
+.queue_item .queue_status {
+    height: 60rpx;
+    line-height: 60rpx;
+    color: #9e9e9e;
+}
+
+.queue_item .queue_status .queue_num {
+    float: left;
+    width: 33.33%;
+}
+
+.queue_page_seat .queue_seat_bottom {
+    height: 100rpx;
+    width: 100%;
+    line-height: 100rpx;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    bottom: 0;
+    font-size: 32rpx;
+    box-sizing: border-box;
+}
+
+.queue_page_seat .queue_seat_bottom image {
+    position: absolute;
+    top: 34rpx;
+    left: 0;
+    height: 35rpx;
+    width: 35rpx;
+}
+
+.queue_page_seat .queue_seat_bottom .autoAssign {
+    position: relative;
+    padding-left: 46rpx;
+    float: left;
+    margin-left: 40rpx;
+    color: #fff;
+}
+
+.queue_page_seat .queue_seat_bottom .right {
+    float: right;
+}
+
+.queue_page_seat .queue_seat_bottom .btn {
+    float: left;
+    padding: 0 20rpx;
+    text-align: center;
+    height: 60rpx;
+    line-height: 60rpx;
+    font-size: 28rpx;
+    margin-top: 20rpx;
+    margin-right: 20rpx;
+    color: #fff;
+    background-color: #3792e8;
+    border-radius: 8rpx;
+}
+
+/* 客户排队界面 开始 */
+
+.client_waiting {
+    height: 100%;
+    width: 100%;
+    /* background-color: #8ed6f6; */
+}
+
+.client_waiting .client_waiting_header {
+    height: 90rpx;
+    line-height: 90rpx;
+    background-color: #f60;
+    color: #fff;
+    font-size: 32rpx;
+    text-align: center;
+}
+
+.client_waiting .client_waiting_main {
+    height: auto;
+}
+
+.client_waiting .client_waiting_main .waiting_text {
+    text-align: center;
+    height: 120rpx;
+    line-height: 160rpx;
+    font-size: 28rpx;
+}
+
+.client_waiting .client_waiting_main .waiting_timer {
+    height: 100rpx;
+    margin-top: 20rpx;
+}
+
+.client_waiting .client_waiting_main .waiting_timer>view {
+    padding: 0 30rpx;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 52rpx;
+    width: auto;
+    border: 5rpx solid #f60;
+    color: #f60;
+    height: 90rpx;
+    line-height: 90rpx;
+    border-radius: 42rpx;
+}
+
+.client_waiting .client_waiting_main .waiting_before {
+    height: 140rpx;
+    line-height: 140rpx;
+    font-size: 36rpx;
+    text-align: center;
+}
+
+.client_waiting .client_waiting_main .waiting_cancel {
+    width: 160rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    background-color: #f60;
+    border-radius: 8rpx;
+    color: #fff;
+    text-align: center;
+    font-size: 28rpx;
+    position: absolute;
+    top: 500rpx;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* 客户排队界面结束 */

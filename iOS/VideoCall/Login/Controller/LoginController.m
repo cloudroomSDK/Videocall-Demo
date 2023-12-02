@@ -226,11 +226,13 @@ typedef NS_ENUM(NSInteger, LoginBtnType)
     
     if ([NSString stringCheckEmptyOrNil:account]) {
         [HUDUtil hudShow:@"账号不能为空!" delay:3 animated:YES];
+        [self _handleSetting];
         return;
     }
     
     if ([NSString stringCheckEmptyOrNil:pswd]) {
         [HUDUtil hudShow:@"密码不能为空!" delay:3 animated:YES];
+        [self _handleSetting];
         return;
     }
     

@@ -1,0 +1,219 @@
+page {
+    height: 100%;
+}
+
+/* 会话界面开始 */
+.meeting_page {
+    height: 100%;
+    background-color: #000;
+    position: relative;
+}
+
+.meeting_header {
+    position: absolute;
+    width: 100%;
+    color: #fff;
+    font-size: 28rpx;
+    text-align: center;
+    background-color: rgba(0, 0, 0, .7);
+    opacity: 0;
+    transition: .3s;
+    transform: translateY(-100%);
+    z-index: 21;
+}
+
+.meeting_header .meetingIdText {
+    font-size: 26rpx;
+}
+
+.meeting_main {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.meeting_toolbar {
+    position: absolute;
+    bottom: 0;
+    z-index: 21;
+    width: 100%;
+    text-align: center;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: .3s;
+    background-color: rgba(0, 0, 0, .7);
+}
+
+.showAnimate {
+    transform: translateY(0);
+    opacity: 1;
+    transition: .3s;
+}
+
+.meeting_toolbar .item {
+    float: left;
+    width: 33.3333%;
+    font-size: 28rpx;
+    color: #fff;
+    padding: 15rpx;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.meeting_toolbar .item:last-of-type {
+    margin-left: 33.3333%;
+}
+.meeting_toolbar .item .img {
+    margin-bottom: 10rpx;
+}
+.meeting_toolbar .item .img  .image {
+    width: 100rpx;
+    height: 100rpx;
+}
+.RecordingText {
+    position: absolute;
+    right: 20rpx;
+    top: 20rpx;
+    z-index: 20;
+    background-color: rgba(0, 0, 0, .6);
+    border-radius: 20rpx;
+    padding: 10rpx 20rpx;
+    line-height: 25rpx;
+    font-size: 25rpx;
+    color: #e00;
+    vertical-align: middle;
+}
+.RecordingText .circle {
+    float: left;
+    background-color: #e00;
+    width: 25rpx;
+    height: 25rpx;
+    border-radius: 50%;
+    margin-right: 10rpx;
+}
+
+.meeting_main .meet_video.noMedia {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+.meeting_main .meet_video.noMedia .big {
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+}
+.meeting_main .meet_video.noMedia .small {
+    position: absolute;
+    height: 400rpx;
+    width: 225rpx;
+    z-index: 10;
+}
+.meeting_main .meet_video .videoitem .nickname {
+    position: absolute;
+    top: 10rpx;
+    left: 20rpx;
+    padding: 6rpx 12rpx;
+    height: 24rpx;
+    line-height: 24rpx;
+    font-size: 20rpx;
+    border-radius: 30rpx;
+    background-color: #000;
+    color: #ccc;
+    z-index: 11;
+}
+
+.meeting_main .meet_video .videoitem .bgc {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+}
+.meeting_main .meet_video .videoitem .bgc .text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    padding: 10rpx 20rpx;
+    font-size: 26rpx;
+    height: 30rpx;
+    line-height: 30rpx;
+    border-radius: 30rpx;
+    background-color: #000;
+    color: #ccc;
+}
+.meeting_main .meet_video.noMedia .small .bgc {
+    z-index: 11;
+}
+.meeting_main .meet_video.noMedia .big .bgc {
+    z-index: 2;
+}
+.meeting_main .meet_media {
+    height: 60%;
+    width: 100%;
+    position: relative;
+}
+.meeting_main .meet_media .screenMarkUI{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}
+.meeting_main .meet_video.mediaLayout {
+    width: 100%;
+    height: 40%;
+}
+.meeting_main .meet_video.mediaLayout .videoitem {
+    height: 100%;
+    width: 50%;
+    position: static;
+    float: left;
+}
+
+.photo-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 31;
+    background-color: rgba(0, 0, 0, .8);
+}
+.photo-box .photo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    height: 1066rpx;
+    width: 600rpx;
+}
+.photo-box .photo .close {
+    position: absolute;
+    top: -40rpx;
+    right: -40rpx;
+    background-color: rgba(1, 1, 1, .6);
+    width: 80rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    color: #fff;
+    text-align: center;
+    border-radius: 50%;
+}
+.photo-box .photo image {
+    width: 100%;
+    height: 100%;
+}
+.photo-box .sava {
+    position: absolute;
+    bottom: 10rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300rpx;
+    height: 100rpx;
+    line-height: 100rpx;
+    text-align: center;
+    color: #fff;
+    background-color: gold;
+    border-radius: 50rpx;
+}

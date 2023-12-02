@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "客户端",
+    "usingComponents": {
+        "myModal": "../../components/myModal/myModal"
+    }
+}

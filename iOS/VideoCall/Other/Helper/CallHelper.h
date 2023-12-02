@@ -10,6 +10,10 @@
 #import <Foundation/Foundation.h>
 
 UIKIT_EXTERN NSString * const roler;
+UIKIT_EXTERN NSString * const CallHelper_server;
+UIKIT_EXTERN NSString * const CallHelper_account;
+UIKIT_EXTERN NSString * const CallHelper_pswd;
+UIKIT_EXTERN NSString * const CallHelper_nickname;
 
 typedef NS_ENUM(NSUInteger, RolerType)
 {

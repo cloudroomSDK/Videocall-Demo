@@ -8,6 +8,10 @@
 
 #import "SettingController.h"
 #import "CallHelper.h"
+#import "AppConfig.h"
+
+NSString *const kAppIDDefaultShow = @"默认appID";
+NSString *const kAppIDPlaceholder = @"请配置appID";
 
 typedef NS_ENUM(NSInteger, SettingBtnType)
 {
@@ -69,9 +73,7 @@ typedef NS_ENUM(NSInteger, SettingBtnType)
         [self _handleReset];
     }
     else {
-        [_accountText setText:callHelper.account];
-        [_pswdText setText:callHelper.pswd];
-        [_serverText setText:callHelper.server];
+        [self reloadConfigView];
     }
 }
 
@@ -94,7 +96,19 @@ typedef NS_ENUM(NSInteger, SettingBtnType)
     CallHelper *callHelper = [CallHelper shareInstance];
     [callHelper resetInfo];
     
-    [_accountText setText:callHelper.account];
+    [self reloadConfigView];
+}
+
+- (void)reloadConfigView {
+    CallHelper *callHelper = [CallHelper shareInstance];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *account = [userDefaults stringForKey:CallHelper_account];
+    if (account.length <= 0 && [KDefaultAppID isEqualToString:callHelper.account] && KDefaultAppID.length > 0) {
+        _accountText.text = kAppIDDefaultShow;
+    } else {
+        _accountText.text = callHelper.account;
+    }
     [_pswdText setText:callHelper.pswd];
     [_serverText setText:callHelper.server];
 }
@@ -118,6 +132,12 @@ typedef NS_ENUM(NSInteger, SettingBtnType)
     if ([NSString stringCheckEmptyOrNil:pswd]) {
         [HUDUtil hudShow:@"密码不能为空!" delay:3 animated:YES];
         return;
+    }
+    
+    // 不保存默认展示
+    if ([account isEqualToString:kAppIDDefaultShow] || [account isEqualToString:KDefaultAppID]) {
+        account = nil;
+        pswd = nil;
     }
     
     CallHelper *callHelper = [CallHelper shareInstance];

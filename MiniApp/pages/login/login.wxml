@@ -1,0 +1,31 @@
+<!-- ------ 登录页开始 ----- -->
+<view class="login_box" hidden='{{loginPageHidden}}'>
+	<view class="head_img">
+		<image src='/image/logo.png'></image>
+	</view>
+	<text class='login_title'>视频呼叫Demo</text>
+	<view class="login_input">
+		<input placeholder='登录昵称，输入任意字符串' value='{{nickname}}' bindinput='nicknameInput'></input>
+		<radio-group bindchange='loginTypeChange' class='login_type_box'>
+			<label class='login_type_client login_type'>
+				<radio checked='{{loginType === 1}}' value="1" color='a4a6aa'></radio>
+				<text>客户</text>
+			</label>
+			<label class='login_type_seat login_type'>
+				<radio checked='{{loginType === 2}}' value='2' color='a4a6aa'></radio>
+				<text>坐席</text>
+			</label>
+		</radio-group>
+		<view class="login_btn" id="login_btn" bindtap='login'>登录</view>
+		<text class="server_set" id="server_set" bindtap='showSet'>服务器设置</text>
+	</view>
+	<view class="version">
+		<view>
+			<text>Demo: V{{ver}}</text>
+		</view>
+		<view>
+			<text>SDK: {{sdkVer}}</text>
+		</view>
+	</view>
+</view>
+<!-- ----- 登录页结束 ----- -->

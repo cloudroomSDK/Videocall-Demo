@@ -1,0 +1,39 @@
+<!-- ----- 客户队列页面开始 ----- -->
+<view class='queue_page_client' hidden='{{queueClientPageHidden}}'>
+	<view class='queue_header'>
+		<text class='queue_logout' bindtap='logout'>注销</text>
+		<text>请选择业务</text>
+		<text class='refresh_queue' bindtap='refreshQue'>刷新</text>
+	</view>
+	<view class='queue_list' scroll-y='true'>
+		<scroll-view class='queue_list_items' scroll-y='true'>
+			<view wx:for='{{queInfoObj}}' wx:for-index='key' wx:for-item='value' wx:key='key' class='queue_item'
+				bindtap='startQueuing' data-info='{{value}}' data-queid='{{key}}'>
+				<view class='queue_info'>
+					<view class='queue_name'>{{value.name}}</view>
+					<view wx:if='{{value.waitNum!==undefined}}' class='queue_waiting'>{{value.waitNum}}人等待</view>
+				</view>
+				<view class='queue_desc'>备注：{{value.desc}}</view>
+			</view>
+		</scroll-view>
+	</view>
+</view>
+<!-- ----- 客户队列页面结束 ----- -->
+<!-- ----- 客户排队页面开始 ----- -->
+<view class='client_waiting' hidden='{{clientWaitingPageHidden}}'>
+	<view class='client_waiting_header'>正在排队...</view>
+	<view class='client_waiting_main'>
+		<view class='waiting_text'>您正在排队等候【
+			<text>{{taskQueInfo.queName}}</text>】服务中，已等候</view>
+		<view class='waiting_timer'>
+			<view>{{taskQueInfo.min}}分{{taskQueInfo.sec}}秒</view>
+		</view>
+		<view class='waiting_before'>前面还有
+			<text>{{taskQueInfo.position - 1}}</text> 位用户</view>
+		<view class='waiting_cancel' bindtap='clientWaitingCancel' data-queid='{{taskQueInfo.queId}}'>取消排队</view>
+	</view>
+</view>
+<!-- ----- 客户排队页面结束 ----- -->
+
+<!-- 自定义模态框 -->
+<myModal id='modal'></myModal>
