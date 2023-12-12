@@ -1,7 +1,7 @@
-﻿<Window x:Class="VideoCall.VideoSessionWin"
+﻿<Window x:Class="SDKDemo.VideoSessionWin"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:y="clr-namespace:VideoCall"         
+    xmlns:y="clr-namespace:SDKDemo"         
     Title="你正在进入和【XXX】视频会话中…" Height="720" Width="1280" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen"
         Closed="Window_Closed" ContentRendered="Window_ContentRendered">
 

@@ -11,7 +11,7 @@ using AxnpcloudroomvideosdkLib;
 using System.Windows.Media.Imaging;
 using System.Windows.Data;
 
-namespace VideoCall
+namespace SDKDemo
 {
     public delegate void devChangeHandler();
     /// <summary>

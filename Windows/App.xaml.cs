@@ -3,7 +3,7 @@ using System.Windows;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace VideoCall
+namespace SDKDemo
 {
     /// <summary>
     /// App.xaml 的交互逻辑

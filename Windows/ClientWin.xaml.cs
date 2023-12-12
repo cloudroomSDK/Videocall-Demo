@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using AxnpcloudroomvideosdkLib;
 using System.Collections.Generic;
 
-namespace VideoCall
+namespace SDKDemo
 {
     /// <summary>
     /// Client.xaml 的交互逻辑

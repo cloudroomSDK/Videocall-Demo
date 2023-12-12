@@ -2,7 +2,7 @@
 using AxnpcloudroomvideosdkLib;
 using System;
 
-namespace VideoCall
+namespace SDKDemo
 {
     public partial class CR_SDK_VideoCall : UserControl
     {        

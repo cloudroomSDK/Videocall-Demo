@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Windows;
 
-namespace VideoCall
+namespace SDKDemo
 {
     /// <summary>
     /// Set.xaml 的交互逻辑
@@ -21,10 +21,28 @@ namespace VideoCall
             IniFile iniFile = new IniFile(Directory.GetCurrentDirectory() + "/VideoCall.ini");  //获取当前根目录
             edtServer.Text = iniFile.ReadValue("Cfg", "LastServer", "sdk.cloudroom.com");
             cbHttpType.SelectedIndex = Convert.ToInt32(iniFile.ReadValue("Cfg", "HttpType", "1"));
-            edtAccount.Text = iniFile.ReadValue("Cfg", "LastAccount", "默认AppID");
-            edtPassword.Password = iniFile.ReadValue("Cfg", "LastPwd", "****");
+            edtAccount.Text = iniFile.ReadValue("Cfg", "LastAccount", "");
+            edtPassword.Password = iniFile.ReadValue("Cfg", "LastPwd", "");
+            if( edtAccount.Text=="" )
+            {
+                setDefAcnt();
+            }
 
             mIsPasswrodChanged = false;
+        }
+
+        private void setDefAcnt()
+        {
+            if( AccountInfo.TEST_AppID=="" )
+            {
+                edtAccount.Text = "";
+                edtPassword.Password = "";
+            }
+            else
+            {
+                edtAccount.Text = "默认APPID";
+                edtPassword.Password = "*";
+            }
         }
 
         //默认设置
@@ -32,8 +50,7 @@ namespace VideoCall
         {
             edtServer.Text = "sdk.cloudroom.com";
             cbHttpType.SelectedIndex = 1;
-            edtAccount.Text = "默认AppID";
-            edtPassword.Password = "****";
+            setDefAcnt();
 
             save2File();
         }
@@ -41,12 +58,6 @@ namespace VideoCall
         //关闭时保存设置
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (edtServer.Text.Trim() == "" || edtAccount.Text.Trim() == "" || edtPassword.Password == "")
-            {
-                MessageBox.Show("请完成输入！");
-                e.Cancel = true;
-                return;
-            }
         }
 
         private void edtPassword_PasswordChanged(object sender, RoutedEventArgs e)

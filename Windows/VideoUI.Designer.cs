@@ -1,4 +1,4 @@
-﻿namespace VideoCall
+﻿namespace SDKDemo
 {
     partial class VideoUI
     {

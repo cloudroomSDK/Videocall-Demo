@@ -1,4 +1,4 @@
-﻿<Window x:Class="VideoCall.StartQueuing"
+﻿<Window x:Class="SDKDemo.StartQueuing"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="开始排队" Height="230" Width="400" Closed="Window_Closed" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">

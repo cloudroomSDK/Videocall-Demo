@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Forms;
 
-namespace VideoCall
+namespace SDKDemo
 {
     /// <summary>
     /// StartQueuing.xaml 的交互逻辑

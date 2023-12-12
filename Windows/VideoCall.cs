@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace VideoCall
+namespace SDKDemo
 {
  
     enum VCALLSDK_ERR_DEF //错误枚举定义

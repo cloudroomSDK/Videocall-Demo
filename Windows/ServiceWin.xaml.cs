@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using AxnpcloudroomvideosdkLib;
 using System.Windows.Controls.Primitives;
 
-namespace VideoCall
+namespace SDKDemo
 {
     /// <summary>
     /// Service.xaml 的交互逻辑

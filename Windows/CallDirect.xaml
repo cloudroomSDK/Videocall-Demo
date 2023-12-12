@@ -1,4 +1,4 @@
-﻿<Window x:Class="VideoCall.CallDirect"
+﻿<Window x:Class="SDKDemo.CallDirect"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="" Height="300" Width="600" Closed="Window_Closed" WindowStartupLocation="CenterScreen">

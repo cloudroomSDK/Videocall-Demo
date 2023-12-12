@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace VideoCall
+namespace SDKDemo
 {
     public class CRError
     {

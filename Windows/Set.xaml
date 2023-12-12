@@ -1,4 +1,4 @@
-﻿<Window x:Class="VideoCall.Set"
+﻿<Window x:Class="SDKDemo.Set"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="设置" Height="275" Width="400" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" Closing="Window_Closing">

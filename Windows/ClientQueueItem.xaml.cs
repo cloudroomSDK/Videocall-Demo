@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System;
 
-namespace VideoCall
+namespace SDKDemo
 {
     /// <summary>
     /// ClientQueueItem.xaml 的交互逻辑

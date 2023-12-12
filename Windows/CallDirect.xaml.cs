@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace VideoCall
+namespace SDKDemo
 {
     /// <summary>
     /// CallDirect.xaml 的交互逻辑
@@ -112,7 +112,7 @@ namespace VideoCall
         }
         public void notifyCallRejected(object sender, ICloudroomVideoSDKEvents_notifyCallRejectedEvent e)
         {
-            Tip tip = new VideoCall.Tip();
+            Tip tip = new SDKDemo.Tip();
             tip.setText("呼叫已被对方拒绝");
             tip.Show();
             btnCall.IsEnabled = true;
@@ -158,7 +158,7 @@ namespace VideoCall
 
         public void acceptCallFail(object sender, ICloudroomVideoSDKEvents_acceptCallFailEvent e)
         {
-            Tip tip = new VideoCall.Tip();
+            Tip tip = new SDKDemo.Tip();
             tip.setText("接收呼叫失败");
             tip.Show();
 

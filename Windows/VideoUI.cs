@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using AxnpcloudroomvideosdkLib;
 
-namespace VideoCall
+namespace SDKDemo
 {
     public partial class VideoUI : UserControl
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace VideoCall
+namespace SDKDemo
 {
     /// <summary>
     /// ConnectWin.xaml 的交互逻辑

@@ -8,7 +8,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
-namespace VideoCall
+namespace SDKDemo
 {
     /// <summary>
     /// Login.xaml 的交互逻辑
@@ -235,8 +235,8 @@ namespace VideoCall
 
 
             App.CRVideoCall.Video.serverAddr = iniFile.ReadValue("Cfg", "LastServer", "sdk.cloudroom.com");
-            string account = iniFile.ReadValue("Cfg", "LastAccount", "demo@cloudroom.com");
-            string password = iniFile.ReadValue("Cfg", "LastPwd", App.getMD5Value("123456"));
+            string account = iniFile.ReadValue("Cfg", "LastAccount", AccountInfo.TEST_AppID);
+            string password = iniFile.ReadValue("Cfg", "LastPwd", App.getMD5Value(AccountInfo.TEST_AppSecret));
             string nickName = edtNickname.Text.Trim();
             string privAcnt = nickName; //自定义账号ID，此处采用登陆昵称，需保证其在此会话参与者中的唯一性            
             mUserID = privAcnt;

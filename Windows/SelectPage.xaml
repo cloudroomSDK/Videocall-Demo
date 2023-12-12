@@ -1,4 +1,4 @@
-﻿<Window x:Class="VideoCall.SelectPage"
+﻿<Window x:Class="SDKDemo.SelectPage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="功能选择" Height="300" Width="300" WindowStartupLocation="CenterScreen">

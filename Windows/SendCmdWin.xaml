@@ -1,4 +1,4 @@
-﻿<Window x:Class="VideoCall.SendCmdWin"
+﻿<Window x:Class="SDKDemo.SendCmdWin"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="发送数据" Height="250" Width="409" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="SingleBorderWindow" Closing="Window_Closing">
