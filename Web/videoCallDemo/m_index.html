@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+
+<script type="text/javascript">
+  window.__CRKEY = 'CRDEMO';
+  var protocol = window.location.protocol;
+  var host = window.location.host;
+  var isLocal = false;
+
+  if (host.indexOf('127.0.0.1') > -1 || host.indexOf('localhost') > -1 || protocol.indexOf('file') > -1) isLocal = true;
+
+  console.log(`isLocal: ${isLocal}`);
+  console.log(`href: ${window.location.href}`);
+  console.log(`referrer: ${document.referrer}`);
+  console.log(`protocol: ${protocol}`);
+
+  // ios上webview打开，如果referrer为空则会获取不到相关媒体api，这里强制刷新一下，让referrer不为空
+  if (document.referrer == '' && !isLocal) window.location.reload();
+
+  // http强制跳转https
+  if (protocol != 'https:' && protocol.indexOf('file') == -1 && !isLocal) {
+    location.href = 'https:' + location.href.substring(protocol.length);
+  }
+
+  // PC端demo和移动端demo强制跳转
+  console.log(/\w+.html$/.exec(window.location.href)[0]);
+  if (navigator.userAgent.includes('Mobile') && !window.location.href.includes('m_')) {
+    // 移动端打开pc页面
+    console.log('true');
+    window.location.href = 'm_' + /\w+.html$/.exec(window.location.href)[0];
+  } else if (!navigator.userAgent.includes('Mobile') && window.location.href.includes('m_')) {
+    // pc端打开移动端页面
+    console.log('false');
+    window.location.href = /\w+.html$/.exec(window.location.href)[0].replace('m_', '');
+  }
+</script>
+
+<html>
+
+<head>
+  <script type="text/javascript" src="../static/js/vconsole.min.js"></script>
+  <script>
+    var vConsole = new VConsole();
+  </script>
+  <meta charset="UTF-8" />
+  <title>视频呼叫Demo</title>
+  <meta http-equiv="pragma" content="no-cache" />
+  <meta http-equiv="cache-control" content="no-cache" />
+  <meta http-equiv="expires" content="0" />
+  <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="WT.pa_cmid" content="" />
+  <meta name="W_design" content="750" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="keywords" content="webRTC" />
+  <meta name="description" content="webRTC" />
+  <link rel="shortcut icon" href="./image/favicon.ico" />
+  <link rel="stylesheet" href="../static/lib/layui/css/layui.css" />
+  <link rel="stylesheet" type="text/css" href="./css/m_videoCall.css?v=1" />
+  <script type="text/javascript" src="../static/js/jquery.2.0.0.min.js"></script>
+  <script type="text/javascript">
+    // 移动端尺寸的函数方法
+    (function (e, t) {
+      function n() {
+        for (var e = navigator.userAgent, t = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod'], n = !0, i = 0; t.length > i; i++)
+          if (e.indexOf(t[i]) > 0) {
+            n = !1;
+            break;
+          }
+        return n;
+      }
+
+      function i() {
+        var t = a.getBoundingClientRect().width;
+        n() && 2047 > t && (t = 640);
+        var i = (t * 100) / w;
+        (a.style.fontSize = i + 'px'), (d.rem = e.rem = i);
+      }
+      var r,
+        o = e.document,
+        a = o.documentElement,
+        s = o.querySelector('meta[name="viewport"]'),
+        c = o.querySelector('meta[name="flexible"]'),
+        l = 0,
+        u = 0,
+        d = t.flexible || (t.flexible = {});
+      var w = o.querySelector('meta[name="W_design"]') ? o.querySelector('meta[name="W_design"]').getAttribute('content') : 640;
+      if (s) {
+        console.warn('将根据已有的meta标签来设置缩放比例');
+        var p = s.getAttribute('content').match(/initial\-scale=([\d\.]+)/);
+        p && ((u = parseFloat(p[1])), (l = parseInt(1 / u)));
+      } else if (c) {
+        var f = c.getAttribute('content');
+        if (f) {
+          var h = f.match(/initial\-dpr=([\d\.]+)/),
+            m = f.match(/maximum\-dpr=([\d\.]+)/);
+          h && ((l = parseFloat(h[1])), (u = parseFloat((1 / l).toFixed(2)))), m && ((l = parseFloat(m[1])), (u = parseFloat((1 / l).toFixed(2))));
+        }
+      }
+      if (!l && !u) {
+        e.navigator.appVersion.match(/android/gi);
+        var g = e.navigator.appVersion.match(/iphone/gi);
+        e.navigator.appVersion.match(/ipad/gi);
+        var v = e.devicePixelRatio;
+        (l = g ? (v >= 3 && (!l || l >= 3) ? 3 : v >= 2 && (!l || l >= 2) ? 2 : 1) : 1), (u = 1 / l);
+      }
+      if ((a.setAttribute('data-dpr', l), !s))
+        if (((s = o.createElement('meta')), s.setAttribute('name', 'viewport'), s.setAttribute('content', 'initial-scale=' + u + ', maximum-scale=' + u + ', minimum-scale=' + u + ', user-scalable=no'), a.firstElementChild)) a.firstElementChild.appendChild(s);
+        else {
+          var y = o.createElement('div');
+          y.appendChild(s), o.write(y.innerHTML);
+        }
+      e.addEventListener(
+        'resize',
+        function () {
+          clearTimeout(r), (r = setTimeout(i, 300));
+        },
+        !1
+      ),
+        e.addEventListener(
+          'pageshow',
+          function (e) {
+            e.persisted && (clearTimeout(r), (r = setTimeout(i, 300)));
+          },
+          !1
+        ),
+        'complete' === o.readyState
+          ? (o.body.style.fontSize = 12 * l + 'px')
+          : o.addEventListener(
+            'DOMContentLoaded',
+            function () {
+              o.body.style.fontSize = 12 * l + 'px';
+            },
+            !1
+          ),
+        i(),
+        (d.dpr = e.dpr = l),
+        (d.refreshRem = i),
+        (d.rem2px = function (e) {
+          var t = parseFloat(e) * this.rem;
+          return 'string' == typeof e && e.match(/rem$/) && (t += 'px'), t;
+        }),
+        (d.px2rem = function (e) {
+          var t = parseFloat(e) / this.rem;
+          return 'string' == typeof e && e.match(/px$/) && (t += 'rem'), t;
+        });
+    })(window, window.lib || (window.lib = {}));
+  </script>
+</head>
+
+<body scroll="no">
+  <!--登录页-->
+  <div class="login_box">
+    <div class="head_img"><span class="logo_img"></span></div>
+    <h2>视频呼叫系统</h2>
+    <ul class="login_input">
+      <li class="input_li">
+        <!-- 禁用自动填充 -->
+        <input type="password" style="display: none" autocomplete="new-password" />
+        <input type="text" class="userName" placeholder="输入任意字符串" id="userName" />
+      </li>
+      <li class="li2 cf" id="login_type">
+        <label class="label1 check" id="type_cust" type="1"><span></span>客户</label>
+        <label class="label2" id="type_seat" type="2"><span></span>坐席</label>
+      </li>
+      <li><button class="login_btn" id="login_btn">登录</button></li>
+      <li class="cf"><span class="server_set" id="server_set">服务器设置</span></li>
+    </ul>
+    <div class="version">sdk ver : <span></span></div>
+  </div>
+  <!--服务器设置页-->
+  <div class="server_set_box hide">
+    <h3 class="head"><span id="close_ser_page"></span>服务器设置</h3>
+    <div class="server_b">
+      <ul class="server_input">
+        <li class="li2"><span>服务器：</span><input type="text" value="" placeholder="请输入服务器地址" id="ser_address" /></li>
+        <li class="li2">
+          <span>AppID：</span><input type="text" value="默认appID" placeholder="请输入账号" id="ser_acount" />
+          <script>
+            var serAddress = window.location.host;
+            serAddress = sessionStorage.getItem('CRServerAdd') || window.location.host;
+            if (serAddress.includes('127.0.0.1') || serAddress.includes('localhost') || !serAddress) serAddress = '';
+            document.getElementById('ser_address').value = serAddress;
+            console.log(document.getElementById('ser_address').value);
+            var serAcount = localStorage.getItem('cr_account') || '默认appID';
+            document.getElementById('ser_acount').value = serAcount;
+          </script>
+        </li>
+        <li><span>Secret：</span><input type="password" value="默认appSecret" placeholder="请输入密码" id="ser_password" /></li>
+      </ul>
+      <div class="server_btn cf">
+        <button class="server_btn_reset" id="server_reset">重置为默认</button>
+        <button class="server_btn_keep" id="server_keep">保存</button>
+      </div>
+    </div>
+  </div>
+  <!--坐席队列-->
+  <div class="queue_box2 hide">
+    <h3 class="head"><span id="queue_box2_close">注销</span>请选择业务</h3>
+    <ul class="queue_list" id="queueList2">
+      <!--<li>-->
+      <!--<p class="p1">窗口名称：深圳</p>-->
+      <!--<p class="p2"><span>坐席人数：1</span>-->
+      <!--<span>排队人数：1</span>-->
+      <!--<span>会话中人数：1</span>-->
+      <!--</p>-->
+      <!--<span class="queue_state">未服务</span>-->
+      <!--</li>-->
+    </ul>
+    <div class="queue_foot cf">
+      <span class="system_auto check" id="system_auto">系统自动分配客户</span>
+      <button class="next_one hide" id="next_user">下一位客户</button>
+    </div>
+  </div>
+  <!--客户队列-->
+  <div class="queue_box1 hide">
+    <h3 class="head"><span id="queue_box1_close">注销</span>请选择业务</h3>
+    <ul class="queue_list" id="queueList1">
+      <!--<li>-->
+      <!--<p class="p1"><span class="queue_name">深圳</span><span>（0人等待）</span></p>-->
+      <!--<p class="p2">描述一下:哈哈哈哈哈哈哈</p>-->
+      <!--</li>-->
+    </ul>
+  </div>
+  <!--正在排队-->
+  <div class="line_up hide">
+    <h3 class="head">正在排队......</h3>
+    <div class="show_server">您正在排队等候 【<span id="queue_name"></span>】服务中，已等候</div>
+    <div class="time_b"><span class="time" id="line_up_time">0秒</span></div>
+    <div id="user_position" class="other_num">前面还有 <span id="user_num">0</span> 位用户</div>
+    <button class="line_up_btn">取消排队</button>
+  </div>
+  <!--客户会话页面-->
+  <div class="dialog hide">
+    <h3 class="head">
+      <p class="p1">您正在和 【<span id="call_user_name">connie</span>】 会话中，通话时长:</p>
+      <p class="p2" id="video_time">4分21秒</p>
+    </h3>
+    <div class="video" id="video_box" style="width: 100%">
+      <div class="video_contain" id="video_main" style="height: 4rem; width: auto; background-color: #000"></div>
+      <div class="video_contain" id="video_local" style="height: 4rem; width: auto; margin-top: 0.2rem; background-color: #000"></div>
+      <script type="text/javascript">
+        var tabHeight = document.body.clientHeight - $('.head').outerHeight();
+        $('#video_box').css('height', tabHeight + 'px');
+        // var videoHeight = parseInt(tabHeight)*9/16;
+        // $(".video_contain").css("height",videoHeight + "px");
+      </script>
+    </div>
+
+    <div class="foot">
+      <!--摄像头选项-->
+      <input type="hidden" value="" id="myVideoId" />
+      <input type="hidden" value="" id="myMicId" />
+      <input type="hidden" value="" id="mySpkerId" />
+      <div style="width: 100%; height: 1rem; display: none" id="change_style">
+        <button id="video_lower">流畅</button>
+        <button id="video_normal">标清</button>
+        <button id="video_height">高清</button>
+        <button id="video_max">超清</button>
+      </div>
+      <script type="text/javascript">
+        var u = navigator.userAgent,
+          app = navigator.appVersion;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if (isAndroid) {
+          //这个是安卓操作系统
+          document.getElementById('change_style').style.display = 'block';
+        }
+      </script>
+      <div style="width: 100%; height: 1rem">
+        <button id="meet_colse_btn">挂断</button>
+        <button id="video_operate_btn">关闭摄像头</button>
+        <button id="change_camera">切换摄像头</button>
+        <button style="margin-right: 0" id="mic_operate_btn">关闭麦克风</button>
+      </div>
+    </div>
+  </div>
+  <div class="loading hide" id="loading"><img src="./image/loading-0.gif" /></div>
+
+  <script type="text/javascript" src="../static/lib/layui/layui.js"></script>
+  <script type="text/javascript" src="../static/js/md5.js"></script>
+<script src="../SDK/RTCSDKV2.min.js?v=e0be"></script></body>
+
+<script>
+  document.querySelector('.version span').innerText = CRVideo.sdkver;
+
+  //全局对象
+  var g_is_init = false; //是否初始化
+  var g_server_addr = sessionStorage.getItem('CRServerAdd') || window.location.host; // 服务器地址
+  if (g_server_addr.includes('127.0.0.1') || g_server_addr.includes('localhost') || !g_server_addr) g_server_addr = '';
+
+  var g_user_id; //用户id
+  var g_nick_name = ''; //登录昵称
+  var g_login_type = 1; //登录类型 , //1客户或2坐席，默认为客户
+  var g_meet_id; //会议id
+  var g_session_call_id; //会话id
+  var g_call_user_id; //对方id
+  var g_call_user_que; //呼叫的队列
+  var g_me_user_id; //自己的id
+
+  var g_loading_index = -1;
+  var g_loading_deleted = false;
+  var g_que_id = ''; //当前的队列名称
+
+  var g_meeting = false; //会议进行中
+  var g_bg_color = 0;
+  var g_residual_timer = -1;
+
+  var g_reEnterTimes = 0; // 重进房间尝试次数
+  var g_reLoginTimes = 0; // 重登服务器尝试次数
+
+  //账号
+  var cr_account = localStorage.getItem('cr_account') || `默认appID`;
+  //密码
+  var cr_psw = localStorage.getItem('cr_psw') || '默认appSecret';
+  //目录地址
+  var g_location_dir = (function () {
+    var location_dir = location.href;
+    var end = location_dir.lastIndexOf('/');
+    var start = location_dir.indexOf('file:///');
+    if (start > -1) {
+      start = 8;
+    } else {
+      start = 0;
+    }
+    location_dir = location_dir.slice(start, end) + '/home/';
+    location_dir = decodeURIComponent(location_dir);
+    return location_dir;
+  })();
+
+  /* ************************ 公共方法 *********************** */
+
+  window.onbeforeunload = function () {
+    CRVideo_Logout();
+    CRVideo_Uninit();
+  };
+
+  // 弹出提示层
+  function tipLayer(msg, timer) {
+    if (!timer) {
+      var timer = 2000;
+    }
+    layui.use('layer', function () {
+      layer.open({
+        title: 0,
+        btn: 0,
+        content: msg,
+        closeBtn: 0,
+        shade: 0,
+        time: timer,
+      });
+    });
+  }
+
+  //登录客户，坐席选择栏
+  $('#login_type label')
+    .unbind()
+    .on('click', function () {
+      if (!$(this).hasClass('check')) {
+        $(this).addClass('check').siblings().removeClass('check');
+      }
+      g_login_type = $(this).attr('type');
+    });
+  //服务器设置点击事件
+  $('#server_set')
+    .unbind()
+    .on('click', function () {
+      $('.login_box').addClass('hide');
+      $('.server_set_box').removeClass('hide');
+      server_set.initpage();
+    });
+
+  /* ************************ 登录相关 *********************** */
+
+  $('#login_btn')
+    .unbind()
+    .on('click', function () {
+      g_nick_name = $('#userName').val();
+      if (g_nick_name == '') {
+        tipLayer('请输入昵称');
+        return;
+      }
+      if (g_nick_name.length > 10) {
+        tipLayer('用户昵称过长,请修改后重试');
+        return;
+      }
+
+      //初始化sdk
+      CRVideo_Init().then(
+        (res) => {
+          g_is_init = true;
+          g_user_id = g_nick_name;
+
+          //密码
+          cr_pswMd5 = md5($('#ser_password').val());
+          if ($('#ser_password').val() == '默认appSecret') cr_pswMd5 = '默认appSecret';
+          CRVideo_SetServerAddr(g_server_addr);
+          CRVideo_Login(cr_account, cr_pswMd5, g_nick_name, g_user_id, '');
+          showLoading();
+        },
+        (err) => {
+          alert(`初始化失败：${err}`);
+        }
+      );
+    });
+
+  $('#ser_address').change(function () {
+    let $val = $('#ser_address').val();
+    sessionStorage.setItem('CRServerAdd', $val);
+  });
+
+  //登录成功
+  CRVideo_LoginSuccess.callback = function (usrID, cookie) {
+    g_reLoginTimes = 0;
+
+    console.log('CRVideo_LoginSuccess(usrID:%s)' + usrID);
+    hideLoading();
+    g_me_user_id = g_user_id;
+
+    if (!!cookie && cookie.includes('reLogin')) {
+      // 重登成功，不做处理
+      return;
+    }
+
+    if (!g_meeting) {
+      //初始化队列数据
+      CRVideo_InitQueueDat();
+      $('.login_box').addClass('hide');
+      //根据登陆的角色显示对应的用户界面
+      if (g_login_type == 1) {
+        //客户
+        $('.queue_box1').removeClass('hide'); //客户队列页面
+        queue_box1.initpage();
+      } else if (g_login_type == 2) {
+        //坐席
+        $('.queue_box2').removeClass('hide'); //坐席队列页面
+        //注销
+        $('#queue_box2_close')
+          .unbind()
+          .on('click', function () {
+            $('.queue_box2').addClass('hide');
+            $('.login_box').removeClass('hide');
+            logout();
+          });
+      }
+    }
+  };
+  //登录失败
+  CRVideo_LoginFail.callback = function (sdkErr, cookie) {
+    hideLoading();
+    console.log(`登录服务器失败，错误码：${sdkErr}, cookie:${cookie}`);
+    if (!!cookie && cookie.includes('reLogin') && cookie.split('_')[1] <= 10) {
+      setTimeout(() => {
+        CRVideo_Login(cr_account, cr_psw == '默认appSecret' ? cr_psw : md5(cr_psw), g_nick_name, g_user_id, '', `reLogin_${++g_reLoginTimes}`); // 登录callserver
+      }, 2000);
+      return;
+    } else if (!!cookie && cookie.includes('reLogin') && cookie.split('_')[1] > 10) {
+      alert(`网络错误，多次尝试重新登录失败！您已掉线！`);
+      window.location.reload();
+    } else {
+      g_is_init = false;
+      g_is_login = false;
+      sdkErr == 7 ? (sdkErr = '用户名或密码错误！') : sdkErr;
+      sdkErr == 21 ? (sdkErr = 'Token鉴权失败！') : sdkErr;
+      sdkErr == 18 ? (sdkErr = 'Token已过期！') : sdkErr;
+      sdkErr == 20 ? (sdkErr = '鉴权app不存在！') : sdkErr;
+      sdkErr == 22 ? (sdkErr = '此app非Token鉴权！') : sdkErr;
+      sdkErr == 202 ? (sdkErr = '登录服务器异常！') : sdkErr;
+      sdkErr == 204 ? (sdkErr = 'socket连接失败！') : sdkErr;
+      alert('登录服务器失败，请稍后再试: ' + sdkErr);
+    }
+  };
+
+  /* ************************ 队列相关 *********************** */
+
+  var g_que_dict; //列队数据
+  var g_queuing_info; //排队信息
+  var g_user_srv_layer_index = -1; //服务用户层索引
+  var g_user_que_layer_index = -1; //服务用户层索引
+
+  //查询列队是否在服务中
+  // function getServicedById(queID)
+  // {
+  //     var result = CRVideo.queServiceInfo.indexOf(","+queID+"-queID");
+
+  //     return CRVideo.queServiceInfo.indexOf(","+queID+"-queID") != -1;
+  // }
+  function getServicedById(queID) {
+    var servingQues = CRVideo_GetServingQueues();
+    if (servingQues.indexOf(queID) > -1) {
+      return true;
+    }
+    return false;
+  }
+
+  function getQueuingById(queID) {
+    var QueuingInfo = CRVideo_GetQueuingInfo();
+    if (QueuingInfo.queID && QueuingInfo.queID == queID) {
+      return true;
+    }
+    return false;
+  }
+
+  //设置列队是否免打扰
+  function setSrvDNDState(state) {
+    if (state) {
+      $('#next_user').removeClass('hide');
+      CRVideo_SetDNDStatus(1);
+    } else {
+      $('#next_user').addClass('hide');
+      CRVideo_SetDNDStatus(0); //0:代表关闭免打扰， 其它值代表开启免打扰
+    }
+  }
+
+  //离线
+  var g_reLoginTimer;
+  CRVideo_LineOff.callback = function (sdkErr) {
+    console.log(`系统掉线了... ${sdkErr}`);
+    if (sdkErr !== 18) {
+      // 不是token到期
+
+      if (sdkErr == 10) {
+        // 登录用户被踢下线
+        if (g_meeting) {
+          CRVideo_ExitMeeting();
+        }
+        $('.dialog').addClass('hide');
+        $('.queue_box1').addClass('hide');
+        $('.queue_box2').addClass('hide');
+        $('.login_box').removeClass('hide');
+        // logout();
+        setTimeout(() => {
+          alert(`您被别人踢下线了...`);
+        }, 1000);
+      } else {
+        !g_meeting && tipLayer(`登录掉线，正在重新登录`);
+        clearTimeout(g_reLoginTimer);
+        g_reLoginTimer = setTimeout(() => {
+          console.log(`重新登录...`);
+          CRVideo_Login(cr_account, cr_psw == '默认appSecret' ? cr_psw : md5(cr_psw), g_nick_name, g_user_id, '', `reLogin_${++g_reLoginTimes}`); // 登录callserver
+        }, 3000);
+      }
+    }
+  };
+
+  CRVideo_NotifyUserStatus.callback = function (userStatus, cookie) { };
+
+  CRVideo_SetDNDStatusSuccess.callback = function (json) {
+    console.log('CRVideo_SetDNDStatusSuccess back ClientCustomStatusUpdate end ' + JSON.stringify(json));
+  };
+
+  CRVideo_SetDNDStatusFail.callback = function (json) {
+    console.log('SetDNDStatusFailCallBack ClientCustomStatusUpdate end ' + JSON.stringify(json));
+  };
+
+  //更新队列状态
+  function updateQue(status) {
+    var queID = status.queID;
+    if (g_login_type == 2) {
+      //坐席
+      $('#span_en_' + queID).text(status.agent_num);
+      $('#span_qn_' + queID).text(status.wait_num);
+      $('#span_sn_' + queID).text(status.srv_num);
+    } else {
+      $('#span_li_' + queID).text('（' + status.wait_num + '人等待）');
+    }
+  }
+
+  //删除请求服务用户层
+  function removeUserSrvLayer() {
+    if (g_user_srv_layer_index != -1) {
+      layui.use('layer', function () {
+        var layer = layui.layer;
+        layer.close(g_user_srv_layer_index);
+        g_user_srv_layer_index = -1;
+      });
+    }
+  }
+
+  //弹出请求服务用户层
+  function popupUserSrvLayer(user) {
+    layui.use('layer', function () {
+      var layer = layui.layer;
+      if (g_user_srv_layer_index != -1) {
+        layer.close(g_user_srv_layer_index);
+      }
+
+      g_user_srv_layer_index = layer.open({
+        type: 0,
+        area: '400px',
+        title: ['用户分配中', 'font-size:14px;'],
+        content: '系统为您分配【' + user.userID + '】', //注意，如果str是object，那么需要字符拼接。
+        btn: ['<p style="font-size:14px;">确定</p>', '<p style="font-size:14px;">取消</p>'],
+        yes: function (index, layero) {
+          layer.close(index);
+          g_call_user_id = user.userID;
+          g_call_user_que = user.queID;
+          CRVideo_CreateMeeting2();
+          g_user_srv_layer_index = -1;
+          showLoading();
+        }.bind(this),
+        btn2: function (index, layero) {
+          layer.close(index);
+          CRVideo_RejectAssignUser(user.queID, user.userID);
+          g_user_srv_layer_index = -1;
+        }.bind(this),
+      });
+      layer.config({
+        skin: 'demo-class',
+      });
+    });
+  }
+
+  //弹出请求用户排队层
+  function popupUserQueLayer(sve_text, queID) {
+    hideLoading();
+    $('#user_position').hide();
+    $('.line_up').removeClass('hide');
+    $('.queue_box1').addClass('hide');
+
+    //排队
+    $('#queue_name').text(sve_text);
+    CRVideo_GetQueueStatus(queID);
+    queue_box1.time_go();
+
+    //取消排队
+    $('.line_up_btn')
+      .unbind()
+      .on('click', function () {
+        $('.queue_box1').removeClass('hide');
+        $('.login_box').addClass('hide');
+        $('.line_up').addClass('hide');
+        $('.dialog').addClass('hide');
+        line_up_time.innerHTML = '0秒';
+
+        clearInterval(queue_box1.timerWaite);
+        CRVideo_StopQueuing();
+      });
+  }
+
+  CRVideo_StartUserStatusNotifyRslt.callback = function (sdkErr, cookie) {
+    if (sdkErr == 0) {
+      var msg = '您已开启在线用户信息';
+      $('#notifyUserBox p').text(msg);
+      $('#notifyUserBox').show();
+    }
+  };
+
+  CRVideo_StopUserStatusNotifyRslt.callback = function (sdkErr, cookie) {
+    if (sdkErr == 0) {
+      var msg = '您已关闭在线用户信息';
+      $('#notifyUserBox p').text(msg);
+      $('#notifyUserBox').show();
+    }
+  };
+
+  // 获取用户状态信息成功
+  CRVideo_GetUserStatusSuccess.callback = function (usersStatus, cookie) {
+    // var msg = "目前有" + usersStatus.length +"用户在线";
+    // $("#notifyUserBox p").text(msg)
+    // $("#notifyUserBox").show();
+  };
+
+  // 获取用户状态信息失败
+  CRVideo_GetUserStatusFail.callback = function (sdkErr, cookie) {
+    var msg = '获取在线用户信息失败,错误码：' + sdkErr;
+    $('#notifyUserBox p').text(msg);
+    $('#notifyUserBox').show();
+  };
+
+  function closeUserPage() {
+    $('#notifyUserBox').hide();
+  }
+
+  function closeUserPage2() {
+    $('#notifyUserBox2').hide();
+  }
+
+  function startStatus() {
+    CRVideo_StartUserStatusNotify();
+  }
+
+  function stopStatus() {
+    CRVideo_StopUserStatusNotify();
+  }
+
+  //获取队列数据  GetServiceDataRslt
+  CRVideo_InitQueueDatRslt.callback = function (RspCode, cookie) {
+    console.log('GetServiceDataRslt InitQueueDatRsltCallBack ');
+    if (RspCode == 0) {
+      var que_info = CRVideo_GetAllQueueInfo();
+      var queInfos_length = que_info.length;
+      console.log('queInfos_length ' + queInfos_length);
+      CRVideo_RefreshAllQueueStatus(); // 之前 demo 封装 到 refresh_que 为啥 ？
+      //初始化坐席业务列表
+      g_que_dict = {};
+      var li = '';
+      for (var i = 0; i < queInfos_length; i++) {
+        var item = que_info[i];
+        if (g_login_type == 2) {
+          //坐席
+          var btn_text = '';
+          if (getServicedById(item.queID)) {
+            btn_text = '正在服务.....';
+          } else {
+            btn_text = '未服务';
+          }
+          li += '<li id="queue_li_' + item.queID + '" queID =' + item.queID + '><p class="p1">窗口名称：' + item.name + '</p>' + '<p class="p2"><span>坐席人数：<span id="span_en_' + item.queID + '">0</span></span>' + '<span>排队人数：<span id="span_qn_' + item.queID + '">0</span></span>' + '<span>会话中人数：<span id="span_sn_' + item.queID + '" >0</span></span>' + '</p>' + '<span class="queue_state" id="srv_open_btn_' + item.queID + '">' + btn_text + '</span>' + '</li>';
+        } else {
+          //var status = CRVideo_GetQueueStatus(item.queID);
+          item.desc = item.desc == '' ? '' : '备注：' + item.desc;
+          li += '<li id="queue_li_' + item.queID + '" queID =' + item.queID + '>' + '<p class="p1"><span class="queue_name" id="queue_name_' + item.queID + '">' + item.name + '</span><span id="span_li_' + item.queID + '">（0人等待）</span></p>' + '<p class="p2">' + item.desc + '</p>' + '</li>';
+        }
+      }
+
+      if (g_login_type == 2) {
+        $('#queueList2 li').remove();
+        $('#queueList2').append(li);
+        $('#queueList2 li')
+          .unbind()
+          .on('click', function () {
+            var queID = $(this).attr('queID').toString();
+            if (getServicedById(queID)) {
+              CRVideo_StopService(queID);
+
+              $('#srv_open_btn_' + queID).text('未服务');
+            } else {
+              CRVideo_StartService(queID);
+              $('#srv_open_btn_' + queID).text('正在服务.....');
+            }
+          });
+
+        setSrvDNDState(0);
+        CRVideo_GetUserStatus();
+
+        $('#next_user')
+          .unbind()
+          .on(
+            'click',
+            function (
+              e //下一位客户
+            ) {
+              CRVideo_ReqAssignUser();
+            }
+          );
+        //系统自动分配客户
+        $('#system_auto')
+          .unbind()
+          .on('click', function () {
+            if ($(this).hasClass('check')) {
+              //取消
+              $(this).removeClass('check');
+              setSrvDNDState(true);
+            } else {
+              //选择
+              $(this).addClass('check');
+              setSrvDNDState(false);
+            }
+          });
+      } else {
+        //用户
+        $('#queueList1 li').remove();
+        $('#queueList1').append(li);
+        $('#queueList1 li')
+          .unbind()
+          .on('click', function () {
+            showLoading();
+            var queID = Number($(this).attr('queID'));
+            if (queID && g_que_id && queID == g_que_id) {
+              CRVideo_StopQueuing();
+              setTimeout(function () {
+                CRVideo_StartQueuing(queID);
+                g_que_id = queID;
+                console.log(queID + '开始排队啦...');
+              }, 200);
+            } else {
+              if (getQueuingById(queID)) {
+                CRVideo_StopQueuing();
+              } else {
+                CRVideo_StartQueuing(queID);
+                g_que_id = queID;
+                console.log(queID + '开始排队啦...');
+              }
+            }
+          });
+      }
+    } else {
+      hideLoading();
+      alert('获取队列失败');
+      $('.login_box').removeClass('hide');
+      $('.queue_box1').addClass('hide');
+      $('.queue_box2').addClass('hide');
+    }
+  };
+
+  //开始排队响应
+  CRVideo_StartQueuingRslt.callback = function (errCode, cookie) {
+    // console.log("CRVideo_StartQueuingRslt(sdkErr%s)",errCode);
+
+    if (errCode == 0) {
+      var sve_text = $('#queue_name_' + g_que_id).text();
+      popupUserQueLayer(sve_text, g_que_id);
+    } else {
+      console.log('排队失败........');
+      hideLoading();
+      alert('排队失败........');
+      //排队失败；
+    }
+  };
+
+  //停止排队响应
+  CRVideo_StopQueuingRslt.callback = function (errCode, cookie) {
+    // var queNUm = parseInt($("#span_li_" + queID).text())
+    // $("#span_li_" + queID).text(queNUm - 1);
+
+    if (errCode == 0) {
+      CRVideo_GetQueueStatus(g_que_id);
+      // console.log("que status(agent_num:%s,wait_num:%s,srv_num:%s)",status.agent_num,status.wait_num,status.srv_num);
+      // updateQue(status);
+    }
+  };
+
+  //客户排队被接受的回调
+  CRVideo_NotifyCallIn.callback = function (callID, meetObj, callerID, usrExtDat) {
+    CRVideo_AcceptCall(callID, meetObj);
+    console.log('CRVideo_AcceptCall');
+    g_meet_id = meetObj.ID;
+    g_session_call_id = callID;
+    g_call_user_id = callerID;
+    CRVideo_EnterMeeting3(meetObj.ID);
+    console.log('CRVideo_EnterMeeting');
+  };
+
+  CRVideo_GetQueueStatusRslt.callback = function (QueStatus, sdkErr, cookie) {
+    if (sdkErr == 0) {
+      var obj = eval(QueStatus);
+      if (g_login_type == 2) {
+        //坐席
+        updateQue(obj);
+      } else {
+        var spanid = 'span_li_' + obj.queID;
+        $('#' + spanid).html('（' + obj.wait_num + ' 人等待）');
+        $('#user_num')
+          .text(obj.wait_num - 1)
+          .parent()
+          .show();
+      }
+    } else {
+    }
+  };
+
+  //正在排队信息更新
+  CRVideo_QueuingInfoChanged.callback = function (queuingInfo) {
+    // console.log("CRVideo_QueuingInfoChanged(queuingInfo%s)",queuingInfo);
+    g_queuing_info = queuingInfo;
+    if (queuingInfo.position) {
+      $('#user_num').text(queuingInfo.position - 1);
+    }
+  };
+
+  //列队状态改变
+  CRVideo_QueueStatusChanged.callback = function (queStatus) {
+    updateQue(queStatus);
+  };
+
+  //开启队列服务响应
+  CRVideo_StartServiceRslt.callback = function (queID, sdkErr, cookie) {
+    // console.log("CRVideo_StartServiceRslt(queID:%s,sdkErr:%s)",queID,sdkErr);
+    if (sdkErr == 0) {
+      //开始服务队列，更新该队列的状态信息
+      CRVideo_GetQueueStatus(queID);
+      // console.log("que status(agent_num:%s,wait_num:%s,srv_num:%s)",status.agent_num,status.wait_num,status.srv_num);
+      // updateQue(status);
+    }
+  };
+
+  //停止队列服务响应
+  CRVideo_StopServiceRslt.callback = function (queID, sdkErr, cookie) {
+    if (sdkErr == 0) {
+      //开始服务队列，更新该队列的状态信息
+      CRVideo_GetQueueStatus(queID);
+      // console.log("que status(agent_num:%s,wait_num:%s,srv_num:%s)",status.agent_num,status.wait_num,status.srv_num);
+      // updateQue(status);
+    }
+  };
+
+  //系统自动安排客户
+  CRVideo_AutoAssignUser.callback = function (usr) {
+    console.log('CRVideo_AutoAssignUser(usrID:%s)：' + usr.usrID);
+    popupUserSrvLayer(usr);
+  };
+
+  //请求分配客户操作结果
+  CRVideo_ReqAssignUserRslt.callback = function (errCode, usr, cookie) {
+    // console.log("CRVideo_ReqAssignUserRslt(errCode:%s)",errCode);
+    if (errCode == 0) {
+      popupUserSrvLayer(usr);
+    } else if (errCode == 101) {
+      alert('目前没有需要服务的客户');
+    } else if (errCode == 103) {
+      alert('未开启队列服务');
+    }
+  };
+
+  //系统取消自动安排客户
+  CRVideo_CancelAssignUser.callback = function (queID, usrID) {
+    // console.log("CRVideo_CancelAssignUser(queID:%s,usrID:%s)",queID,usrID);
+    removeUserSrvLayer();
+  };
+
+  //会议创建成功
+  CRVideo_CreateMeetingSuccess.callback = function (meetObj, cookie) {
+    console.log('CRVideo_CreateMeetingSuccess');
+    CRVideo_Call(g_call_user_id, meetObj);
+    CRVideo_AcceptAssignUser(g_call_user_que, g_call_user_id);
+  };
+
+  //会议创建失败
+  CRVideo_CreateMeetingFail.callback = function (sdkErr, cookie) {
+    console.log('CRVideo_CreateMeetingFail ');
+    alert('创建会议失败');
+    hideLoading();
+  };
+
+  //呼叫他人操作成功
+  CRVideo_CallSuccess.callback = function (callID, cookie) {
+    // console.log("CRVideo_CallSuccess(callID:%s)",callID);
+    CRVideo.CallID = callID;
+  };
+
+  //呼叫他人操作失败
+  CRVideo_CallFail.callback = function (callID, sdkErr, cookie) {
+    // console.log("CRVideo_CallFail(callID:%s,sdkErr:%s)",callID,sdkErr);
+    alert('呼叫失败');
+    hideLoading();
+  };
+
+  //通知呼叫被对方接受
+  CRVideo_NotifyCallAccepted.callback = function (callID, meetObj, usrExtDat) {
+    g_meet_id = meetObj.ID;
+    g_session_call_id = callID;
+    console.log('CRVideo_NotifyCallAccepted ' + callID);
+    CRVideo_EnterMeeting3(g_meet_id);
+  };
+
+  //通知呼叫被对方拒绝
+  CRVideo_NotifyCallRejected.callback = function (callID, sdkErr, usrExtDat) {
+    // console.log("CRVideo_NotifyCallRejected(callID:%s,sdkErr:%s)",callID,sdkErr);
+    alert('呼叫被对方拒绝');
+    hideLoading();
+  };
+
+  //服务器设置页的事件
+  var server_set = {
+    initpage: function () {
+      //$('#ser_address').val(g_server_addr) ;
+      $('#ser_acount').val(cr_account);
+      $('#ser_password').val(cr_psw);
+      //退出页面
+      $('#close_ser_page')
+        .unbind()
+        .on('click', function () {
+          $('.login_box').removeClass('hide');
+          $('.server_set_box').addClass('hide');
+        });
+      //重置为默认的
+      $('#server_reset')
+        .unbind()
+        .on('click', function () {
+          // g_server_addr = $('#ser_address').val(window.location.host).val();
+          console.log(g_server_addr);
+          $('#ser_address').val(g_server_addr);
+          sessionStorage.setItem('CRServerAdd', g_server_addr);
+          cr_account = `默认appID`;
+          cr_psw = '默认appSecret';
+          $('#ser_acount').val(`默认appID`);
+          $('#ser_password').val('默认appSecret');
+        });
+      //保存
+      $('#server_keep')
+        .unbind()
+        .on('click', function () {
+          g_server_addr = $('#ser_address').val();
+          console.log(g_server_addr);
+          cr_account = $('#ser_acount').val();
+          cr_psw = $('#ser_password').val();
+          localStorage.setItem('g_server_addr', g_server_addr);
+          localStorage.setItem('cr_account', cr_account);
+          localStorage.setItem('cr_psw', cr_psw);
+          $('.login_box').removeClass('hide');
+          $('.server_set_box').addClass('hide');
+        });
+    },
+  };
+  //客户 队列
+  var queue_box1 = {
+    timerWaite: -1,
+    startTime: 0,
+    initpage: function () {
+      //注销
+      $('#queue_box1_close')
+        .unbind()
+        .on('click', function () {
+          $('.queue_box2').addClass('hide');
+          $('.login_box').removeClass('hide');
+          logout();
+        });
+    },
+    time_go: function () {
+      queue_box1.startTime = 0;
+      if (queue_box1.timerWaite != -1) {
+        clearInterval(queue_box1.timerWaite);
+        queue_box1.timerWaite = -1;
+        //startTime = parseInt(user.queuingTime)
+      }
+      var line_up_time = document.getElementById('line_up_time');
+      line_up_time.innerHTML = '0秒';
+      queue_box1.timerWaite = setInterval(function () {
+        queue_box1.startTime++;
+        if (queue_box1.startTime < 60) {
+          line_up_time.innerHTML = queue_box1.startTime + '秒';
+        } else {
+          var min = parseInt(queue_box1.startTime / 60);
+          var s = queue_box1.startTime % 60;
+          line_up_time.innerHTML = min + '分' + s + '秒';
+        }
+      }, 1000);
+    },
+  };
+  //显示加载中
+  function showLoading() {
+    $('#loading').removeClass('hide');
+  }
+
+  function hideLoading() {
+    $('#loading').addClass('hide');
+  }
+  //注销
+  function logout() {
+    CRVideo_Logout();
+    setTimeout(function () {
+      location.replace(location.href);
+    }, 200); //延迟刷新页面防止logout未执行完毕
+  }
+
+  /* ************************ 视频通话相关 *********************** */
+
+  var g_call_video; //呼叫的视频
+  var g_me_video; //自己的视频
+  var useFrontVideo = true; //使用前置摄像头
+  var g_record_timer = -1;
+  //挂断
+  $('#meet_colse_btn').click(function () {
+    CRVideo_HungupCall(g_session_call_id);
+    if (g_login_type == '1') {
+      $('.queue_box1').removeClass('hide');
+      $('.line_up').addClass('hide');
+    } else {
+      $('.queue_box2').removeClass('hide');
+    }
+    $('.dialog').addClass('hide');
+  });
+  $('#video_operate_btn').click(function () {
+    var $btn = $(this);
+    if ($btn.hasClass('disabled')) {
+      tipLayer('操作太频繁了，歇一会吧！');
+      return;
+    }
+    $btn.addClass('disabled');
+    $('#change_camera').addClass('disabled');
+
+    $btn.timerId = setTimeout(function () {
+      $btn.removeClass('disabled');
+    }, 2000);
+    var vStatus = CRVideo_GetVideoStatus(g_me_user_id);
+    if (vStatus == 0) {
+      alert('没有可打开的视频设备');
+    } else if (vStatus == 2) {
+      CRVideo_OpenVideo(g_me_user_id);
+      $btn.text('关闭摄像头');
+      $('#change_camera').removeClass('disabled');
+    } else {
+      CRVideo_CloseVideo(g_me_user_id);
+      $btn.text('打开摄像头');
+    }
+  });
+
+  $('#mic_operate_btn').click(function () {
+    var $btn = $(this);
+    if ($btn.hasClass('disabled')) {
+      tipLayer('操作太频繁了，歇一会吧！');
+      return;
+    }
+    $btn.addClass('disabled');
+    $btn.timerId = setTimeout(() => {
+      $btn.removeClass('disabled');
+    }, 5000);
+    var aStatus = CRVideo_GetAudioStatus(g_me_user_id);
+    if (aStatus == 0) {
+      alert('没有可打开的音频设备');
+    } else if (aStatus == 2) {
+      CRVideo_OpenMic(g_me_user_id);
+      $btn.text('关闭麦克风');
+    } else {
+      CRVideo_CloseMic(g_me_user_id);
+      $btn.text('打开麦克风');
+    }
+  });
+  //切换摄像头
+  $('#change_camera').click(function () {
+    $btn = $(this);
+    if ($btn.hasClass('disabled')) {
+      tipLayer('操作太频繁了，歇一会吧！');
+      return;
+    }
+    $btn.addClass('disabled');
+    $('#video_operate_btn').addClass('disabled');
+    $btn.timerId = setTimeout(function () {
+      $btn.removeClass('disabled');
+      $('#video_operate_btn').removeClass('disabled');
+    }, 2000);
+
+    //alert("change_camera-----")
+    var videoList = CRVideo_GetAllVideoInfo(g_me_user_id);
+    //alert(videoList)
+    console.log(JSON.stringify(videoList));
+    if (videoList.length > 1) {
+      if (useFrontVideo) {
+        //CRVideo_SetDefaultVideo(g_me_user_id, videoList[1].name);
+        CRVideo_SetDefaultVideo(g_me_user_id, 2); //后置
+        useFrontVideo = false;
+      } else {
+        //CRVideo_SetDefaultVideo(g_me_user_id,videoList[0].name);
+        CRVideo_SetDefaultVideo(g_me_user_id, 1); //前置
+        useFrontVideo = true;
+      }
+    } else {
+      alert('摄像头还没准备好，请稍后');
+      useFrontVideo = true;
+    }
+  });
+
+  // //进入会议结果
+  CRVideo_EnterMeetingRslt.callback = function (sdkErr, cookie) {
+    console.log('CRVideo_EnterMeetingRslt：' + sdkErr);
+    hideLoading();
+    if (sdkErr == 0) {
+      g_meeting = true;
+      g_reEnterTimes = 0;
+      if (!!cookie && cookie.includes('reEnter')) {
+        tipLayer('进入房间成功');
+      }
+      if (g_login_type == '1') {
+        $('.line_up').addClass('hide');
+        $('.queue_box1').addClass('hide');
+      } else {
+        $('.queue_box2').addClass('hide');
+      }
+      $('.dialog').removeClass('hide');
+
+      g_call_video = CRVideo_CreatVideoObj({
+        poster: './image/be_closed.jpg',
+      });
+      $('#video_main').html(g_call_video.handler());
+
+      g_me_video = CRVideo_CreatVideoObj({
+        poster: './image/be_closed.jpg',
+      });
+      $('#video_local').html(g_me_video.handler());
+
+      $('#mic_operate_btn').text('关闭麦克风');
+      $('#video_operate_btn').text('关闭摄像头');
+
+      //设置对方的视频,延迟显示(ie8有可能组件还没初始化完毕)
+      $('#call_user_name').text(g_call_user_id);
+      dialog_time(); //计时器
+
+      g_me_video.setVideo(g_me_user_id);
+      g_call_video.setVideo(g_call_user_id);
+
+      CRVideo_OpenVideo(g_me_user_id);
+      CRVideo_OpenMic(g_me_user_id);
+    } else {
+      if (!!cookie && cookie.includes('reEnter') && cookie.split('_')[1] <= 10) {
+        setTimeout(() => {
+          tipLayer(`进入房间失败，第${g_reEnterTimes + 1}次尝试重新进入...`);
+          console.log(`第${g_reEnterTimes + 1}次尝试重新入会`);
+          CRVideo_EnterMeeting(g_meet_id, '', g_user_id, g_nick_name, `reEnter_${++g_reEnterTimes}`);
+        }, 2000);
+        return;
+      } else if (!!cookie && cookie.includes('reEnter') && cookie.split('_')[1] > 10) {
+        console.log(`从房间中掉线，多次尝试重新进入失败!`);
+        alert(`从房间中掉线，多次尝试重新进入失败，请检查您的网络！${sdkErr}`);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        g_meeting = false;
+        let errDesc = '';
+        if (sdkErr == 205) {
+          errDesc = '没有可用服务器';
+        } else if (sdkErr == 800) {
+          errDesc = '房间不存在或已结束';
+        } else if (sdkErr == 802) {
+          errDesc = '服务器授权到期或超出并发数！';
+        } else {
+          errDesc = '请稍后再试！';
+        }
+        alert(`进入房间失败！${errDesc}`);
+      }
+    }
+  };
+
+  //会议掉线
+  CRVideo_MeetingDropped.callback = function (sdkErr) {
+    console.log(`会议掉线了...`);
+    g_meeting = false;
+    tipLayer(`已从房间中掉线，准备重新进入...`);
+    setTimeout(() => {
+      // 掉线后自动重登，通过cookie来判断是否是重登
+      tipLayer(`正在第1次尝试重新进入房间...`);
+      CRVideo_EnterMeeting(g_meet_id, '', g_user_id, g_nick_name, `reEnter_${++g_reEnterTimes}`);
+    }, 3000);
+  };
+  //用户进入会议
+  CRVideo_UserEnterMeeting.callback = function (usrID) {
+    console.log('CRVideo_UserEnterMeeting(usrID:%%%%%)：' + usrID);
+    if (usrID == g_call_user_id) {
+      if (g_call_video) g_call_video.setVideo(g_call_user_id);
+    }
+  };
+  //有人离开会议
+  CRVideo_UserLeftMeeting.callback = function (id, reson) {
+    console.log('user: ' + id + '  left meeting, reason: ' + reson);
+
+    if (reson !== 'extrude' && id !== g_me_user_id) {
+      // 如果是对方离开会议
+
+      tipLayer('用户 ' + id + ' 离开会话，离开原因：' + reson);
+    } else if (reson == 'extrude' && id !== g_me_user_id) {
+      // 如果是对方掉线
+      tipLayer('用户 ' + id + ' 已离开会话，离开原因：网络掉线...');
+    }
+  };
+  CRVideo_NotifyCmdData.callback = function (sourceUserId, data) {
+    tipLayer('收到' + sourceUserId + '的消息：' + data);
+  };
+  //挂断呼叫操作成功响应
+  CRVideo_HangupCallSuccess.callback = function (callID, cookie) {
+    CRVideo_ExitMeeting();
+    //g_session_call_id = null;
+    if (g_record_timer != -1) {
+      clearInterval(g_record_timer);
+      g_record_timer = -1;
+    }
+    $('.dialog').addClass('hide');
+    g_meeting = false;
+    if (g_call_video !== undefined && g_me_video !== undefined) {
+      g_call_video.clear();
+      g_me_video.clear();
+    }
+    if (g_login_type == 1) {
+      //客户
+      $('.queue_box1').removeClass('hide');
+    } else if (g_login_type == 2) {
+      //坐席
+      $('.queue_box2').removeClass('hide');
+    }
+    useFrontVideo = true;
+  };
+  //挂断呼叫操作失败响应
+  CRVideo_HangupCallFail.callback = function (callID, sdkErr, cookie) {
+    // console.log("CRVideo_HangupCallFail(callID:%s,sdkErr:%s)",callID,sdkErr);
+    alert('挂断呼叫失败！');
+  };
+  //SDK通知自己呼叫被挂断
+  CRVideo_NotifyCallHungup.callback = function (callID, usrExtDat) {
+    CRVideo_ExitMeeting();
+    g_session_call_id = null;
+    if (g_record_timer != -1) {
+      clearInterval(g_record_timer);
+      g_record_timer = -1;
+    }
+    g_meeting = false;
+
+    $('.dialog').addClass('hide');
+    if (g_login_type == 1) {
+      //客户
+      $('.queue_box1').removeClass('hide');
+    } else if (g_login_type == 2) {
+      //坐席
+      $('.queue_box2').removeClass('hide');
+    }
+    tipLayer('当前呼叫已被挂断');
+    useFrontVideo = true;
+  };
+  CRVideo_VideoStatusChanged.callback = function (userID, oldStatus, newStatus) {
+    // console.log("CRVideo_VideoStatusChanged(userID:%s,oldStatus:%s,newStatus:%s)",userID,oldStatus,newStatus);
+  };
+  CRVideo_DefVideoChanged.callback = function (userID, videoID) {
+    // console.log("CRVideo_DefVideoChanged(userID:%s,videoID:%s)",userID,videoID);
+  };
+  CRVideo_VideoDevChanged.callback = function (userID) {
+    // console.log("CRVideo_VideoDevChanged()");
+  };
+
+  // 通知打开摄像头失败
+  CRVideo_OpenVideoFailed.callback = (errDesc) => {
+    alert(`打开摄像头失败：${errDesc}`);
+  };
+  // 通知打开麦克风失败
+  CRVideo_OpenMicFailed.callback = (errDesc) => {
+    alert(`打开麦克风失败：${errDesc}`);
+  };
+
+  //会话页面计时器
+  function dialog_time() {
+    var startTime = 0;
+    if (g_record_timer != -1) {
+      clearInterval(g_record_timer);
+      g_record_timer = -1;
+      //startTime = parseInt(user.queuingTime)
+    }
+    var line_up_time = document.getElementById('video_time');
+    line_up_time.innerHTML = '0秒';
+    g_record_timer = setInterval(function () {
+      startTime++;
+      if (startTime < 60) {
+        line_up_time.innerHTML = startTime + '秒';
+      } else {
+        var min = parseInt(startTime / 60);
+        var s = startTime % 60;
+        line_up_time.innerHTML = min + '分' + s + '秒';
+      }
+    }, 1000);
+  }
+
+  $('#video_lower').click(function () {
+    updateVideoCfg(1);
+  });
+  $('#video_normal').click(function () {
+    updateVideoCfg(2);
+  });
+  $('#video_height').click(function () {
+    updateVideoCfg(3);
+  });
+  $('#video_max').click(function () {
+    updateVideoCfg(4);
+  });
+
+  function updateVideoCfg(num) {
+    var cfg = {};
+    cfg.size = num;
+    console.log('SetVideoCfg------', cfg);
+    CRVideo_SetVideoCfg(cfg);
+  }
+
+  // 给所有的video标签加上双击全屏事件
+  var videoEleTimer = setInterval(function () {
+    requestVideoFullScreen();
+  }, 5000);
+  // 双击video全屏
+  function requestVideoFullScreen() {
+    document.querySelectorAll('video').forEach(function (item) {
+      $(item).unbind();
+    });
+    document.querySelectorAll('video').forEach(function (item) {
+      $(item).on('dblclick', function () {
+        console.log(`双击全屏：`, this);
+        if (this.webkitRequestFullScreen) {
+          this.webkitRequestFullScreen();
+        } else if (this.mozRequestFullScreen) {
+          this.mozRequestFullScreen();
+        } else if (this.msRequestFullScreen) {
+          this.msRequestFullScreen();
+        }
+      });
+    });
+  }
+  // 判断是否在全屏状态
+  function isFullScreen() {
+    return document.isFullScreen || document.mozIsFullScreen || document.webkitIsFullScreen;
+  }
+  // 获取当前全屏的元素
+  function getFullscreenElement() {
+    var fullscreenEle = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
+    //注意：要在用户授权全屏后才能获取全屏的元素，否则 fullscreenEle为null
+    console.log('全屏元素：', fullscreenEle);
+    return fullscreenEle;
+  }
+  // 退出全屏
+  function exitFullscreen() {
+    if (!isFullScreen()) return;
+    console.log(`退出全屏`);
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+      document.msExiFullscreen();
+    } else if (document.webkitCancelFullScreen) {
+      document.webkitCancelFullScreen();
+    }
+  }
+</script>
+
+</html>

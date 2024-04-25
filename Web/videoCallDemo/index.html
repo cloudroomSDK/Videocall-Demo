@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+
+<script type="text/javascript">
+    window.__CRKEY = 'CRDEMO';
+    // http强制跳转https
+    var protocol = location.protocol;
+    var host = location.host;
+    var isLocal = false;
+    if (host.indexOf('127.0.0.1') > -1 || host.indexOf('localhost') > -1) isLocal = true;
+    if (protocol != 'https:' && protocol.indexOf('file') == -1 && !isLocal) {
+        location.href = 'https:' + location.href.substring(protocol.length);
+    }
+
+    // 移动端/pc端自动跳转
+    if (navigator.userAgent.indexOf('Mobile') > -1 && !window.location.href.indexOf('m_') > -1) { // 移动端打开pc页面
+        window.location.href = 'm_index.html';
+    } else if (!navigator.userAgent.indexOf('Mobile') > -1 && window.location.href.indexOf('m_') > -1) { // pc端打开移动端页面
+        window.location.href = window.location.href.replace('m_index.html', '');
+    }
+
+    // 设置rem根字体大小
+    function setHtmlFontSize() {
+        document.documentElement.style.fontSize = window.innerHeight ? (window.innerHeight / 1080 * 10).toFixed() * 10 +
+            'px' : (document.documentElement.clientHeight / 1080 * 10).toFixed() * 10 + 'px';
+    }
+    setHtmlFontSize()
+    window.onresize = setHtmlFontSize;
+</script>
+
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="victor,wwdn7@vip.qq.com">
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta name="google" value="notranslate">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <title></title>
+    <link rel="shortcut icon" href="./image/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../static/lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <script src="../static/js/jquery.2.0.0.min.js"></script>
+    <script src="../static/lib/layui/layui.js"></script>
+
+</head>
+
+<body>
+
+    <!-- 浏览器不支持提示 -->
+    <div class="alert-wrapper">
+        <div class="mask"></div>
+        <div class="alert-box alert-box-1">
+            <div class="alert-header">
+                <div class="title">提示</div>
+                <div class="close" id="wrapperCloseBtn"></div>
+            </div>
+            <div class="alert-body">
+                <div class="check-compatibility">
+                    <div class="tip-content">
+                        <div class="c-item">当前浏览器不支持WebRTC，无法正常使用白板互动功能。</div>
+                        <div class="c-item">请下载最新Chrome浏览器后重新打开此页面。</div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert-footer">
+                <button class="btn btn-longer f-mgr-10" id="downloadChromeBtn">立即下载</button>
+                <button class="btn btn-cancle" id="laterDownloadBtn">稍后下载</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        if (navigator.userAgent.indexOf("MSIE") > -1 || navigator.userAgent.indexOf("Trident") > -1) {
+            $(".alert-wrapper").show();
+            document.querySelector('.alert-wrapper').display = 'block';
+            document.querySelector("#downloadChromeBtn").onclick = function () {
+                window.location.href = "https://www.baidu.com/s?wd=chrome";
+            }
+            document.querySelector("#laterDownloadBtn").onclick = function () {
+                $(".alert-wrapper").hide();
+            }
+            document.querySelector("#wrapperCloseBtn").onclick = function () {
+                $(".alert-wrapper").hide();
+            }
+        }
+    </script>
+
+    <!-- 登录页 -->
+    <div class="login-page">
+        <div class="login-box h-pa-center">
+            <div class="login-box-header">
+                <img src="./image/icon_03_RR.png" alt="" class="h-pa-center">
+                <span class="title" id="demoTitle"></span>
+                <div class="login-set-btn cr-btn" id="loginSetBtn" onclick="videoCall.login.openSetBox()">设置</div>
+            </div>
+            <div class="login-box-form layui-form" lay-filter="loginPageBox">
+                <div class="login-form-item">
+                    <label for="loginNickname">昵称：</label>
+                    <input type="text" class="login-input" name="loginName" id="nicknameInput" placeholder="请输入登录昵称" onchange="videoCall.login.onNicknameInput()">
+                </div>
+                <div class="login-form-item login-item-indent layui-form-item">
+                    <label for="loginIdent">身份：</label>
+                    <div class="layui-input-block login-input">
+                        <select lay-filter="loginIdent" name="loginIdentify">
+                            <option value=0>坐席</option>
+                            <option value=1>客户</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="login-btn cr-btn" id="loginBtn" onclick="videoCall.login.onClickLoginBtn()">登录</div>
+            <!-- 登录设置模块 -->
+            <div class="login-setting-box">
+                <div class="set-header">
+                    <div class="set-header-title">登录设置</div>
+                </div>
+                <div class="set-form">
+                    <div class="layui-form layui-form-pane" action="" lay-filter="settForm">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">服务器：</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="svrAddrInput" name="server" required lay-verify="required" placeholder="请输入服务器地址" autocomplete="off" class="layui-input" value="">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">鉴权方式：</label>
+                            <div class="layui-input-block">
+                                <select name="authType" lay-verify="required" id="authType" lay-filter='authTypeSelect'>
+                                    <option value="0" selected>AppID鉴权</option>
+                                    <option value="1">Token鉴权</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item login-appID">
+                            <label class="layui-form-label">AppID：</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="appIDInput" name="appID" required lay-verify="required" placeholder="默认appID" autocomplete="off" class="layui-input" value="默认appID">
+                            </div>
+                        </div>
+                        <div class="layui-form-item login-appSec">
+                            <label class="layui-form-label">AppSecret：</label>
+                            <div class="layui-input-block">
+                                <input type="password" id="appSecretInput" name="appSecret" required lay-verify="required" placeholder="默认Secret" autocomplete="off" class="layui-input" value="默认appSecret">
+                            </div>
+                        </div>
+                        <div class="layui-form-item token-area">
+                            <label class="layui-form-label">Token：</label>
+                            <div class="layui-input-block">
+                                <textarea name="token" id="tokenInput" placeholder="请输入Token" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">流媒体协议：</label>
+                            <div class="layui-input-block msprotocal">
+                                <input type="radio" name="protocol" value="0" title="UDP/TCP" checked>
+                                <input type="radio" name="protocol" value="1" title="UDP">
+                                <input type="radio" name="protocol" value="2" title="TCP">
+                            </div>
+                        </div>
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">第三方鉴权：</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="authSwitch" lay-skin="switch" lay-text="on|off" lay-filter='authCodeSwitch' id="authSwitch">
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text userAuthCode-area">
+                            <div class="layui-input-block">
+                                <textarea name="userAuthCode" id="userAuthCode" placeholder="请输入第三方鉴权参数" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item confirm-btns">
+                            <div class="layui-input-block">
+                                <button class="layui-btn themeColorBgc" lay-submit lay-filter="settFormSubmit">确定</button>
+                                <button class="layui-btn layui-btn-primary" onclick="videoCall.login.resetSetForm()">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sdk-ver">
+                    <span>ver:</span>
+                    <span id="sdkVer"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 呼叫模式选择页 -->
+    <div class="call-page">
+        <div class="main-box h-pa-center">
+            <div class="cr-btn logout-btn" onclick="videoCall.login.onClickLogoutBtn()">注销</div>
+            <div class="top-half half">
+                <span class="choose-btn btn1 pa-center" onclick="videoCall.login.onClickShowQuePageBtn()">排队叫号</span>
+            </div>
+            <div class="bottom-half half">
+                <span class="choose-btn btn2 pa-center" onclick="videoCall.login.onClickDirectCallBtn()">直接呼叫</span>
+            </div>
+            <div class="call-box pa-center">
+                <div class="call-text fl">请输入对方ID：</div>
+                <div class="call-input fl"><input type="text" id="callUserID"></div>
+                <div class="call-btns fl">
+                    <div class="cr-btn btn1 h-pa-center" onclick="videoCall.login.onClickCallBtn()">呼叫</div>
+                    <div class="cr-btn btn2 h-pa-center" onclick="$('.call-box').css({'visibility':'hidden','opacity':0})">取消</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 坐席身份队列页 -->
+    <div class="seat-que-page por">
+        <div class="main-box pa-center">
+            <div class="main-box-header por">
+                <div class="header-title">
+                    <span>坐席：</span>
+                    <span class="seat-name">小花</span>
+                </div>
+                <div class="logout-btn cr-btn" onclick="videoCall.login.onClickLogoutBtn()">注销</div>
+            </div>
+            <div class="main-box-quelist">
+                <div class="quelist-header">
+                    <ul>
+                        <li class="li-box">窗口名称</li>
+                        <li class="li-box">坐席人数</li>
+                        <li class="li-box">排队人数</li>
+                        <li class="li-box">进行中的会话</li>
+                        <li class="li-box">服务状态</li>
+                        <li class="li-box">优先级</li>
+                    </ul>
+                </div>
+                <div class="quelist-main" id="seatQueList">
+                    <!-- layui模板替换 开始 -->
+                    <ul>
+                        <!-- <li id="que1935" class="que-list-item">
+                            <ul>
+                                <li class="li-box">广东区</li>
+                                <li class="li-box">0</li>
+                                <li class="li-box">0</li>
+                                <li class="li-box">0</li>
+                                <li class="li-box">
+                                    <div class="service-start-btn pa-center"
+                                        onclick="videoCall.que.onClickServiceBtn(189,true)">请开启服务</div>
+                                </li>
+                                <li class="li-box">1</li>
+                            </ul>
+                        </li> -->
+                    </ul>
+                    <!-- layui模板替换 结束 -->
+                </div>
+                <div class="main-box-foot">
+                    <form class="foot-isDND layui-form por" lay-filter="isDNDForm">
+                        <div class="layui-form-item">
+                            <label>免打扰</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" lay-filter='isDNDSwitch' name="DNDSwitch" lay-skin="switch">
+                            </div>
+                        </div>
+                        <div class="user-state-monitor por">
+                            <div class="start-monitor pa-center start cr-border-btn" onclick="videoCall.call.userStatusNotify()">开启用户状态推送</div>
+                            <div class="request-user cr-btn v-pa-center" onclick="videoCall.que.reqAssignUser()">下一位客户
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 客户身份队列页 -->
+    <div class="user-que-page">
+        <div class="main-box pa-center">
+            <div class="main-box-header">
+                <div class="header-title">
+                    <span>欢迎：</span><span class="user-name"></span>
+                </div>
+                <div class="header-right-btns">
+                    <div class="refresh-btn cr-btn" onclick="videoCall.que.onClickRefreshBtn()">刷新</div>
+                    <div class="logout-btn cr-btn" onclick="videoCall.login.onClickLogoutBtn()">注销</div>
+                </div>
+            </div>
+            <div class="main-box-quelist" id="userQueList">
+                <!-- layui模板替换 开始 -->
+                <ul>
+                    <li class="list-item">
+                        <div class="item-left">
+                            <div class="que-title">队列名</div>
+                            <div class="que-desc">队列描述</div>
+                        </div>
+                        <div class="item-right">
+                            <span class="wait-num">8</span>
+                            <span>人</span>
+                        </div>
+                    </li>
+                </ul>
+                <!-- layui模板替换 结束 -->
+            </div>
+        </div>
+    </div>
+    <!-- 通话页 -->
+    <div class="meeting-page h-pa-center seat">
+        <header class="title">
+            <div class="text">您正在和【 <span id="headerUserName"></span> 】视频会话中...</div>
+            <div class="room-id">当前房间号：<span id="roomID">00000000</span></div>
+        </header>
+        <div class="main">
+            <div class="left">
+                <div class="product-info">
+                    <div class="header-title">
+                        <span>产品信息</span>
+                    </div>
+                    <div class="info product">
+                        <ul class="product">
+                            <li>
+                                <div class="info-title">产品名称：</div>
+                                <div class="info-value">全额保货币市场基金</div>
+                            </li>
+                            <li>
+                                <div class="info-title">产品代码：</div>
+                                <div class="info-value">000397</div>
+                            </li>
+                            <li>
+                                <div class="info-title">产品类型：</div>
+                                <div class="info-value">货币市场基金</div>
+                            </li>
+                            <li>
+                                <div class="info-title">产品期限：</div>
+                                <div class="info-value">160天</div>
+                            </li>
+                            <li>
+                                <div class="info-title">风险级别：</div>
+                                <div class="info-value">较低</div>
+                            </li>
+                            <li>
+                                <div class="info-title">收益币种：</div>
+                                <div class="info-value">人民币</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="user-info">
+                    <div class="header-title">
+                        <span>客户信息</span>
+                    </div>
+                    <div class="info">
+                        <ul>
+                            <li>
+                                <div class="info-title">姓名：</div>
+                                <div class="info-value">张三</div>
+                            </li>
+                            <li>
+                                <div class="info-title">性别：</div>
+                                <div class="info-value">男</div>
+                            </li>
+                            <li>
+                                <div class="info-title">出生：</div>
+                                <div class="info-value">1987年11月16日</div>
+                            </li>
+                            <li class="address">
+                                <div class="info-title">住址：</div>
+                                <div class="info-value">广东省深圳市南山区粤海街道科技中三路科兴科学园A1座12楼1201室</div>
+                            </li>
+                            <li>
+                                <div class="info-title">身份证：</div>
+                                <div class="info-value">430703888888888888</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="id-img">
+                        <div class="id-front id-card">
+                            <img src="./image/身份证正面_1.png" alt="" class="pa-center">
+                        </div>
+                        <div class="id-back id-card">
+                            <img src="./image/身份证反面_1.png" alt="" class="pa-center">
+                        </div>
+                        <div class="right-toggle">
+                            <img src="./image/切换.png" alt="" class="pa-center" onclick="videoCall.shuanglu.toggleIDCardImg()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="video-box layoutA">
+                    <div class="seat-video video"></div>
+                    <div class="user-video video"></div>
+                    <div class="third-video video"></div>
+                    <div class="media-video"></div>
+                </div>
+                <div class="set-bar">
+                    <div class="set-btns">
+                        <button id="settingBtn" class="btn" onclick="videoCall.meeting.showVideoSetBox()">设置</button>
+                        <button id="RecordBtn" class="btn none" onclick="videoCall.svrMixerMgr.onClickRecordBtn(this)">开始录制</button>
+                        <button id="screenShareBtn" class="btn none" onclick="videoCall.screenShare.onClickScreenShareBtn(this)">屏幕共享</button>
+                        <!-- <button id="inviteBtn" class="btn none"
+                            onclick="videoCall.meeting.onClickInviteBtn()">邀请</button> -->
+                        <button id="savePicBtn" class="btn none" onclick="videoCall.audioVideo.onClickSavePicBtn()">拍照</button>
+                        <button id="chatBtn" class="btn" onclick="videoCall.meeting.onClickChatBtn()">聊天</button>
+                        <button id="hungupBtn" class="btn warning" onclick="videoCall.meeting.onClickHungUpBtn()">结束服务</button>
+                    </div>
+                </div>
+                <div class="tips-bar">
+                    <span>风险提示：买入后T+1日确认份额并产生收益，份额确认次日15:00前可查看收益。</span>
+                </div>
+                <div class="right-bottom none">
+                    <div class="bottom-media">
+                        <div class="title">
+                            <div class="tab media-tab checked" id="mediaTab" onclick="videoCall.meeting.toggleMediaRecord(this, '.list-media')">风险告知与提醒</div>
+                            <div class="tab record-tab" id="recordTab" onclick="videoCall.meeting.toggleMediaRecord(this, '.list-record')">录制文件管理</div>
+                            <div class="import-file">
+                                <label for="mediaFilesInput">选择影音文件</label>
+                                <input style="display: none;" type="file" id="mediaFilesInput" multiple onchange="videoCall.mediaShare.onLoadMediaFiles(this)">
+                                <button class="cr-btn" onclick="$('#mediaFilesInput').click()">选择文件</button>
+                            </div>
+                            <div class="refresh-record cr-btn none">刷新</div>
+                        </div>
+                        <div class="list-media list">
+                            <ul>
+                            </ul>
+                        </div>
+                        <div class="list-record list none">
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="verbal-trick">
+                        <div class="title">
+                            <div class="tab checked">话术提示</div>
+                        </div>
+                        <div class="list">
+                            <ol>
+                                <li>
+                                    <p>1、开场白：您好，我是xxx证券客户经理或投资顾问xxx</p>
+                                </li>
+                                <li>
+                                    <p>2、目前有一只现金管理产品-汇添富收益快线货币市场基金已经正式上线</p>
+                                </li>
+                                <li>
+                                    <p>3、该基金为国内首只T+0货币基金，既能满足您账户中闲置资金的理财需求既能满足您账户中闲置资金的理财需求0货币基金，既能满足您账户中闲置资金的理财需求既能满足您账户中闲置资金的理财需求
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>4、又能满足资金高流动性要求，能助您轻松实现闲置资金的理财管理</p>
+                                </li>
+                                <li>
+                                    <p>5、建议您了解一下</p>
+                                </li>
+                                <li>
+                                    <p>6、该基金为国内首只T+0货币基金，既能满足您账户中闲置资金的理财需求</p>
+                                </li>
+                                <li>
+                                    <p>7、又能满足资金高流动性要求，能助您轻松实现闲置资金的理财管理</p>
+                                </li>
+                                <li>
+                                    <p>8、建议您了解一下</p>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="layer-box">
+                    <div class="chat-box h-pa-center none">
+                        <div class="header">
+                            <span>聊天</span>
+                            <span class="close-btn v-pa-center" onclick="$('.chat-box').hide(100)"></span>
+                        </div>
+                        <div class="list chat-msg-box">
+                            <ul id="chatMsgList">
+                            </ul>
+                        </div>
+                        <div class="value-box">
+                            <textarea name="" id="msgValue" cols="30" rows="10" placeholder="请输入..." autofocus="autofocus"></textarea>
+                            <button class="send-btn cr-btn" id="sendMsg" onclick=videoCall.msgMgr.onClickSendBtn(event)>发送</button>
+                        </div>
+                    </div>
+                    <div class="set-box pa-center none">
+                        <div class="header">
+                            <div class="tab video-set-tab checked" onclick="videoCall.meeting.toggleSetTab(this,'.video-set')">视频设置</div>
+                            <div class="tab record-set-tab none" onclick="videoCall.meeting.toggleSetTab(this, '.record-set')">录制设置</div>
+                        </div>
+                        <div class="video-set set-main layui-form">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">摄像头</label>
+                                <div class="layui-input-block">
+                                    <select class="video-set-camlist" lay-filter="cameraList">
+                                        <!-- <option value=1>摄像头1</option>
+                                        <option value=2>摄像头2</option> -->
+                                    </select>
+                                    <button class="cr-btn v-pa-center cam-onoff-btn" onclick="videoCall.meeting.onClickVideoOnOffBtn(this)">关闭</button>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">麦克风</label>
+                                <div class="layui-input-block">
+                                    <select class="video-set-miclist" lay-filter="micList">
+                                        <!-- <option value="1">麦克风1</option>
+                                        <option value="2">麦克风2</option> -->
+                                    </select>
+                                    <button class="cr-btn v-pa-center mic-onoff-btn" onclick="videoCall.meeting.onClickMicOnOffBtn(this)">关闭</button>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">扬声器</label>
+                                <div class="layui-input-block">
+                                    <select class="video-set-speakerlist" lay-filter="speakerList">
+                                        <!-- <option value="1">扬声器1</option>
+                                        <option value="2">扬声器2</option> -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">视频尺寸</label>
+                                <div class="layui-input-block">
+                                    <select lay-filter="videoSizeChange">
+                                        <option value="1">流畅</option>
+                                        <option value="2">标清</option>
+                                        <option value="3">高清</option>
+                                        <option value="4">超清</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">视频比例</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="rate" value="1" title="16:9" checked="" lay-filter="videoRateType">
+                                    <input type="radio" name="rate" value="2" title="4:3" lay-filter="videoRateType">
+                                    <input type="radio" name="rate" value="3" title="1:1" lay-filter="videoRateType">
+                                </div>
+                            </div>
+                            <div class="input-li layui-form-item">
+                                <label class="layui-form-label">视频帧率</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="frame" required lay-verify="required" autocomplete="off" class="layui-input" value="20" id="videoFps">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="record-set set-main layui-form none" lay-filter="recordSetBox">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">分辨率</label>
+                                <div class="layui-input-block">
+                                    <select name="recordSize">
+                                        <option value="0" name="recordSize">720p(1280*720)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">最大码率(kbps)</label>
+                                <div class="layui-input-block">
+                                    <input type="text" value="" name="maxBps" class="layui-input" id="recordBpsInput">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">帧率(取值6~20)</label>
+                                <div class="layui-input-block">
+                                    <input type="text" value="" name="fps" class="layui-input" id="recordFpsInput">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">录制方式</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="recordType" value="1" title="云端录制" checked>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">声道类型</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="aChannelType" value="0" title="单声道" checked>
+                                    <input type="radio" name="aChannelType" value="1" title="左右声道">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">直播推流</label>
+                                <div class="layui-input-block">
+                                    <input type="checkbox" name="livePushSwitch" lay-filter="livePushSwitch" lay-skin="switch" lay-text="开启|关闭">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">推流URL</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="pushUrl" class="layui-input" id="pushUrlInput" disabled>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="set-bottom-btns h-pa-center">
+                            <button class="yes-btn cr-btn " onclick="videoCall.meeting.saveSetting()">确定</button>
+                            <button class="cancel-btn cr-btn" onclick="$('.set-box').hide(100)">取消</button>
+                        </div>
+                    </div>
+                    <div class="invite-box pa-center none">
+                        <div class="invite-header">
+                            <span class="invite-title">邀请</span>
+                            <div class="close-btn" onclick="$('.invite-box').hide(100)"></div>
+                        </div>
+                        <div class="invite-main h-pa-center">
+                            <input class="id-input v-pa-center" placeholder="请输入用户ID" id="inviteUserID">
+                            <span class="invite-confirm-btn cr-btn v-pa-center" onclick="">确定</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/js/md5.js"></script>
+
+<script src="../SDK/RTCSDKV2.min.js?v=e0be"></script></body>
+
+<script src="./js/index.js"></script>
+
+
+<!-- 坐席队列模板 -->
+<script id="seatQueListTpl" type="text/html">
+    <ul>
+        {{#  layui.each(d, function(index, item){ }}
+        <li id="que1935" class="que-list-item">
+            <ul>
+                <li class="li-box">{{item.name}}</li>
+                <li class="li-box">{{item.agent_num}}</li>
+                <li class="li-box">{{item.wait_num}}</li>
+                <li class="li-box">{{item.srv_num}}</li>
+                <li class="li-box">
+                    {{#  if(item.isServing === false){ }}
+                    <div class="service-start-btn pa-center"
+                        onclick=videoCall.que.onClickServiceBtn({{item.queID}},true)>请开启服务</div>
+                    {{#  }else{ }} 
+                    <div class="service-start-btn pa-center serving"
+                        onclick=videoCall.que.onClickServiceBtn({{item.queID}},false)>服务中...</div>
+                    {{#  } }}
+                </li>
+                <li class="li-box">{{item.prio}}</li>
+            </ul>
+        </li>
+        {{#  }); }}
+        {{#  if(d.length === 0){ }}
+        <p style="text-align: center;padding-top:30px">无数据</p>
+        {{#  } }}
+    </ul>
+</script>
+
+<!-- 客户队列模板 -->
+<script id="userQueListTpl" type="text/html">
+    <ul>
+        {{#  layui.each(d, function(index, item){ }}
+        <li class="list-item" onclick=videoCall.que.onClickUserQueItem({{item.queID}})>
+            <div class="item-left">
+                <div class="que-title">{{item.name}}</div>
+                <div class="que-desc">{{item.desc}}</div>
+            </div>
+            <div class="item-right">
+                <span class="wait-num">{{item.wait_num}}</span>
+                <span>人</span>
+            </div>
+        </li>
+        {{#  }); }}
+        {{#  if(d.length === 0){ }}
+        <p style="text-align: center;padding-top:30px">无数据</p>
+        {{#  } }}
+    </ul>
+</script>
+
+</html>
