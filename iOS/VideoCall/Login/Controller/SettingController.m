@@ -65,7 +65,6 @@ typedef NS_ENUM(NSInteger, SettingBtnType)
     [self _setupForProperies];
     
     CallHelper *callHelper = [CallHelper shareInstance];
-    [callHelper readInfo];
     
     if ([NSString stringCheckEmptyOrNil:callHelper.account] ||
         [NSString stringCheckEmptyOrNil:callHelper.pswd] ||

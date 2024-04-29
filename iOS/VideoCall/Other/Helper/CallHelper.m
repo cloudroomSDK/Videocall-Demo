@@ -53,6 +53,19 @@ static CallHelper *shareInstance;
         return nil;
     }
     
+    [self readInfo];
+    
+    if ([NSString stringCheckEmptyOrNil:_account] ||
+        [NSString stringCheckEmptyOrNil:_pswd]
+        ) {
+        _account = KDefaultAppID;
+        _pswd = KDefaultAppSecret;
+    }
+    
+    if ([NSString stringCheckEmptyOrNil:_server]) {
+        [self resetInfo];
+    }
+    
     _settingInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(RolerTypeCustom), roler, nil];
     
     return self;

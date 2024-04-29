@@ -111,18 +111,13 @@
 - (void)_setupForVideoCallSDK
 {
     CallHelper *callHelper = [CallHelper shareInstance];
-    [callHelper readInfo];
-    
-    if ([NSString stringCheckEmptyOrNil:callHelper.account] ||
-        [NSString stringCheckEmptyOrNil:callHelper.pswd] ||
-        [NSString stringCheckEmptyOrNil:callHelper.server]) {
-        [callHelper resetInfo];
-    }
     
     // FIXME:WARNING: QApplication was not created in the main() thread.QObject::connect: No such slot MeetRecordImpl::slot_SetScreenShare(bool)
     SdkInitDat *sdkInitData = [[SdkInitDat alloc] init];
     [sdkInitData setSdkDatSavePath:[PathUtil searchPathInCacheDir:@"CRVideoSDK"]];
     [sdkInitData setShowSDKLogConsole:NO];
+    sdkInitData.datEncType = @"0";
+    [sdkInitData.params setValue:@"0" forKey:@"VerifyHttpsCert"];
     [sdkInitData.params setValue:@"0" forKey:@"HttpDataEncrypt"];
     CRVIDEOSDK_ERR_DEF error = [[CloudroomVideoSDK shareInstance] initSDK:sdkInitData];
     

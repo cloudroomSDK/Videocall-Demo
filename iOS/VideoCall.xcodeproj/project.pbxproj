@@ -786,7 +786,7 @@
 					C24A32621DE2D8400038D9B1 = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = 93XFE92JTW;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1051,13 +1051,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 93XFE92JTW;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 93XFE92JTW;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../../Framework",
@@ -1073,11 +1071,10 @@
 				MARKETING_VERSION = 4.3.20;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cloudroom.VideoCall;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cloudroom.VideoCallDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "cloudroom-com-debug";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = cloudroom_com_debug;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
