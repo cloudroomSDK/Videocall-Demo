@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		167FF8E12C01E88E00F61192 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 167FF8E02C01E88E00F61192 /* PrivacyInfo.xcprivacy */; };
 		16DB910B28D5CC1D0094ACF6 /* IQTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DB90EC28D5CC1D0094ACF6 /* IQTextView.m */; };
 		16DB910C28D5CC1D0094ACF6 /* IQToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DB90F028D5CC1D0094ACF6 /* IQToolbar.m */; };
 		16DB910D28D5CC1D0094ACF6 /* IQTitleBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DB90F228D5CC1D0094ACF6 /* IQTitleBarButtonItem.m */; };
@@ -110,6 +111,7 @@
 
 /* Begin PBXFileReference section */
 		164A714D2B15D1DD00DAD72B /* AppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConfig.h; sourceTree = "<group>"; };
+		167FF8E02C01E88E00F61192 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		16DB90EC28D5CC1D0094ACF6 /* IQTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IQTextView.m; sourceTree = "<group>"; };
 		16DB90ED28D5CC1D0094ACF6 /* IQTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQTextView.h; sourceTree = "<group>"; };
 		16DB90EF28D5CC1D0094ACF6 /* IQUIView+IQKeyboardToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IQUIView+IQKeyboardToolbar.h"; sourceTree = "<group>"; };
@@ -416,6 +418,7 @@
 				C24A32721DE2D8400038D9B1 /* Assets.xcassets */,
 				C24A32741DE2D8400038D9B1 /* LaunchScreen.storyboard */,
 				C24A32771DE2D8400038D9B1 /* Info.plist */,
+				167FF8E02C01E88E00F61192 /* PrivacyInfo.xcprivacy */,
 				C24A32661DE2D8400038D9B1 /* Supporting Files */,
 			);
 			path = VideoCall;
@@ -842,6 +845,7 @@
 				C24A32761DE2D8400038D9B1 /* LaunchScreen.storyboard in Resources */,
 				C28C74701DE68FBB0056F0AB /* owner.jpg in Resources */,
 				C24A32731DE2D8400038D9B1 /* Assets.xcassets in Resources */,
+				167FF8E12C01E88E00F61192 /* PrivacyInfo.xcprivacy in Resources */,
 				C29888AA1DE563BE00786224 /* Server.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
