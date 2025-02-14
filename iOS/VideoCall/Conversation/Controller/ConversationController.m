@@ -305,7 +305,7 @@ typedef NS_ENUM(NSInteger, ConversationSwitchType)
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [self _uninstallCountTimer];
         NSString *cookie = [NSString stringWithFormat:@"%f", CFAbsoluteTimeGetCurrent()];
-        [[CloudroomVideoMgr shareInstance] hungupCall:self.callID usrExtDat:nil cookie:cookie];
+        [[CloudroomVideoMgr shareInstance] hangupCall:self.callID usrExtDat:nil cookie:cookie];
         [self _jumpToLogin];
         _dropVC = nil;
     }];
@@ -713,7 +713,7 @@ typedef NS_ENUM(NSInteger, ConversationSwitchType)
     // FIXME:web端挂断,这边alert再挂断可能会造成"callID无效"
     NSString *cookie = [NSString stringWithFormat:@"%f", CFAbsoluteTimeGetCurrent()];
     [HUDUtil hudShowProgress:@"正在挂断..." animated:YES];
-    [[CloudroomVideoMgr shareInstance] hungupCall:_callID usrExtDat:nil cookie:cookie];
+    [[CloudroomVideoMgr shareInstance] hangupCall:_callID usrExtDat:nil cookie:cookie];
 }
 
 /**
@@ -875,7 +875,7 @@ typedef NS_ENUM(NSInteger, ConversationSwitchType)
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [self _uninstallCountTimer];
         NSString *cookie = [NSString stringWithFormat:@"%f", CFAbsoluteTimeGetCurrent()];
-        [[CloudroomVideoMgr shareInstance] hungupCall:self.callID usrExtDat:nil cookie:cookie];
+        [[CloudroomVideoMgr shareInstance] hangupCall:self.callID usrExtDat:nil cookie:cookie];
         [self _jumpToLogin];
         _dropVC = nil;
     }];
