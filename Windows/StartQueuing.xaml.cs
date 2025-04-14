@@ -71,13 +71,13 @@ namespace SDKDemo
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            App.CRVideoCall.Video.stopQueuing("");
+            App.CRVideoCall.VideoSDK.stopQueuing("");
             Close();
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            App.CRVideoCall.Video.stopQueuing("");
+            App.CRVideoCall.VideoSDK.stopQueuing("");
             mCountTimer.Stop();
             tb_queName.Text = "";
             tb_waitTime.Text = String.Format("排队中，已等待时间：{0}", "", 0);

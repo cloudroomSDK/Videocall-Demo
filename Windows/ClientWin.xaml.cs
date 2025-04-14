@@ -29,23 +29,23 @@ namespace SDKDemo
         {
             if(isInit)
             {
-                App.CRVideoCall.Video.acceptCallSuccess += acceptCallSucceed;
-                App.CRVideoCall.Video.acceptCallFail += acceptCallFailed;
-                App.CRVideoCall.Video.queueStatusChanged += queueStatusChanged;
-                App.CRVideoCall.Video.queuingInfoChanged += queuingInfoChanged;
-                App.CRVideoCall.Video.startQueuingRslt += startQueuingRslt;
-                App.CRVideoCall.Video.stopQueuingRslt += stopQueuingRslt;
-                App.CRVideoCall.Video.notifyCallIn += notifyCallIn;
+                App.CRVideoCall.VideoSDK.acceptCallSuccess += acceptCallSucceed;
+                App.CRVideoCall.VideoSDK.acceptCallFail += acceptCallFailed;
+                App.CRVideoCall.VideoSDK.queueStatusChanged += queueStatusChanged;
+                App.CRVideoCall.VideoSDK.queuingInfoChanged += queuingInfoChanged;
+                App.CRVideoCall.VideoSDK.startQueuingRslt += startQueuingRslt;
+                App.CRVideoCall.VideoSDK.stopQueuingRslt += stopQueuingRslt;
+                App.CRVideoCall.VideoSDK.notifyCallIn += notifyCallIn;
             }
             else 
             {
-                App.CRVideoCall.Video.acceptCallSuccess -= acceptCallSucceed;
-                App.CRVideoCall.Video.acceptCallFail -= acceptCallFailed;
-                App.CRVideoCall.Video.queueStatusChanged -= queueStatusChanged;
-                App.CRVideoCall.Video.queuingInfoChanged -= queuingInfoChanged;
-                App.CRVideoCall.Video.startQueuingRslt -= startQueuingRslt;
-                App.CRVideoCall.Video.stopQueuingRslt -= stopQueuingRslt;
-                App.CRVideoCall.Video.notifyCallIn -= notifyCallIn;
+                App.CRVideoCall.VideoSDK.acceptCallSuccess -= acceptCallSucceed;
+                App.CRVideoCall.VideoSDK.acceptCallFail -= acceptCallFailed;
+                App.CRVideoCall.VideoSDK.queueStatusChanged -= queueStatusChanged;
+                App.CRVideoCall.VideoSDK.queuingInfoChanged -= queuingInfoChanged;
+                App.CRVideoCall.VideoSDK.startQueuingRslt -= startQueuingRslt;
+                App.CRVideoCall.VideoSDK.stopQueuingRslt -= stopQueuingRslt;
+                App.CRVideoCall.VideoSDK.notifyCallIn -= notifyCallIn;
             }
         }
 
@@ -56,14 +56,14 @@ namespace SDKDemo
 
         public void setQueues(List<QueueInfo> queues)
         {
-            QueuingInfo queuing = JsonConvert.DeserializeObject<QueuingInfo>(App.CRVideoCall.Video.getQueuingInfo());
+            QueuingInfo queuing = JsonConvert.DeserializeObject<QueuingInfo>(App.CRVideoCall.VideoSDK.getQueuingInfo());
             string queuingName = "";
 
             queues_panel.Children.Clear();
             for (int i = 0; i < queues.Count; i++)
             {
                 QueueInfo que = queues[i];
-                QueueStatus queStatus = JsonConvert.DeserializeObject<QueueStatus>(App.CRVideoCall.Video.getQueueStatus(que.queID));
+                QueueStatus queStatus = JsonConvert.DeserializeObject<QueueStatus>(App.CRVideoCall.VideoSDK.getQueueStatus(que.queID));
                 ClientQueueItem item = new ClientQueueItem(que.queID);
                 item.queName.Text = que.name;
                 item.queDesc.Text = que.desc;
@@ -93,7 +93,7 @@ namespace SDKDemo
             Console.WriteLine("acceptCallSucceed");
             MeetObj meet = JsonConvert.DeserializeObject<MeetObj>(e.p_cookie);
             
-            App.CRVideoCall.Video.enterMeeting3(meet.ID);
+            App.CRVideoCall.VideoSDK.enterMeeting3(meet.ID);
 
             this.Dispatcher.BeginInvoke((Action)delegate()
             {
@@ -157,7 +157,7 @@ namespace SDKDemo
             mStartQueuing.Close();
 
             mCallInCallerID = e.p_callerID;
-            App.CRVideoCall.Video.acceptCall(e.p_callID, e.p_meetObj, "test param", e.p_meetObj);  
+            App.CRVideoCall.VideoSDK.acceptCall(e.p_callID, e.p_meetObj, "test param", e.p_meetObj);  
         }
 
         public void lineOff()
@@ -175,7 +175,7 @@ namespace SDKDemo
             QueueItemClickRoutedEventArgs arg = (QueueItemClickRoutedEventArgs)e;
 
             Console.WriteLine("startqueuing: " + arg.queID + ", name:" + arg.Name);
-            App.CRVideoCall.Video.startQueuing(arg.queID, "testString");
+            App.CRVideoCall.VideoSDK.startQueuing(arg.queID, "testString");
   
             mStartQueuing = new StartQueuing();
            
@@ -192,7 +192,7 @@ namespace SDKDemo
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            App.CRVideoCall.Video.initQueueDat("");  //初始化专家坐席用户队列
+            App.CRVideoCall.VideoSDK.initQueueDat("");  //初始化专家坐席用户队列
             //App.CRVideoCall.Video.refreshAllQueueStatus();
         }
 

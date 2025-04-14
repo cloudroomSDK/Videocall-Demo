@@ -35,19 +35,32 @@ namespace SDKDemo
         private void initDict()
         {
             errorDict.Add(0, "没有错误");
+
+            errorDict.Add(-1, "ipcam url不正确");
+            errorDict.Add(-2, "cam已存在");
+            errorDict.Add(-3, "添加太多cam");
+            errorDict.Add(-4, "不支持的格式");
+            errorDict.Add(-5, "无效的屏幕id");
+
             errorDict.Add(1, "未知错误");
             errorDict.Add(2, "内存不足");
             errorDict.Add(3, "sdk内部错误");
             errorDict.Add(4, "不支持的sdk版本");
             errorDict.Add(5, "参数错误");
             errorDict.Add(6, "无效数据");
-	        errorDict.Add(7, "AppID或AppSecret不正确");
-	        errorDict.Add(8, "服务异常");
+            errorDict.Add(7, "AppID或AppSecret不正确");
+            errorDict.Add(8, "服务异常");
             errorDict.Add(9, "登录状态错误");
             errorDict.Add(10, "帐号在别处被使用");
             errorDict.Add(11, "sdk未初始化");
             errorDict.Add(12, "还没有登录");
             errorDict.Add(13, "base64转换失败");
+
+            errorDict.Add(18, "token已过期");
+            errorDict.Add(19, "鉴权信息错误");
+            errorDict.Add(20, "appid不存在");
+            errorDict.Add(21, "鉴权失败");
+            errorDict.Add(22, "非token鉴权方式");
 
             errorDict.Add(200, "网络初始化失败");
             errorDict.Add(201, "没有服务器信息");
@@ -107,10 +120,6 @@ namespace SDKDemo
             errorDict.Add(1201, "录制文件不存在");
             errorDict.Add(1202, "上传失败，失败原因参考日志");
             errorDict.Add(1203, "移除本地文件失败");
-
-            errorDict.Add(1300, "ipcam url不正确");
-            errorDict.Add(1301, "ipcam已存在");
-            errorDict.Add(1302, "添加太多ip cam");
 
             errorDict.Add(1400, "文件不存在");
             errorDict.Add(1401, "文件读失败");

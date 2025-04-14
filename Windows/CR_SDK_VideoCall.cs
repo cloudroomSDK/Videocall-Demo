@@ -11,7 +11,7 @@ namespace SDKDemo
             InitializeComponent();            
         }
 
-        public AxCloudroomVideoSDK Video
+        public AxCloudroomVideoSDK VideoSDK
         {
             get { return axCRVideoSDK; }
         }

@@ -47,16 +47,16 @@ namespace SDKDemo
         //委托方法关联
         private void initVideoCallDelegate()
         {
-            App.CRVideoCall.Video.loginSuccess += loginSuccess;
-            App.CRVideoCall.Video.loginFail += loginFailed;
-            App.CRVideoCall.Video.lineOff += lineOff;
-            App.CRVideoCall.Video.initQueueDatRslt += initQueueDatRslt;
-            App.CRVideoCall.Video.notifyCallHungup += notifyHungupCall;
-            App.CRVideoCall.Video.hangupCallSuccess += hungupCallSuccess;
-            App.CRVideoCall.Video.hangupCallFail += hungupCallFail;
-            App.CRVideoCall.Video.enterMeetingRslt += enterMeetingRslt;
-            App.CRVideoCall.Video.userEnterMeeting += userEnterMeeting;
-            App.CRVideoCall.Video.meetingDropped += meetingDropped;
+            App.CRVideoCall.VideoSDK.loginSuccess += loginSuccess;
+            App.CRVideoCall.VideoSDK.loginFail += loginFailed;
+            App.CRVideoCall.VideoSDK.lineOff += lineOff;
+            App.CRVideoCall.VideoSDK.initQueueDatRslt += initQueueDatRslt;
+            App.CRVideoCall.VideoSDK.notifyCallHungup += notifyHungupCall;
+            App.CRVideoCall.VideoSDK.hangupCallSuccess += hungupCallSuccess;
+            App.CRVideoCall.VideoSDK.hangupCallFail += hungupCallFail;
+            App.CRVideoCall.VideoSDK.enterMeetingRslt += enterMeetingRslt;
+            App.CRVideoCall.VideoSDK.userEnterMeeting += userEnterMeeting;
+            App.CRVideoCall.VideoSDK.meetingDropped += meetingDropped;
         }
 
         //服务端消息处理使用异步消息弹框，防止阻塞对服务器的响应
@@ -128,7 +128,7 @@ namespace SDKDemo
         {
             if (sessionCallID != "")
             {
-                App.CRVideoCall.Video.hungupCall(sessionCallID, "", "");
+                App.CRVideoCall.VideoSDK.hangupCall(sessionCallID, "", "");
             }
 
             if (mVideoSession != null)
@@ -151,7 +151,7 @@ namespace SDKDemo
         {
             if (sessionCallID != "")
             {
-                App.CRVideoCall.Video.hungupCall(sessionCallID, "", "");
+                App.CRVideoCall.VideoSDK.hangupCall(sessionCallID, "", "");
             }
 
             if (mVideoSession != null)
@@ -189,15 +189,15 @@ namespace SDKDemo
                 mCallDirect = null;
             }
 
-            App.CRVideoCall.Video.logout();
-            App.CRVideoCall.Video.uninit();
+            App.CRVideoCall.VideoSDK.logout();
+            App.CRVideoCall.VideoSDK.uninit();
             this.Show();
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine(App.CRVideoCall.Video.Version);
-            int versionInfo = String.Compare(App.CRVideoCall.Video.Version, mActiveXVersion);
+            Console.WriteLine(App.CRVideoCall.VideoSDK.Version);
+            int versionInfo = String.Compare(App.CRVideoCall.VideoSDK.Version, mActiveXVersion);
             if (versionInfo < 0)
             {
                 MessageBox.Show("ActiveX组件版本过低, 请重新安装新版本！");
@@ -218,8 +218,8 @@ namespace SDKDemo
         private void startLogin()
         {
             //初始化云屋sdk组件
-            App.CRVideoCall.Video.setSDKParams("{\"DatEncType\":0}");
-            App.CRVideoCall.Video.init_2(Environment.CurrentDirectory);
+            App.CRVideoCall.VideoSDK.setSDKParams("{\"DatEncType\":0}");
+            App.CRVideoCall.VideoSDK.init_2(Environment.CurrentDirectory);
 
 
             //sdk参数
@@ -231,18 +231,16 @@ namespace SDKDemo
                 sdkParamJson.Add("DatEncType", "0");
             }
             string sdkParamJsonStr = JsonConvert.SerializeObject(sdkParamJson);
-            App.CRVideoCall.Video.setSDKParams(sdkParamJsonStr);
+            App.CRVideoCall.VideoSDK.setSDKParams(sdkParamJsonStr);
 
 
-            App.CRVideoCall.Video.serverAddr = iniFile.ReadValue("Cfg", "LastServer", "sdk.cloudroom.com");
+            App.CRVideoCall.VideoSDK.serverAddr = iniFile.ReadValue("Cfg", "LastServer", "sdk.cloudroom.com");
             string account = iniFile.ReadValue("Cfg", "LastAccount", AccountInfo.TEST_AppID);
             string password = iniFile.ReadValue("Cfg", "LastPwd", App.getMD5Value(AccountInfo.TEST_AppSecret));
-            string nickName = edtNickname.Text.Trim();
-            string privAcnt = nickName; //自定义账号ID，此处采用登陆昵称，需保证其在此会话参与者中的唯一性            
-            mUserID = privAcnt;
-            App.CRVideoCall.Video.login(account, password, nickName, privAcnt, "", "");   //后两处参数按需传入
+            mUserID = edtNickname.Text.Trim();
+            App.CRVideoCall.VideoSDK.login(account, password, mUserID, "", "");   //后两处参数按需传入
 
-            iniFile.WriteValue("Cfg", "LastUser", nickName);
+            iniFile.WriteValue("Cfg", "LastUser", mUserID);
         }
 
         private void Window_Closed(object sender, System.EventArgs e)
@@ -261,14 +259,14 @@ namespace SDKDemo
             page.ShowDialog();
             if(page.getRslt().HasValue == false)
             {
-                App.CRVideoCall.Video.logout();
+                App.CRVideoCall.VideoSDK.logout();
                 this.Show();
                 return;
             }
 
             if(page.getRslt() == 2)
             {
-                App.CRVideoCall.Video.initQueueDat("");  //初始化专家坐席用户队列
+                App.CRVideoCall.VideoSDK.initQueueDat("");  //初始化专家坐席用户队列
 
                 if (cmbRole.SelectedIndex == 0)  //坐席
                 {
@@ -313,12 +311,12 @@ namespace SDKDemo
                 return;
             }
             //队列初始化成功后获取上一次意外结束的视频会话信息，如果存在，则可以选择恢复会话
-            VideoSessionInfo sessionInfo = JsonConvert.DeserializeObject<VideoSessionInfo>(App.CRVideoCall.Video.getSessionInfo());
+            VideoSessionInfo sessionInfo = JsonConvert.DeserializeObject<VideoSessionInfo>(App.CRVideoCall.VideoSDK.getSessionInfo());
             if (sessionInfo.callID != "" && sessionInfo.duration > 0)
             {
                 if (MessageBox.Show("是否恢复意外关闭的视频会话？", "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    App.CRVideoCall.Video.enterMeeting3(sessionInfo.meetingID);
+                    App.CRVideoCall.VideoSDK.enterMeeting3(sessionInfo.meetingID);
                     startVideoSession(sessionInfo.callID, sessionInfo.peerID);
                 }
                 else //结束上次的会话，准备新的会话
@@ -327,7 +325,7 @@ namespace SDKDemo
                 }
             }
 
-            List<QueueInfo> queues = JsonConvert.DeserializeObject<List<QueueInfo>>(App.CRVideoCall.Video.getAllQueueInfo());
+            List<QueueInfo> queues = JsonConvert.DeserializeObject<List<QueueInfo>>(App.CRVideoCall.VideoSDK.getAllQueueInfo());
             if (cmbRole.SelectedIndex == 0)  //加载专家坐席数据
             {
                 mService.setNickName(edtNickname.Text.Trim());
@@ -409,7 +407,7 @@ namespace SDKDemo
             Console.WriteLine("enterMeetingRslt:" + e.p_sdkErr);
             if (e.p_sdkErr == 0)
             {
-                App.CRVideoCall.Video.setEnableMutiVideo(mUserID, 0);
+                App.CRVideoCall.VideoSDK.setEnableMutiVideo(mUserID, 0);
                 mVideoSession.initVideoSession();
             }
             else //如果入会失败，可以从sdk中获取缓存的会话信息，尝试重新进入
@@ -419,12 +417,12 @@ namespace SDKDemo
                     endVideoSession_callDirect(mCallDirect.getCallID());
                     return;
                 }
-                VideoSessionInfo sessionInfo = JsonConvert.DeserializeObject<VideoSessionInfo>(App.CRVideoCall.Video.getSessionInfo());
+                VideoSessionInfo sessionInfo = JsonConvert.DeserializeObject<VideoSessionInfo>(App.CRVideoCall.VideoSDK.getSessionInfo());
                 if (sessionInfo.callID != "" && sessionInfo.duration > 0)
                 {
                     if (MessageBox.Show("启动视频会话失败，是否重试？", "警告", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
-                        App.CRVideoCall.Video.enterMeeting3(sessionInfo.meetingID);
+                        App.CRVideoCall.VideoSDK.enterMeeting3(sessionInfo.meetingID);
                         startVideoSession(sessionInfo.callID, sessionInfo.peerID);
                     }
                     else
@@ -453,7 +451,7 @@ namespace SDKDemo
                 endVideoSession_callDirect(mCallDirect.getCallID());
                 return;
             }
-            VideoSessionInfo sessionInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<VideoSessionInfo>(App.CRVideoCall.Video.getSessionInfo());
+            VideoSessionInfo sessionInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<VideoSessionInfo>(App.CRVideoCall.VideoSDK.getSessionInfo());
             if (sessionInfo.callID != "")
             {
                 //if (MessageBox.Show(mVideoSession, "视频会话掉线，是否重新连接？", "警告", MessageBoxButton.YesNo) == MessageBoxResult.Yes)

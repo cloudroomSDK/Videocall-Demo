@@ -42,29 +42,29 @@ namespace SDKDemo
         {
             if (isInit)
             {
-                App.CRVideoCall.Video.acceptCallSuccess += acceptCallSuccess;
-                App.CRVideoCall.Video.acceptCallFail += acceptCallFail;
-                App.CRVideoCall.Video.notifyCallIn += notifyCallIn;
-                App.CRVideoCall.Video.createMeetingSuccess += createMeetingSuccess;
-                App.CRVideoCall.Video.createMeetingFail += createMeetingFail;
+                App.CRVideoCall.VideoSDK.acceptCallSuccess += acceptCallSuccess;
+                App.CRVideoCall.VideoSDK.acceptCallFail += acceptCallFail;
+                App.CRVideoCall.VideoSDK.notifyCallIn += notifyCallIn;
+                App.CRVideoCall.VideoSDK.createMeetingSuccess += createMeetingSuccess;
+                App.CRVideoCall.VideoSDK.createMeetingFail += createMeetingFail;
               //  App.CRVideoCall.Video.callSuccess += callSuccess;
-                App.CRVideoCall.Video.callFail += callFail;
-                App.CRVideoCall.Video.notifyCallAccepted += notifyCallAccepted;
-                App.CRVideoCall.Video.notifyCallRejected += notifyCallRejected;
-                App.CRVideoCall.Video.notifyCallHungup += notifyCallHungup;
+                App.CRVideoCall.VideoSDK.callFail += callFail;
+                App.CRVideoCall.VideoSDK.notifyCallAccepted += notifyCallAccepted;
+                App.CRVideoCall.VideoSDK.notifyCallRejected += notifyCallRejected;
+                App.CRVideoCall.VideoSDK.notifyCallHungup += notifyCallHungup;
 
             }
             else
             {
-                App.CRVideoCall.Video.acceptCallSuccess -= acceptCallSuccess;
-                App.CRVideoCall.Video.acceptCallFail -= acceptCallFail;
-                App.CRVideoCall.Video.notifyCallIn -= notifyCallIn;
-                App.CRVideoCall.Video.createMeetingSuccess -= createMeetingSuccess;
-                App.CRVideoCall.Video.createMeetingFail -= createMeetingFail;
+                App.CRVideoCall.VideoSDK.acceptCallSuccess -= acceptCallSuccess;
+                App.CRVideoCall.VideoSDK.acceptCallFail -= acceptCallFail;
+                App.CRVideoCall.VideoSDK.notifyCallIn -= notifyCallIn;
+                App.CRVideoCall.VideoSDK.createMeetingSuccess -= createMeetingSuccess;
+                App.CRVideoCall.VideoSDK.createMeetingFail -= createMeetingFail;
                // App.CRVideoCall.Video.callSuccess -= callSuccess;
-                App.CRVideoCall.Video.callFail -= callFail;
-                App.CRVideoCall.Video.notifyCallAccepted -= notifyCallAccepted;
-                App.CRVideoCall.Video.notifyCallRejected -= notifyCallRejected;
+                App.CRVideoCall.VideoSDK.callFail -= callFail;
+                App.CRVideoCall.VideoSDK.notifyCallAccepted -= notifyCallAccepted;
+                App.CRVideoCall.VideoSDK.notifyCallRejected -= notifyCallRejected;
             }
         }
 
@@ -76,7 +76,7 @@ namespace SDKDemo
                 return;
             }
             btnCall.IsEnabled = false;
-            App.CRVideoCall.Video.createMeeting2("", ""); //是否使用会议密码：0，不适用
+            App.CRVideoCall.VideoSDK.createMeeting2("", ""); //是否使用会议密码：0，不适用
         }
 
         public void createMeetingSuccess(object sender, ICloudroomVideoSDKEvents_createMeetingSuccessEvent e)
@@ -84,7 +84,7 @@ namespace SDKDemo
             if(e.p_cookie == "")
             {
                 mOtherUsrID = textUsrID.Text.Trim();
-                App.CRVideoCall.Video.call(textUsrID.Text.Trim(), e.p_meetObj, "", "");
+                App.CRVideoCall.VideoSDK.call(textUsrID.Text.Trim(), e.p_meetObj, "", "");
 
             }
         }
@@ -105,7 +105,7 @@ namespace SDKDemo
             Console.WriteLine("notifyCallAccepted");
             mCallID = e.p_callID;
             MeetObj meet = JsonConvert.DeserializeObject<MeetObj>(e.p_meetObj);
-            App.CRVideoCall.Video.enterMeeting3(meet.ID);
+            App.CRVideoCall.VideoSDK.enterMeeting3(meet.ID);
             Login.Instance.startVideoSession_callDirect(e.p_callID, mOtherUsrID);
             btnCall.IsEnabled = true;
 
@@ -131,7 +131,7 @@ namespace SDKDemo
             mConnectWin = null;
             if (reason == ConnectWin.CLOSE_REASON.CLOSE_BY_REJECT)
             {
-                App.CRVideoCall.Video.rejectCall(e.p_callID, "", "");
+                App.CRVideoCall.VideoSDK.rejectCall(e.p_callID, "", "");
                 return;
             }
             else if (reason == ConnectWin.CLOSE_REASON.CLOSE_BY_CANCEL)
@@ -139,7 +139,7 @@ namespace SDKDemo
                 return;
             }
             mOtherUsrID = e.p_callerID;
-            App.CRVideoCall.Video.acceptCall(e.p_callID, e.p_meetObj, "", e.p_meetObj);
+            App.CRVideoCall.VideoSDK.acceptCall(e.p_callID, e.p_meetObj, "", e.p_meetObj);
         }
 
         public void acceptCallSuccess(object sender, ICloudroomVideoSDKEvents_acceptCallSuccessEvent e)
@@ -147,7 +147,7 @@ namespace SDKDemo
             Console.WriteLine("acceptCallSucceed");
             MeetObj meet = JsonConvert.DeserializeObject<MeetObj>(e.p_cookie);
             mCallID = e.p_callID;
-            App.CRVideoCall.Video.enterMeeting3(meet.ID);
+            App.CRVideoCall.VideoSDK.enterMeeting3(meet.ID);
 
             this.Dispatcher.BeginInvoke((Action)delegate()
             {

@@ -169,7 +169,7 @@
     <Compile Include="Tip.xaml.cs">
       <DependentUpon>Tip.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VideoCall.cs" />
+    <Compile Include="VideoSDKDef.cs" />
     <Compile Include="VideoSessionWin.xaml.cs">
       <DependentUpon>VideoSessionWin.xaml</DependentUpon>
     </Compile>

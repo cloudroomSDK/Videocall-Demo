@@ -40,13 +40,13 @@ namespace SDKDemo
 
             mPeerUserID = peerUserID;
             //本地录制状态
-            localRecordST = (MIXER_STATE)(App.CRVideoCall.Video.getLocMixerState(mLocMixId));
+            localRecordST = (MIXER_STATE)(App.CRVideoCall.VideoSDK.getLocMixerState(mLocMixId));
 
             //云端录制状态(座席才可以控制）
             cloudRecordST = MIXER_STATE.MST_NULL;
             if ( Login.Instance.IsServiceRole() )
             {
-                string cloudMixerInfoListStr = App.CRVideoCall.Video.getAllCloudMixerInfo();
+                string cloudMixerInfoListStr = App.CRVideoCall.VideoSDK.getAllCloudMixerInfo();
                 List<CloudMixerInfo> cloudMixerInfoList = JsonConvert.DeserializeObject<List<CloudMixerInfo>>(cloudMixerInfoListStr);
                 if (cloudMixerInfoList.Count > 0)
                 {
@@ -66,19 +66,19 @@ namespace SDKDemo
         {
             if (isInit)
             {
-                App.CRVideoCall.Video.locMixerStateChanged += Meeting_locMixerStateChanged;
-                App.CRVideoCall.Video.locMixerOutputInfo += Meeting_locMixerOutputInfo;
-                App.CRVideoCall.Video.createCloudMixerFailed += Meeting_createCloudMixerFailed;
-                App.CRVideoCall.Video.cloudMixerStateChanged += Meeting_cloudMixerStateChanged;
-                App.CRVideoCall.Video.cloudMixerOutputInfoChanged += Meeting_cloudMixerOutputInfoChanged;
+                App.CRVideoCall.VideoSDK.locMixerStateChanged += Meeting_locMixerStateChanged;
+                App.CRVideoCall.VideoSDK.locMixerOutputInfo += Meeting_locMixerOutputInfo;
+                App.CRVideoCall.VideoSDK.createCloudMixerFailed += Meeting_createCloudMixerFailed;
+                App.CRVideoCall.VideoSDK.cloudMixerStateChanged += Meeting_cloudMixerStateChanged;
+                App.CRVideoCall.VideoSDK.cloudMixerOutputInfoChanged += Meeting_cloudMixerOutputInfoChanged;
             }
             else
             {
-                App.CRVideoCall.Video.locMixerStateChanged -= Meeting_locMixerStateChanged;
-                App.CRVideoCall.Video.locMixerOutputInfo -= Meeting_locMixerOutputInfo;
-                App.CRVideoCall.Video.createCloudMixerFailed -= Meeting_createCloudMixerFailed;
-                App.CRVideoCall.Video.cloudMixerStateChanged -= Meeting_cloudMixerStateChanged;
-                App.CRVideoCall.Video.cloudMixerOutputInfoChanged -= Meeting_cloudMixerOutputInfoChanged;
+                App.CRVideoCall.VideoSDK.locMixerStateChanged -= Meeting_locMixerStateChanged;
+                App.CRVideoCall.VideoSDK.locMixerOutputInfo -= Meeting_locMixerOutputInfo;
+                App.CRVideoCall.VideoSDK.createCloudMixerFailed -= Meeting_createCloudMixerFailed;
+                App.CRVideoCall.VideoSDK.cloudMixerStateChanged -= Meeting_cloudMixerStateChanged;
+                App.CRVideoCall.VideoSDK.cloudMixerOutputInfoChanged -= Meeting_cloudMixerOutputInfoChanged;
             }
         }
 
@@ -132,7 +132,7 @@ namespace SDKDemo
                 Dispatcher.BeginInvoke(new messageBoxDelegate(BeginInvokeMessageBox), new object[] { "录制发生异常:" + CRError.Instance.getError(obj.errCode) });
                 
                 //结束本地录制
-                App.CRVideoCall.Video.destroyLocMixer(mLocMixId);
+                App.CRVideoCall.VideoSDK.destroyLocMixer(mLocMixId);
             }
         }
 
@@ -180,7 +180,7 @@ namespace SDKDemo
             {
                 Dispatcher.BeginInvoke(new messageBoxDelegate(BeginInvokeMessageBox), new object[] { "录制发生异常:" + CRError.Instance.getError(obj.errCode) });
                 //结束云端录制
-                App.CRVideoCall.Video.destroyCloudMixer(obj.id);
+                App.CRVideoCall.VideoSDK.destroyCloudMixer(obj.id);
             }
         }
 
@@ -245,12 +245,12 @@ namespace SDKDemo
             if (localRecordST != MIXER_STATE.MST_NULL)
             {
                 //停止录像
-                App.CRVideoCall.Video.destroyLocMixer(mLocMixId);
+                App.CRVideoCall.VideoSDK.destroyLocMixer(mLocMixId);
             }
             else
             {
                 //开启本地混图器
-                int nRet = App.CRVideoCall.Video.createLocMixer(mLocMixId, locMixerCfg(), mixerContentsString());
+                int nRet = App.CRVideoCall.VideoSDK.createLocMixer(mLocMixId, locMixerCfg(), mixerContentsString());
                 if (nRet != 0)
                 {
                     Dispatcher.BeginInvoke(new messageBoxDelegate(BeginInvokeMessageBox), new object[] { "录制发生错误，代码：" + CRError.Instance.getError(nRet) });
@@ -258,10 +258,10 @@ namespace SDKDemo
                 }
 
                 //添加输出
-                nRet = App.CRVideoCall.Video.addLocMixerOutput(mLocMixId, locOutput());
+                nRet = App.CRVideoCall.VideoSDK.addLocMixerOutput(mLocMixId, locOutput());
                 if (nRet != 0)
                 {
-                    App.CRVideoCall.Video.destroyLocMixer(mLocMixId);
+                    App.CRVideoCall.VideoSDK.destroyLocMixer(mLocMixId);
                     Dispatcher.BeginInvoke(new messageBoxDelegate(BeginInvokeMessageBox), new object[] { "录制发生错误，代码：" + CRError.Instance.getError(nRet) });
                     return;
                 }
@@ -272,16 +272,16 @@ namespace SDKDemo
         {
             if (cloudRecordST != MIXER_STATE.MST_NULL)
             {
-                string cloudMixerInfoListStr = App.CRVideoCall.Video.getAllCloudMixerInfo();
+                string cloudMixerInfoListStr = App.CRVideoCall.VideoSDK.getAllCloudMixerInfo();
                 List<CloudMixerInfo> cloudMixerInfoList = JsonConvert.DeserializeObject<List<CloudMixerInfo>>(cloudMixerInfoListStr);
                 if (cloudMixerInfoList.Count > 0)
                 {
-                    App.CRVideoCall.Video.destroyCloudMixer(cloudMixerInfoList[0].ID);
+                    App.CRVideoCall.VideoSDK.destroyCloudMixer(cloudMixerInfoList[0].ID);
                 }
             }
             else
             {
-                string cloudMixID = App.CRVideoCall.Video.createCloudMixer(cloudMixerCfg());
+                string cloudMixID = App.CRVideoCall.VideoSDK.createCloudMixer(cloudMixerCfg());
             }
         }
 

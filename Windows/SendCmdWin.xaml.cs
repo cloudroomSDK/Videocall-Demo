@@ -43,7 +43,7 @@ namespace SDKDemo
                 return;
             }
 
-            App.CRVideoCall.Video.sendCmd(txtCmdReceiver.Text.Trim(), txtCmdData.Text.Trim());
+            App.CRVideoCall.VideoSDK.sendCmd(txtCmdReceiver.Text.Trim(), txtCmdData.Text.Trim());
             GC.Collect();
         }
 
@@ -87,7 +87,7 @@ namespace SDKDemo
                 label_sendBuffer_desc.Text = "文件大小：" + stream.Length / 1000 + "KB";
             }
 
-            mBufferTaskID = (string)App.CRVideoCall.Video.sendFile(txtFileReceiver.Text.Trim(), mSelectedFile);
+            mBufferTaskID = (string)App.CRVideoCall.VideoSDK.sendFile(txtFileReceiver.Text.Trim(), mSelectedFile);
         }
 
         public void sendProgress(int totalLen, int sendedLen)
@@ -136,7 +136,7 @@ namespace SDKDemo
         {
             if (mBufferTaskID != "")
             {
-                App.CRVideoCall.Video.cancelSend(mBufferTaskID);
+                App.CRVideoCall.VideoSDK.cancelSend(mBufferTaskID);
                 label_sendBuffer_desc.Text = "发送已取消";
             }
             else

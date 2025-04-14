@@ -83,7 +83,7 @@ namespace SDKDemo
             iniFile.WriteValue("Cfg", "LastServer", edtServer.Text);
             iniFile.WriteValue("Cfg", "HttpType", cbHttpType.SelectedIndex.ToString());
 
-            if (edtAccount.Text != "默认AppID")
+            if (edtAccount.Text != "默认APPID")
             {
                 iniFile.WriteValue("Cfg", "LastAccount", edtAccount.Text);
                 iniFile.WriteValue("Cfg", "LastPwd", mIsPasswrodChanged ? App.getMD5Value(edtPassword.Password) : edtPassword.Password);

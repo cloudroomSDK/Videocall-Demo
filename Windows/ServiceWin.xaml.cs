@@ -38,39 +38,39 @@ namespace SDKDemo
         {
             if(isInit)
             {
-                App.CRVideoCall.Video.setDNDStatusSuccess += setDNDStatusSucceed;
-                App.CRVideoCall.Video.setDNDStatusFail += setDNDStatusFailed;
-                App.CRVideoCall.Video.createMeetingSuccess += createMeetingSuccess;
-                App.CRVideoCall.Video.createMeetingFail += createMeetingFail;
-                App.CRVideoCall.Video.queueStatusChanged += queueStatusChanged;
-                App.CRVideoCall.Video.startServiceRslt += startServiceRslt;
-                App.CRVideoCall.Video.stopServiceRslt += stopServiceRslt;
-                App.CRVideoCall.Video.autoAssignUser += autoAssignUser;
-                App.CRVideoCall.Video.reqAssignUserRslt += reqAssignUserRslt;
-                App.CRVideoCall.Video.responseAssignUserRslt += responseAssignUserRslt;
-                App.CRVideoCall.Video.cancelAssignUser += cancelAssignUser;
-                App.CRVideoCall.Video.callSuccess += callSuccess;
-                App.CRVideoCall.Video.callFail += callFailed;
-                App.CRVideoCall.Video.notifyCallAccepted += notifyCallAccepted;
-                App.CRVideoCall.Video.notifyCallRejected += notifyCallRejected;
+                App.CRVideoCall.VideoSDK.setDNDStatusSuccess += setDNDStatusSucceed;
+                App.CRVideoCall.VideoSDK.setDNDStatusFail += setDNDStatusFailed;
+                App.CRVideoCall.VideoSDK.createMeetingSuccess += createMeetingSuccess;
+                App.CRVideoCall.VideoSDK.createMeetingFail += createMeetingFail;
+                App.CRVideoCall.VideoSDK.queueStatusChanged += queueStatusChanged;
+                App.CRVideoCall.VideoSDK.startServiceRslt += startServiceRslt;
+                App.CRVideoCall.VideoSDK.stopServiceRslt += stopServiceRslt;
+                App.CRVideoCall.VideoSDK.autoAssignUser += autoAssignUser;
+                App.CRVideoCall.VideoSDK.reqAssignUserRslt += reqAssignUserRslt;
+                App.CRVideoCall.VideoSDK.responseAssignUserRslt += responseAssignUserRslt;
+                App.CRVideoCall.VideoSDK.cancelAssignUser += cancelAssignUser;
+                App.CRVideoCall.VideoSDK.callSuccess += callSuccess;
+                App.CRVideoCall.VideoSDK.callFail += callFailed;
+                App.CRVideoCall.VideoSDK.notifyCallAccepted += notifyCallAccepted;
+                App.CRVideoCall.VideoSDK.notifyCallRejected += notifyCallRejected;
             }
             else 
             {
-                App.CRVideoCall.Video.setDNDStatusSuccess -= setDNDStatusSucceed;
-                App.CRVideoCall.Video.setDNDStatusFail -= setDNDStatusFailed;
-                App.CRVideoCall.Video.createMeetingSuccess -= createMeetingSuccess;
-                App.CRVideoCall.Video.createMeetingFail -= createMeetingFail;
-                App.CRVideoCall.Video.queueStatusChanged -= queueStatusChanged;
-                App.CRVideoCall.Video.startServiceRslt -= startServiceRslt;
-                App.CRVideoCall.Video.stopServiceRslt -= stopServiceRslt;
-                App.CRVideoCall.Video.autoAssignUser -= autoAssignUser;
-                App.CRVideoCall.Video.reqAssignUserRslt -= reqAssignUserRslt;
-                App.CRVideoCall.Video.responseAssignUserRslt -= responseAssignUserRslt;
-                App.CRVideoCall.Video.cancelAssignUser -= cancelAssignUser;
-                App.CRVideoCall.Video.callSuccess -= callSuccess;
-                App.CRVideoCall.Video.callFail -= callFailed;
-                App.CRVideoCall.Video.notifyCallAccepted -= notifyCallAccepted;
-                App.CRVideoCall.Video.notifyCallRejected -= notifyCallRejected;
+                App.CRVideoCall.VideoSDK.setDNDStatusSuccess -= setDNDStatusSucceed;
+                App.CRVideoCall.VideoSDK.setDNDStatusFail -= setDNDStatusFailed;
+                App.CRVideoCall.VideoSDK.createMeetingSuccess -= createMeetingSuccess;
+                App.CRVideoCall.VideoSDK.createMeetingFail -= createMeetingFail;
+                App.CRVideoCall.VideoSDK.queueStatusChanged -= queueStatusChanged;
+                App.CRVideoCall.VideoSDK.startServiceRslt -= startServiceRslt;
+                App.CRVideoCall.VideoSDK.stopServiceRslt -= stopServiceRslt;
+                App.CRVideoCall.VideoSDK.autoAssignUser -= autoAssignUser;
+                App.CRVideoCall.VideoSDK.reqAssignUserRslt -= reqAssignUserRslt;
+                App.CRVideoCall.VideoSDK.responseAssignUserRslt -= responseAssignUserRslt;
+                App.CRVideoCall.VideoSDK.cancelAssignUser -= cancelAssignUser;
+                App.CRVideoCall.VideoSDK.callSuccess -= callSuccess;
+                App.CRVideoCall.VideoSDK.callFail -= callFailed;
+                App.CRVideoCall.VideoSDK.notifyCallAccepted -= notifyCallAccepted;
+                App.CRVideoCall.VideoSDK.notifyCallRejected -= notifyCallRejected;
             }
         }
 
@@ -86,7 +86,7 @@ namespace SDKDemo
             for (int i = 0; i < queues.Count; i++)
             {
                 QueueInfo que = queues[i];
-                QueueStatus queState = JsonConvert.DeserializeObject<QueueStatus>(App.CRVideoCall.Video.getQueueStatus(que.queID));
+                QueueStatus queState = JsonConvert.DeserializeObject<QueueStatus>(App.CRVideoCall.VideoSDK.getQueueStatus(que.queID));
                 if(isServing(que.queID))
                 {
                     QueueStatusItemList.Add(new QueueStatusItem(que.name, que.queID, queState.agent_num, queState.wait_num, queState.srv_num, que.prio, true, "服务中…"));
@@ -142,7 +142,7 @@ namespace SDKDemo
             }
             else
             {
-                QueueStatus queState = JsonConvert.DeserializeObject<QueueStatus>(App.CRVideoCall.Video.getQueueStatus(state.queID));
+                QueueStatus queState = JsonConvert.DeserializeObject<QueueStatus>(App.CRVideoCall.VideoSDK.getQueueStatus(state.queID));
                 QueueStatusItemList[row].Agent_num = queState.agent_num;
                 QueueStatusItemList[row].Wait_num = queState.wait_num;
                 QueueStatusItemList[row].Srv_num = queState.srv_num;
@@ -175,7 +175,7 @@ namespace SDKDemo
                 }
                 else
                 {
-                    QueueStatus queState = JsonConvert.DeserializeObject<QueueStatus>(App.CRVideoCall.Video.getQueueStatus(e.p_queID));
+                    QueueStatus queState = JsonConvert.DeserializeObject<QueueStatus>(App.CRVideoCall.VideoSDK.getQueueStatus(e.p_queID));
                     QueueStatusItemList[row].Agent_num = queState.agent_num;
                     QueueStatusItemList[row].Wait_num = queState.wait_num;
                     QueueStatusItemList[row].Srv_num = queState.srv_num;
@@ -230,7 +230,7 @@ namespace SDKDemo
             Console.WriteLine("notifyCallAccepted");
 
             MeetObj meet = JsonConvert.DeserializeObject<MeetObj>(e.p_meetObj);
-            App.CRVideoCall.Video.enterMeeting3(meet.ID);
+            App.CRVideoCall.VideoSDK.enterMeeting3(meet.ID);
             Login.Instance.startVideoSession(e.p_callID, mPeerUser.usrID);            
         }
         //对方拒绝会话邀请，本demo中对方默认直接接受，所有此委托不会被调用
@@ -277,7 +277,7 @@ namespace SDKDemo
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
             btnNext.IsEnabled = false;
-            App.CRVideoCall.Video.reqAssignUser("");
+            App.CRVideoCall.VideoSDK.reqAssignUser("");
         }
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)
@@ -289,19 +289,19 @@ namespace SDKDemo
         {
             if (cbkSetDND.IsChecked == true)   //免打扰，手动分配
             {
-                App.CRVideoCall.Video.setDNDStatus(1, "");
+                App.CRVideoCall.VideoSDK.setDNDStatus(1, "");
                 bIsDND = true;
             }
             else
             {
-                App.CRVideoCall.Video.setDNDStatus(0, "");
+                App.CRVideoCall.VideoSDK.setDNDStatus(0, "");
                 bIsDND = false;
             }
         }
 
         private bool isServing(int queID)
         {
-            string str = App.CRVideoCall.Video.getServingQueues();
+            string str = App.CRVideoCall.VideoSDK.getServingQueues();
             string[] queIDs = str.Split('\n');
             for (int i = 0; i < queIDs.Length; i++)
             {
@@ -313,7 +313,7 @@ namespace SDKDemo
 
         private void createMeeting()
         {
-            App.CRVideoCall.Video.createMeeting2("", "");
+            App.CRVideoCall.VideoSDK.createMeeting2("", "");
         }
 
         public void createMeetingSuccess(object sender, ICloudroomVideoSDKEvents_createMeetingSuccessEvent e)
@@ -331,7 +331,7 @@ namespace SDKDemo
             if (mPeerUser.usrID.Length <= 0)
                 return;
             Console.WriteLine("createMeetingFail, rejectAssignUser...");
-            App.CRVideoCall.Video.rejectAssignUser(mPeerUser.queID, mPeerUser.usrID, e.p_cookie);
+            App.CRVideoCall.VideoSDK.rejectAssignUser(mPeerUser.queID, mPeerUser.usrID, e.p_cookie);
 
             this.Dispatcher.BeginInvoke(new messageBoxDelegate(BeginInvokeMessageBox), new object[] { "创建会议失败，无法继续邀请, 自动拒绝已分配的客户，代码：" + CRError.Instance.getError(e.p_sdkErr) });
         }
@@ -349,7 +349,7 @@ namespace SDKDemo
                 if (reason==ConnectWin.CLOSE_REASON.CLOSE_BY_REJECT)
                 {
                     Console.WriteLine("rejectAssignUser");
-                    App.CRVideoCall.Video.rejectAssignUser(mPeerUser.queID, mPeerUser.usrID, "");
+                    App.CRVideoCall.VideoSDK.rejectAssignUser(mPeerUser.queID, mPeerUser.usrID, "");
                     return;
                 }
                 else if (reason == ConnectWin.CLOSE_REASON.CLOSE_BY_CANCEL)
@@ -365,9 +365,9 @@ namespace SDKDemo
         {
             Console.WriteLine("acceptAssignUser");
 
-            App.CRVideoCall.Video.acceptAssignUser(mPeerUser.queID, mPeerUser.usrID, "");
+            App.CRVideoCall.VideoSDK.acceptAssignUser(mPeerUser.queID, mPeerUser.usrID, "");
 
-            string callID = App.CRVideoCall.Video.call(mPeerUser.usrID, meetObj, "", ""); //无密码，无扩展参数
+            string callID = App.CRVideoCall.VideoSDK.call(mPeerUser.usrID, meetObj, "", ""); //无密码，无扩展参数
             Console.Write("start call " + mPeerUser.usrID + ", callID:" + callID);
         }
 
@@ -383,17 +383,17 @@ namespace SDKDemo
             int queID = (int)btn.CommandParameter;
             if (isServing(queID))
             {
-                App.CRVideoCall.Video.stopService(queID, "");
+                App.CRVideoCall.VideoSDK.stopService(queID, "");
             }
             else
             {
-                App.CRVideoCall.Video.startService(queID, "");
+                App.CRVideoCall.VideoSDK.startService(queID, "");
             }
          }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            App.CRVideoCall.Video.initQueueDat("");  //初始化专家坐席用户队列
+            App.CRVideoCall.VideoSDK.initQueueDat("");  //初始化专家坐席用户队列
         }
 
     }

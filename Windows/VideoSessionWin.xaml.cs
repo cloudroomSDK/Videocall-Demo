@@ -13,6 +13,37 @@ using System.Windows.Data;
 
 namespace SDKDemo
 {
+    public class CCamInfo
+    {
+        public int ID;
+        public string NAME;
+        public CCamInfo(int id, string name)
+        {
+            this.ID = id;
+            this.NAME = name;
+        }
+        public override string ToString()
+        {
+            return this.NAME;
+        }
+    }
+
+    public class CAudioInfo
+    {
+        public string ID;
+        public string NAME;
+        public CAudioInfo(string id, string name)
+        {
+            this.ID = id;
+            this.NAME = name;
+        }
+        public override string ToString()
+        {
+            return this.NAME;
+        }
+    } 
+
+
     public delegate void devChangeHandler();
     /// <summary>
     /// VideoSessionWin.xaml 的交互逻辑
@@ -21,7 +52,6 @@ namespace SDKDemo
     {        
         private string mSessionID;
         private string mPeerUserId;
-        private List<int> mCameras = new List<int>();
         private DispatcherTimer mTickTimer = new DispatcherTimer();
         private int mSessionTick;
 
@@ -60,45 +90,45 @@ namespace SDKDemo
         {
             if (isInit)
             {
-                App.CRVideoCall.Video.netStateChanged += netStateChanged;
-                App.CRVideoCall.Video.micEnergyUpdate += micEnergyUpdate;
-                App.CRVideoCall.Video.audioDevChanged += audioDevChanged;
-                App.CRVideoCall.Video.audioStatusChanged += audioStatusChanged;
-                App.CRVideoCall.Video.videoDevChanged += videoDevChanged;
-                App.CRVideoCall.Video.videoStatusChanged += videoStatusChanged;
-                App.CRVideoCall.Video.startScreenShareRslt += startScreenShareRslt;
-                App.CRVideoCall.Video.stopScreenShareRslt += stopScreenShareRslt;
+                App.CRVideoCall.VideoSDK.netStateChanged += netStateChanged;
+                App.CRVideoCall.VideoSDK.micEnergyUpdate += micEnergyUpdate;
+                App.CRVideoCall.VideoSDK.audioDevChanged += audioDevChanged;
+                App.CRVideoCall.VideoSDK.audioStatusChanged += audioStatusChanged;
+                App.CRVideoCall.VideoSDK.videoDevChanged += videoDevChanged;
+                App.CRVideoCall.VideoSDK.videoStatusChanged += videoStatusChanged;
+                App.CRVideoCall.VideoSDK.startScreenShareRslt += startScreenShareRslt;
+                App.CRVideoCall.VideoSDK.stopScreenShareRslt += stopScreenShareRslt;
                 //App.CRVideoCall.Video.notifyVideoData +=  ICloudroomVideoSDKEvents_notifyVideoDataEventHandler(notifyVideoData);
 
-                App.CRVideoCall.Video.sendFileRlst += sendFileRlst;
-                App.CRVideoCall.Video.notifyFileData += notifyFileData;
+                App.CRVideoCall.VideoSDK.sendFileRlst += sendFileRlst;
+                App.CRVideoCall.VideoSDK.notifyFileData += notifyFileData;
 
-                App.CRVideoCall.Video.cancelSendRlst += cancelSendRlst;
-                App.CRVideoCall.Video.sendProgress += sendProgress;
+                App.CRVideoCall.VideoSDK.cancelSendRlst += cancelSendRlst;
+                App.CRVideoCall.VideoSDK.sendProgress += sendProgress;
 
-                App.CRVideoCall.Video.sendCmdRlst += sendCmdRlst;
-                App.CRVideoCall.Video.notifyCmdData += notifyCmdData;
+                App.CRVideoCall.VideoSDK.sendCmdRlst += sendCmdRlst;
+                App.CRVideoCall.VideoSDK.notifyCmdData += notifyCmdData;
             }
             else 
             {
-                App.CRVideoCall.Video.netStateChanged -= netStateChanged;
-                App.CRVideoCall.Video.micEnergyUpdate -= micEnergyUpdate;
-                App.CRVideoCall.Video.audioDevChanged -= audioDevChanged;
-                App.CRVideoCall.Video.audioStatusChanged -= audioStatusChanged;
-                App.CRVideoCall.Video.videoDevChanged -= videoDevChanged;
-                App.CRVideoCall.Video.videoStatusChanged -= videoStatusChanged;
-                App.CRVideoCall.Video.startScreenShareRslt -= startScreenShareRslt;
-                App.CRVideoCall.Video.stopScreenShareRslt -= stopScreenShareRslt;                
+                App.CRVideoCall.VideoSDK.netStateChanged -= netStateChanged;
+                App.CRVideoCall.VideoSDK.micEnergyUpdate -= micEnergyUpdate;
+                App.CRVideoCall.VideoSDK.audioDevChanged -= audioDevChanged;
+                App.CRVideoCall.VideoSDK.audioStatusChanged -= audioStatusChanged;
+                App.CRVideoCall.VideoSDK.videoDevChanged -= videoDevChanged;
+                App.CRVideoCall.VideoSDK.videoStatusChanged -= videoStatusChanged;
+                App.CRVideoCall.VideoSDK.startScreenShareRslt -= startScreenShareRslt;
+                App.CRVideoCall.VideoSDK.stopScreenShareRslt -= stopScreenShareRslt;                
                 //App.CRVideoCall.Video.notifyVideoData -= ICloudroomVideoSDKEvents_notifyVideoDataEventHandler(notifyVideoData);
 
-                App.CRVideoCall.Video.sendFileRlst -= sendFileRlst;
-                App.CRVideoCall.Video.notifyFileData -= notifyFileData;
+                App.CRVideoCall.VideoSDK.sendFileRlst -= sendFileRlst;
+                App.CRVideoCall.VideoSDK.notifyFileData -= notifyFileData;
 
-                App.CRVideoCall.Video.cancelSendRlst -= cancelSendRlst;
-                App.CRVideoCall.Video.sendProgress -= sendProgress;
+                App.CRVideoCall.VideoSDK.cancelSendRlst -= cancelSendRlst;
+                App.CRVideoCall.VideoSDK.sendProgress -= sendProgress;
 
-                App.CRVideoCall.Video.sendCmdRlst -= sendCmdRlst;
-                App.CRVideoCall.Video.notifyCmdData -= notifyCmdData;
+                App.CRVideoCall.VideoSDK.sendCmdRlst -= sendCmdRlst;
+                App.CRVideoCall.VideoSDK.notifyCmdData -= notifyCmdData;
             }
         }
 
@@ -112,12 +142,12 @@ namespace SDKDemo
         {
             initDevs(DEVTYPE.ALL);
             //设置视频尺寸            
-            cmbVideoSize.SelectedIndex = (int)VIDEO_SHOW_SIZE.VSIZE_SZ_480;
+            cmbVideoSize.SelectedIndex = (int)VIDEO_SHOW_SIZE.VSIZE_SZ_360;
             //打开设备
             btnCameraOpr.Content = "打开";
-            App.CRVideoCall.Video.openVideo(Login.Instance.SelfUserId);
+            App.CRVideoCall.VideoSDK.openVideo(Login.Instance.SelfUserId);
             btnMicOpr.Content = "打开";
-            App.CRVideoCall.Video.openMic(Login.Instance.SelfUserId);
+            App.CRVideoCall.VideoSDK.openMic(Login.Instance.SelfUserId);
 
             updateVideoCfg();
             chkMute.IsChecked = false;
@@ -217,44 +247,42 @@ namespace SDKDemo
             cmbSpeakers.IsEnabled = false;
             cmbCameras.IsEnabled = false;
 
-            string[] mics = null;
-            string[] speakers = null;
-            //获取麦克风和扬声器设备，用换行符拆分
+            //获取麦克风和扬声器设备
             if (type == DEVTYPE.AUDIO || type == DEVTYPE.ALL)
             {
-                mics = App.CRVideoCall.Video.getAudioMicNames().Split(new Char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                speakers = App.CRVideoCall.Video.getAudioSpkNames().Split(new Char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                AudioCfg aCfg = JsonConvert.DeserializeObject<AudioCfg>(App.CRVideoCall.VideoSDK.getAudioCfg());
+                List<AudioInfo> micDevs = JsonConvert.DeserializeObject<List<AudioInfo>>(App.CRVideoCall.VideoSDK.getAudioMics());
+                List<AudioInfo> spkDevs = JsonConvert.DeserializeObject<List<AudioInfo>>(App.CRVideoCall.VideoSDK.getAudioSpks());
 
-                object itemMic = cmbMics.SelectedItem;
                 cmbMics.Items.Clear();
-                for (int i = 0; i < mics.Length; i++)
+                CAudioInfo aDevInfo = new CAudioInfo("", "默认设备");
+                cmbMics.Items.Add(aDevInfo);
+                cmbMics.SelectedIndex = 0;
+                //下拉列表加载设备
+                for (int i = 0; i < micDevs.Count; i++)
                 {
-                    cmbMics.Items.Add(mics[i]);
+                    AudioInfo dev = micDevs[i];
+                    aDevInfo = new CAudioInfo(dev.id, dev.name);
+                    cmbMics.Items.Add(aDevInfo);
+                    if (aCfg.micID == aDevInfo.ID)
+                    {
+                        cmbMics.Text = aDevInfo.NAME;
+                    }
                 }
 
-                if (cmbMics.Items.Contains(itemMic))
-                {
-                    cmbMics.SelectedItem = itemMic;
-                }
-                else if (cmbMics.Items.Count > 0)
-                {
-                    cmbMics.SelectedIndex = 0;
-                }
-
-                object itemSpeakers = cmbSpeakers.SelectedItem;
                 cmbSpeakers.Items.Clear();
-                for (int i = 0; i < speakers.Length; i++)
+                aDevInfo = new CAudioInfo("", "默认设备");
+                cmbSpeakers.Items.Add(aDevInfo);
+                cmbSpeakers.SelectedIndex = 0;
+                for (int i = 0; i < spkDevs.Count; i++)
                 {
-                    cmbSpeakers.Items.Add(speakers[i]);
-                }
-
-                if (cmbSpeakers.Items.Contains(itemSpeakers))
-                {
-                    cmbSpeakers.SelectedItem = itemSpeakers;
-                }
-                else  if(cmbSpeakers.Items.Count > 0)
-                {
-                    cmbSpeakers.SelectedIndex = 0;
+                    AudioInfo dev = spkDevs[i];
+                    aDevInfo = new CAudioInfo(dev.id, dev.name);
+                    cmbSpeakers.Items.Add(aDevInfo);
+                    if (aCfg.spkID == aDevInfo.ID)
+                    {
+                        cmbSpeakers.Text = aDevInfo.NAME;
+                    }
                 }
             }
 
@@ -262,23 +290,26 @@ namespace SDKDemo
             if (type == DEVTYPE.VIDEO || type == DEVTYPE.ALL)
             {
                 //获取视频设备
-                mCameras.Clear();
                 cmbCameras.Items.Clear();
-                long cameraId = App.CRVideoCall.Video.getDefaultVideo(Login.Instance.SelfUserId);
-                int selIndex = -1;
-                List<VideoInfo> devs = JsonConvert.DeserializeObject<List<VideoInfo>>(App.CRVideoCall.Video.getAllVideoInfo(Login.Instance.SelfUserId));
+                int cameraId = App.CRVideoCall.VideoSDK.getDefaultVideo(Login.Instance.SelfUserId);
+                List<VideoInfo> devs = JsonConvert.DeserializeObject<List<VideoInfo>>(App.CRVideoCall.VideoSDK.getAllVideoInfo(Login.Instance.SelfUserId));
                 for (int i = 0; i < devs.Count; i++)
                 {
-                    VideoInfo dev = (VideoInfo)devs[i];
-                    cmbCameras.Items.Add(dev.videoName);
-                    mCameras.Add(dev.videoID);   //记录下视频设备的id和名称的对应，以便选择设备时使用
-                    if ( cameraId==dev.videoID )
+                    VideoInfo dev = devs[i];
+                    CCamInfo camInfo = new CCamInfo(dev.videoID, dev.videoName);
+                    cmbCameras.Items.Add(camInfo);
+                    if (cameraId == dev.videoID)
                     {
-                        selIndex = i;
+                        cmbCameras.Text = dev.videoName;
                     }
                 }
 
-                cmbCameras.SelectedIndex = selIndex;
+                if (cameraId == 0 && devs.Count > 0) //如果还没选择设备，则选择一个
+                {
+                    cmbCameras.SelectedIndex = 0;
+                    cameraId = devs[0].videoID;
+                    App.CRVideoCall.VideoSDK.setDefaultVideo(Login.Instance.SelfUserId, cameraId);
+                }
             }
 
             cmbMics.IsEnabled = true;
@@ -288,13 +319,12 @@ namespace SDKDemo
 
         private void cmbCameras_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cmbCameras.SelectedIndex < 0)
-                return;
-            if (cmbCameras.SelectedIndex >= mCameras.Count)
+            if (cmbCameras.IsEnabled == false)
                 return;
 
-            App.CRVideoCall.Video.setDefaultVideo(Login.Instance.SelfUserId, mCameras[cmbCameras.SelectedIndex]);
-            Console.WriteLine("cmbCameras_SelectedIndexChanged, set camera:" + App.CRVideoCall.Video.getDefaultVideo(Login.Instance.SelfUserId));
+            CCamInfo camInfo = (CCamInfo)cmbCameras.SelectedItem;
+            App.CRVideoCall.VideoSDK.setDefaultVideo(Login.Instance.SelfUserId, camInfo.ID);
+            Console.WriteLine("cmbCameras_SelectedIndexChanged, set camera:" + App.CRVideoCall.VideoSDK.getDefaultVideo(Login.Instance.SelfUserId));
         }
 
         private void cmbSpeakers_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -302,12 +332,20 @@ namespace SDKDemo
             if (cmbSpeakers.SelectedIndex < 0)
                 return;
 
-            audioCfg cfg = new audioCfg();
-            cfg.micName = (string)cmbSpeakers.SelectedItem;           //""为使用系统默认设备
-            cfg.speakerName = (string)cmbSpeakers.SelectedItem;       //同上
-            App.CRVideoCall.Video.setAudioCfg(JsonConvert.SerializeObject(cfg));
+            AudioCfg cfg = new AudioCfg();
+            if (cmbMics.SelectedIndex > 0)
+            {
+                CAudioInfo v = (CAudioInfo)cmbMics.SelectedItem;
+                cfg.micID = v.ID;
+            }
+            if (cmbSpeakers.SelectedIndex > 0)
+            {
+                CAudioInfo v = (CAudioInfo)cmbSpeakers.SelectedItem;
+                cfg.spkID = v.ID;
+            }
+            App.CRVideoCall.VideoSDK.setAudioCfg(JsonConvert.SerializeObject(cfg));
 
-            Console.WriteLine("cmbSpeakers_SelectionChanged, set mic:" + cfg.micName + ", set speaker:" + cfg.speakerName);
+            Console.WriteLine("cmbSpeakers_SelectionChanged, set mic:" + cfg.micID + ", set speaker:" + cfg.spkID);
         }
 
         private void cmbMics_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -315,12 +353,20 @@ namespace SDKDemo
             if (cmbMics.SelectedIndex < 0)
                 return;
 
-            audioCfg cfg = new audioCfg();
-            cfg.micName = (string)cmbMics.SelectedItem;                 //""为使用系统默认设备
-            cfg.speakerName = (string)cmbSpeakers.SelectedItem;         //同上
-            App.CRVideoCall.Video.setAudioCfg(JsonConvert.SerializeObject(cfg));
+            AudioCfg cfg = new AudioCfg();
+            if (cmbMics.SelectedIndex > 0)
+            {
+                CAudioInfo v = (CAudioInfo)cmbMics.SelectedItem;
+                cfg.micID = v.ID;
+            }
+            if (cmbSpeakers.SelectedIndex > 0)
+            {
+                CAudioInfo v = (CAudioInfo)cmbSpeakers.SelectedItem;
+                cfg.spkID = v.ID;
+            }
+            App.CRVideoCall.VideoSDK.setAudioCfg(JsonConvert.SerializeObject(cfg));
 
-            Console.WriteLine("cmbMics_SelectionChanged, set mic:" + cfg.micName + ", set speaker:" + cfg.speakerName);
+            Console.WriteLine("cmbMics_SelectionChanged, set mic:" + cfg.micID + ", set speaker:" + cfg.spkID);
         }
 
         public void endVideoSession(string sessionID)
@@ -342,26 +388,25 @@ namespace SDKDemo
             
             try
             {
-                if (App.CRVideoCall.Video.isScreenShareStarted == 1)
+                if (App.CRVideoCall.VideoSDK.isScreenShareStarted == 1)
                 {
-                    App.CRVideoCall.Video.stopScreenShare();
+                    App.CRVideoCall.VideoSDK.stopScreenShare();
                 }
 
                 if (mSessionID != "")
                 {
-                    App.CRVideoCall.Video.hungupCall(mSessionID, "", "");
+                    App.CRVideoCall.VideoSDK.hangupCall(mSessionID, "", "");
                 }  
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            App.CRVideoCall.Video.exitMeeting();         
+            App.CRVideoCall.VideoSDK.exitMeeting();         
 
             //关闭窗口时清理缓存数据            
             mSessionID = null;
             mPeerUserId = null;
-            mCameras.Clear();
             mSessionTick = 0;
 
             mTickTimer.Stop();
@@ -374,31 +419,31 @@ namespace SDKDemo
 
         private void btnCameraOpr_Click(object sender, RoutedEventArgs e)
         {
-            int status = App.CRVideoCall.Video.getVideoStatus(Login.Instance.SelfUserId);
+            int status = App.CRVideoCall.VideoSDK.getVideoStatus(Login.Instance.SelfUserId);
             if (status <= 2)
             {
-                App.CRVideoCall.Video.openVideo(Login.Instance.SelfUserId);
+                App.CRVideoCall.VideoSDK.openVideo(Login.Instance.SelfUserId);
                 btnCameraOpr.Content = "关闭";
             }
             else
             {
-                App.CRVideoCall.Video.closeVideo(Login.Instance.SelfUserId);
+                App.CRVideoCall.VideoSDK.closeVideo(Login.Instance.SelfUserId);
                 btnCameraOpr.Content = "打开";
             }
         }
 
         private void btnMicOpr_Click(object sender, RoutedEventArgs e)
         {
-            int micStatus = App.CRVideoCall.Video.getAudioStatus(Login.Instance.SelfUserId);
+            int micStatus = App.CRVideoCall.VideoSDK.getAudioStatus(Login.Instance.SelfUserId);
             if (micStatus <= 2)
             {
-                App.CRVideoCall.Video.openMic(Login.Instance.SelfUserId);
+                App.CRVideoCall.VideoSDK.openMic(Login.Instance.SelfUserId);
                 btnMicOpr.Content = "关闭";
 
             }
             else
             {
-                App.CRVideoCall.Video.closeMic(Login.Instance.SelfUserId);
+                App.CRVideoCall.VideoSDK.closeMic(Login.Instance.SelfUserId);
                 btnMicOpr.Content = "打开";
             }
         }
@@ -546,7 +591,10 @@ namespace SDKDemo
         private void updateVideoCfg()
         {
             VideoCfg cfg = new VideoCfg();
-            cfg.sizeType = cmbVideoSize.SelectedIndex + 1;  //VIDEO_SHOW_SIZE从1开始
+            cfg.size = cmbVideoSize.Text;
+            if (cfg.size.Length <= 0)
+                return;
+
             cfg.fps = (int)FPSBar.Value;
             if (rbVideoQuality.IsChecked == true)
             {
@@ -559,7 +607,7 @@ namespace SDKDemo
                 cfg.qp_max = 36;
             }
 
-            if(App.CRVideoCall.Video.setVideoCfg(JsonConvert.SerializeObject(cfg)) == false)
+            if(App.CRVideoCall.VideoSDK.setVideoCfg(JsonConvert.SerializeObject(cfg)) == false)
             {
                 MessageBox.Show(this, "视频配置失败，请检查配置");
             }
@@ -567,7 +615,7 @@ namespace SDKDemo
 
         private void chkMute_Click(object sender, RoutedEventArgs e)
         {
-            App.CRVideoCall.Video.speakerMute = chkMute.IsChecked==true ? 1 : 0;     
+            App.CRVideoCall.VideoSDK.speakerMute = chkMute.IsChecked==true ? 1 : 0;     
         }
         
         //shown
