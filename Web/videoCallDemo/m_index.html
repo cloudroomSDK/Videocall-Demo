@@ -174,18 +174,18 @@
       <ul class="server_input">
         <li class="li2"><span>服务器：</span><input type="text" value="" placeholder="请输入服务器地址" id="ser_address" /></li>
         <li class="li2">
-          <span>AppID：</span><input type="text" value="默认appID" placeholder="请输入账号" id="ser_acount" />
+          <span>AppID：</span><input type="text" value="默认" placeholder="请输入账号" id="ser_acount" />
           <script>
             var serAddress = window.location.host;
             serAddress = sessionStorage.getItem('CRServerAdd') || window.location.host;
             if (serAddress.includes('127.0.0.1') || serAddress.includes('localhost') || !serAddress) serAddress = '';
             document.getElementById('ser_address').value = serAddress;
             console.log(document.getElementById('ser_address').value);
-            var serAcount = localStorage.getItem('cr_account') || '默认appID';
+            var serAcount = localStorage.getItem('cr_account') || '默认';
             document.getElementById('ser_acount').value = serAcount;
           </script>
         </li>
-        <li><span>Secret：</span><input type="password" value="默认appSecret" placeholder="请输入密码" id="ser_password" /></li>
+        <li><span>Secret：</span><input type="password" value="默认" placeholder="请输入密码" id="ser_password" /></li>
       </ul>
       <div class="server_btn cf">
         <button class="server_btn_reset" id="server_reset">重置为默认</button>
@@ -279,7 +279,7 @@
 
   <script type="text/javascript" src="../static/lib/layui/layui.js"></script>
   <script type="text/javascript" src="../static/js/md5.js"></script>
-<script src="../SDK/RTCSDKV2.min.js?v=91c3"></script></body>
+<script src="../SDK/RTCSDKV2.min.js?v=3df4"></script></body>
 
 <script>
   document.querySelector('.version span').innerText = CRVideo.sdkver;
@@ -310,9 +310,9 @@
   var g_reLoginTimes = 0; // 重登服务器尝试次数
 
   //账号
-  var cr_account = localStorage.getItem('cr_account') || `默认appID`;
+  var cr_account = localStorage.getItem('cr_account') || `默认`;
   //密码
-  var cr_psw = localStorage.getItem('cr_psw') || '默认appSecret';
+  var cr_psw = localStorage.getItem('cr_psw') || '默认';
   //目录地址
   var g_location_dir = (function () {
     var location_dir = location.href;
@@ -388,12 +388,15 @@
       //初始化sdk
       CRVideo_Init().then(
         (res) => {
+          // SDK接口：设置sdk配置
+          CRVideo_SetSDKParams({
+            // securityEnhancement: true, //是否开启安全增强（会有跨域问题，需配置跨域响应头）
+          });
           g_is_init = true;
           g_user_id = g_nick_name;
-
           //密码
           cr_pswMd5 = md5($('#ser_password').val());
-          if ($('#ser_password').val() == '默认appSecret') cr_pswMd5 = '默认appSecret';
+          if ($('#ser_password').val() == '默认') cr_pswMd5 = '默认';
           CRVideo_SetServerAddr(g_server_addr);
           CRVideo_Login(cr_account, cr_pswMd5, g_nick_name, g_user_id, '');
           showLoading();
@@ -451,7 +454,7 @@
     console.log(`登录服务器失败，错误码：${sdkErr}, cookie:${cookie}`);
     if (!!cookie && cookie.includes('reLogin') && cookie.split('_')[1] <= 10) {
       setTimeout(() => {
-        CRVideo_Login(cr_account, cr_psw == '默认appSecret' ? cr_psw : md5(cr_psw), g_nick_name, g_user_id, '', `reLogin_${++g_reLoginTimes}`); // 登录callserver
+        CRVideo_Login(cr_account, cr_psw == '默认' ? cr_psw : md5(cr_psw), g_nick_name, g_user_id, '', `reLogin_${++g_reLoginTimes}`); // 登录callserver
       }, 2000);
       return;
     } else if (!!cookie && cookie.includes('reLogin') && cookie.split('_')[1] > 10) {
@@ -465,7 +468,7 @@
       sdkErr == 18 ? (sdkErr = 'Token已过期！') : sdkErr;
       sdkErr == 20 ? (sdkErr = '鉴权app不存在！') : sdkErr;
       sdkErr == 22 ? (sdkErr = '此app非Token鉴权！') : sdkErr;
-      sdkErr == 202 ? (sdkErr = '登录服务器异常！') : sdkErr;
+      sdkErr == 202 ? (sdkErr = '网络异常！') : sdkErr;
       sdkErr == 204 ? (sdkErr = 'socket连接失败！') : sdkErr;
       alert('登录服务器失败，请稍后再试: ' + sdkErr);
     }
@@ -522,7 +525,7 @@
       if (sdkErr == 10) {
         // 登录用户被踢下线
         if (g_meeting) {
-          CRVideo_ExitMeeting();
+          CRVideo_ExitMeeting('kick');
         }
         $('.dialog').addClass('hide');
         $('.queue_box1').addClass('hide');
@@ -537,7 +540,7 @@
         clearTimeout(g_reLoginTimer);
         g_reLoginTimer = setTimeout(() => {
           console.log(`重新登录...`);
-          CRVideo_Login(cr_account, cr_psw == '默认appSecret' ? cr_psw : md5(cr_psw), g_nick_name, g_user_id, '', `reLogin_${++g_reLoginTimes}`); // 登录callserver
+          CRVideo_Login(cr_account, cr_psw == '默认' ? cr_psw : md5(cr_psw), g_nick_name, g_user_id, '', `reLogin_${++g_reLoginTimes}`); // 登录callserver
         }, 3000);
       }
     }
@@ -719,7 +722,7 @@
         $('#queueList2 li')
           .unbind()
           .on('click', function () {
-            var queID = $(this).attr('queID').toString();
+            var queID = +$(this).attr('queID');
             if (getServicedById(queID)) {
               CRVideo_StopService(queID);
 
@@ -971,10 +974,10 @@
           console.log(g_server_addr);
           $('#ser_address').val(g_server_addr);
           sessionStorage.setItem('CRServerAdd', g_server_addr);
-          cr_account = `默认appID`;
-          cr_psw = '默认appSecret';
-          $('#ser_acount').val(`默认appID`);
-          $('#ser_password').val('默认appSecret');
+          cr_account = `默认`;
+          cr_psw = '默认';
+          $('#ser_acount').val(`默认`);
+          $('#ser_password').val('默认');
         });
       //保存
       $('#server_keep')
@@ -1305,11 +1308,11 @@
   };
 
   // 通知打开摄像头失败
-  CRVideo_OpenVideoFailed.callback = (errDesc) => {
+  CRVideo_OpenVideoFailed.callback = (errCode, errDesc) => {
     alert(`打开摄像头失败：${errDesc}`);
   };
   // 通知打开麦克风失败
-  CRVideo_OpenMicFailed.callback = (errDesc) => {
+  CRVideo_OpenMicFailed.callback = (errCode, errDesc) => {
     alert(`打开麦克风失败：${errDesc}`);
   };
 

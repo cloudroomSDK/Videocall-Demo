@@ -56,7 +56,7 @@ if (window.location.href.includes('videoCall')) {
           !!videoCall.call.callID && CRVideo_HangupCall(videoCall.call.callID, '正常挂断'); // SDK接口：挂断呼叫
           // win.CRVideo_Logout(); // SDK接口：退出登录
           if (!!videoCall.meetMgr.isMeeting) {
-            win.CRVideo_ExitMeeting(); // SDK接口：退出房间
+            win.CRVideo_ExitMeeting('refresh'); // SDK接口：退出房间
             win.CRVideo_DestroyMeeting(window.__recordDemoMeetID); // SDK接口：销毁房间
           }
           // 做一个耗时处理，防止结束会议的ajax请求发不出去
@@ -353,8 +353,8 @@ if (window.location.href.includes('videoCall')) {
         // 重置layui表单并渲染
         server: host,
         authType: 0,
-        appID: '默认appID',
-        appSecret: '默认appSecret',
+        appID: '默认',
+        appSecret: '默认',
         token: '',
         protocol: 0,
         authSwitch: false,
@@ -410,15 +410,15 @@ if (window.location.href.includes('videoCall')) {
     }
     // 初始化SDK
     initSDK() {
-      const initParam = {
-        MSProtocol: this.protocol, // 媒体流转发协议，1 udp, 2 tcp 默认为udp
-        // 其它参数请参考文档
-      };
       // SDK接口：初始化SDK
-      // 若全部使用默认参数，则可以不传initParam对象直接CRVideo_Init().then(successCallback, failCallback)
-      CRVideo_Init(initParam).then(
+      CRVideo_Init().then(
         (res) => {
           // 初始化成功
+          // SDK接口：设置sdk配置
+          CRVideo_SetSDKParams({
+            MSProtocol: this.protocol, // 媒体流转发协议，1 udp, 2 tcp 默认为udp
+            // securityEnhancement: true, //是否开启安全增强（会有跨域问题，需配置跨域响应头）
+          });
           this.setSDKServer(); // 设置服务器地址
           this.loginToServer('normally'); // 登录系统，用cookie来区分正常登录和掉线重登
         },
@@ -459,7 +459,7 @@ if (window.location.href.includes('videoCall')) {
       }
       if (this.authType === 0) {
         // SDK接口：密码鉴权登录
-        win.CRVideo_Login(this.appID, this.appSecret == '默认appSecret' || this.appSecret.length == 32 ? this.appSecret : md5(this.appSecret), this.nickname, this.userID, userAuthCode, cookie);
+        win.CRVideo_Login(this.appID, this.appSecret == '默认' || this.appSecret.length == 32 ? this.appSecret : md5(this.appSecret), this.nickname, this.userID, userAuthCode, cookie);
       } else {
         // SDK接口：Token鉴权登录
         win.CRVideo_LoginByToken(this.token, this.nickname, this.userID, userAuthCode, cookie);
@@ -528,7 +528,7 @@ if (window.location.href.includes('videoCall')) {
           errMsg = '此app非Token鉴权！';
           break;
         case 202:
-          errMsg = '登录服务器异常！';
+          errMsg = '网络异常！';
           break;
         case 204:
           errMsg = 'socket连接失败！';
@@ -1323,6 +1323,7 @@ if (window.location.href.includes('videoCall')) {
             win.CRVideo_RejectCall(that.callID); // SDK接口：拒绝呼叫
           },
         });
+        
       } else {
         videoCall.tipLayer(`收到坐席呼叫，正在进入房间...`);
         // 自动接受呼叫
@@ -1503,7 +1504,7 @@ if (window.location.href.includes('videoCall')) {
         videoCall.mediaShare.createMediaUIObj(); // 创建影音共享组件
 
         // 只有默认账号下才展示录像文件管理界面
-        document.querySelector('#recordTab').style.display = videoCall.login.appID == '默认appID' ? 'block' : 'none';
+        document.querySelector('#recordTab').style.display = videoCall.login.appID == '默认' ? 'block' : 'none';
       } else {
         this.isMeeting = false;
         console.log(`进入房间失败，errCode:${sdkErr}，cookie:${cookie}`);
@@ -1836,11 +1837,11 @@ if (window.location.href.includes('videoCall')) {
         this.videoStatusChangedHandler(...args);
       };
       // 通知打开摄像头失败
-      win.CRVideo_OpenVideoFailed.callback = (errDesc) => {
+      win.CRVideo_OpenVideoFailed.callback = (errCode, errDesc) => {
         videoCall.alertLayer(`打开摄像头失败：${errDesc}`);
       };
       // 通知打开麦克风失败
-      win.CRVideo_OpenMicFailed.callback = (errDesc) => {
+      win.CRVideo_OpenMicFailed.callback = (errCode, errDesc) => {
         videoCall.alertLayer(`打开麦克风失败：${errDesc}`);
       };
     }
@@ -2672,10 +2673,10 @@ if (window.location.href.includes('videoCall')) {
       }
     }
     // 停止共享影音
-    stopMediaShare() {
+    stopMediaShare(isNotify = false) {
       if (this.isMySharing === false) return;
       $('.playpuse-btn').addClass('play').removeClass('play-pause').removeClass('pause');
-      win.CRVideo_StopPlayMedia(); // SDK接口：停止影音共享
+      if(!isNotify) win.CRVideo_StopPlayMedia(); // SDK接口：停止影音共享
       this.isPlayingMedia = false;
       this.isMySharing = false;
     }
@@ -2707,6 +2708,7 @@ if (window.location.href.includes('videoCall')) {
       videoCall.shuanglu.exitFullscreen(); // 如果正在全屏状态，就退出全屏
       videoCall.shuanglu.requestVideoFullScreen(); // 重新立即注册双击全屏事件
       videoCall.meeting.setLayout('layoutA');
+      this.stopMediaShare(true);
       if (videoCall.svrMixerMgr.recordState === 2) {
         // 录制中
         videoCall.svrMixerMgr.updateCloudMixerContent(); // 更新录制内容
