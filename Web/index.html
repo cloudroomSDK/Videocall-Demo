@@ -1,21 +1,31 @@
 <!DOCTYPE html>
 
 <script type="text/javascript">
+    // window.__CRRTCSDK_NO_CONSOLE = true;
     window.__CRKEY = 'CRDEMO';
+    var protocol = window.location.protocol;
+    var host = window.location.host;
+    var isLocal = host.includes('127.0.0.1') || host.includes('localhost:') || protocol.includes('file');
+    var isMobile = navigator.userAgent.includes('Mobile') || navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad') || navigator.userAgent.includes('Android');
+
+    console.log(`isLocal: ${isLocal}`);
+    console.log(`href: ${window.location.href}`);
+    console.log(`referrer: ${document.referrer}`);
+    console.log(`page protocol: ${protocol}`);
+    console.log(`isMobile: ${isMobile}`);
+
     // http强制跳转https
-    var protocol = location.protocol;
-    var host = location.host;
-    var isLocal = false;
-    if (host.indexOf('127.0.0.1') > -1 || host.indexOf('localhost') > -1) isLocal = true;
-    if (protocol != 'https:' && protocol.indexOf('file') == -1 && !isLocal) {
+    if (protocol != 'https:' && !isLocal) {
         location.href = 'https:' + location.href.substring(protocol.length);
     }
 
     // 移动端/pc端自动跳转
-    if (navigator.userAgent.indexOf('Mobile') > -1 && !window.location.href.indexOf('m_') > -1) { // 移动端打开pc页面
-        window.location.href = 'm_index.html';
-    } else if (!navigator.userAgent.indexOf('Mobile') > -1 && window.location.href.indexOf('m_') > -1) { // pc端打开移动端页面
-        window.location.href = window.location.href.replace('m_index.html', '');
+    const htmlName = /\w+.html/.exec(window.location.href)[0];
+    console.log(htmlName);
+    if (isMobile && !htmlName.includes('m_')) { // 移动端打开pc页面
+        window.location.href = window.location.href.replace(htmlName, `m_${htmlName}`);
+    } else if (!isMobile && htmlName.includes('m_')) { // pc端打开移动端页面
+        window.location.href = window.location.href.replace(htmlName, `${htmlName.replace('m_', '')}`);
     }
 
     // 设置rem根字体大小

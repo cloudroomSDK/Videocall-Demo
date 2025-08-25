@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 
 <script type="text/javascript">
-  window.__CRKEY = 'CRDEMO';
-  var protocol = window.location.protocol;
-  var host = window.location.host;
-  var isLocal = false;
+    // window.__CRRTCSDK_NO_CONSOLE = true;
+    window.__CRKEY = 'CRDEMO';
+    var protocol = window.location.protocol;
+    var host = window.location.host;
+    var isLocal = host.includes('127.0.0.1') || host.includes('localhost:') || protocol.includes('file');
+    var isMobile = navigator.userAgent.includes('Mobile') || navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad') || navigator.userAgent.includes('Android');
 
-  if (host.indexOf('127.0.0.1') > -1 || host.indexOf('localhost') > -1 || protocol.indexOf('file') > -1) isLocal = true;
+    console.log(`isLocal: ${isLocal}`);
+    console.log(`href: ${window.location.href}`);
+    console.log(`referrer: ${document.referrer}`);
+    console.log(`page protocol: ${protocol}`);
+    console.log(`isMobile: ${isMobile}`);
 
-  console.log(`isLocal: ${isLocal}`);
-  console.log(`href: ${window.location.href}`);
-  console.log(`referrer: ${document.referrer}`);
-  console.log(`protocol: ${protocol}`);
+    // http强制跳转https
+    if (protocol != 'https:' && !isLocal) {
+        location.href = 'https:' + location.href.substring(protocol.length);
+    }
 
-  // ios上webview打开，如果referrer为空则会获取不到相关媒体api，这里强制刷新一下，让referrer不为空
-  if (document.referrer == '' && !isLocal) window.location.reload();
+    // // 移动端/pc端自动跳转
+    // const htmlName = /\w+.html/.exec(window.location.href)[0];
+    // console.log(htmlName);
+    // if (isMobile && !htmlName.includes('m_')) { // 移动端打开pc页面
+    //     window.location.href = window.location.href.replace(htmlName, `m_${htmlName}`);
+    // } else if (!isMobile && htmlName.includes('m_')) { // pc端打开移动端页面
+    //     window.location.href = window.location.href.replace(htmlName, `${htmlName.replace('m_', '')}`);
+    // }
 
-  // http强制跳转https
-  if (protocol != 'https:' && protocol.indexOf('file') == -1 && !isLocal) {
-    location.href = 'https:' + location.href.substring(protocol.length);
-  }
-
-  // PC端demo和移动端demo强制跳转
-  console.log(/\w+.html$/.exec(window.location.href)[0]);
-  if (navigator.userAgent.includes('Mobile') && !window.location.href.includes('m_')) {
-    // 移动端打开pc页面
-    console.log('true');
-    window.location.href = 'm_' + /\w+.html$/.exec(window.location.href)[0];
-  } else if (!navigator.userAgent.includes('Mobile') && window.location.href.includes('m_')) {
-    // pc端打开移动端页面
-    console.log('false');
-    window.location.href = /\w+.html$/.exec(window.location.href)[0].replace('m_', '');
-  }
+    // ios上webview打开，如果referrer为空则会获取不到相关媒体api，这里强制刷新一下，让referrer不为空(Firefox不行)
+    // 2025-08-15 暂时注释，中债环境始终获取不到referrer
+    // if (document.referrer == '' && !isLocal && !navigator.userAgent.includes('Firefox')) {
+    //     window.location.reload();
+    // }
 </script>
 
 <html>
