@@ -1504,7 +1504,7 @@ if (window.location.href.includes('videoCall')) {
         videoCall.mediaShare.createMediaUIObj(); // 创建影音共享组件
 
         // 只有默认账号下才展示录像文件管理界面
-        document.querySelector('#recordTab').style.display = videoCall.login.appID == '默认' ? 'block' : 'none';
+        document.querySelector('#recordTab').style.display = videoCall.login.appID == '默认' || videoCall.login.appID == 'demo' ? 'block' : 'none';
       } else {
         this.isMeeting = false;
         console.log(`进入房间失败，errCode:${sdkErr}，cookie:${cookie}`);
@@ -2403,12 +2403,27 @@ if (window.location.href.includes('videoCall')) {
     }
     // 查询录像信息
     getRecordFileInfo(filePathName) {
+      let CompID = 1;
+      let CompSecret = 1;
+
+      if(videoCall.login.appID === '默认') {
+        // 内网25环境
+        if(videoCall.login.server.indexOf('crlab') > -1) {
+          CompID = 213213;
+          CompSecret = '7859f2ee1064f3fac228b1792f8ca48b'
+        } else {
+          // 公有云环境
+          CompID = 213213;
+          CompSecret = '1hm4fn0lop79oyz7kjorzp0szis95uia'
+        }
+      }
+
       // 接口用法请参考SDK开发文档-服务端API
-      const url = `https://sdk.${window.__CRName}.com/${window.__CRNameUP}-API/netDisk/query`;
+      const url = `https://${videoCall.login.server}/CLOUDMEETING-API/netDisk/query`;
       const data = {
         RequestId: new Date().getTime(),
-        CompID: 213213, // CompID和CompSecret在管理后台右上角【WEB API】获取，每个账号都不一样，请替换为实际值
-        SecretKey: md5(`213213&7859f2ee1064f3fac228b1792f8ca48b`), // SecretKey=MD5(CompID+'&'+CompSecret)
+        CompID: CompID, // CompID和CompSecret在管理后台右上角【WEB API】获取，每个账号都不一样，请替换为实际值
+        SecretKey: md5(`${CompID}&${CompSecret}`), // SecretKey=MD5(CompID+'&'+CompSecret)
         FileName: filePathName,
       };
       $.ajax({
@@ -2452,7 +2467,7 @@ if (window.location.href.includes('videoCall')) {
         });
         if (!url || videoCall.mediaShare.isPlayingMedia || videoCall.screenShare.sharerID != '') return;
         $('.media-video').html('');
-        $('.media-video').append($(`<video autoplay src="${url}" controls loop preload style="height:100%;width:100%">`));
+        $('.media-video').append($(`<video autoplay src="${url}" controls loop preload poster="./image/playing_mp3.jpg" style="height:100%;width:100%">`));
         $(dom).removeClass('play').addClass('pause');
         videoCall.meeting.setLayout('layoutB');
       } else {
