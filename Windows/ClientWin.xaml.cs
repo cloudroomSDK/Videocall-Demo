@@ -97,7 +97,7 @@ namespace SDKDemo
 
             this.Dispatcher.BeginInvoke((Action)delegate()
             {
-                Login.Instance.startVideoSession(e.p_callID, mCallInCallerID);
+                Login.Instance.startVideoSession(e.p_callID, mCallInCallerID, meet.ID);
             });
             //打开会话界面
         }

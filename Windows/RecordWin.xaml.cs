@@ -23,6 +23,7 @@ namespace SDKDemo
         private int mGop { get { return mFrameRate * 15; } }
 
         private string mPeerUserID;
+        private int mMeetingID;
         private MIXER_STATE localRecordST = MIXER_STATE.MST_NULL;
         private MIXER_STATE cloudRecordST = MIXER_STATE.MST_NULL;
 
@@ -32,13 +33,15 @@ namespace SDKDemo
             System.Windows.MessageBox.Show(this, desc);
         }
 
-        public RecordWin(string peerUserID, VideoSessionWin videoSession)
+        public RecordWin(VideoSessionWin videoSession)
         {
             InitializeComponent();
             initDelegate(true);
             rbnLocal.IsChecked = true;
 
-            mPeerUserID = peerUserID;
+            mPeerUserID = videoSession.peerUserId;
+            mMeetingID = videoSession.meetingID;
+
             //本地录制状态
             localRecordST = (MIXER_STATE)(App.CRVideoCall.VideoSDK.getLocMixerState(mLocMixId));
 
@@ -152,7 +155,7 @@ namespace SDKDemo
             cloudRecordST = (MIXER_STATE)e.p_state;
             updateRecordStateUI();
 
-            if ( cloudRecordST == MIXER_STATE.MST_NULL )
+            if ( cloudRecordST == MIXER_STATE.MST_NULL && e.p_exParam.Length > 0)
             {
                 CloudMixerErrInfo errInfo = JsonConvert.DeserializeObject<CloudMixerErrInfo>(e.p_exParam);
                 if ( errInfo.err!=0 )
@@ -364,7 +367,7 @@ namespace SDKDemo
 
         private string cloudMixerCfg()
         {
-            string recordFileName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + "_Win32.mp4";
+            string recordFileName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss_") +  Convert.ToString(mMeetingID) + "_Win32.mp4";
             string recordDir = "/" + recordFileName.Substring(0, 10) + "/";
 
             CloudMixerCfgObj cloudCfg = new CloudMixerCfgObj();

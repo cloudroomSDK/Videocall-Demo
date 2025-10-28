@@ -27,15 +27,10 @@
                 <RowDefinition Height="30*" />
             </Grid.RowDefinitions>
 
-            <Label Grid.Column="0" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center" >昵称：</Label>
+            <Label Grid.Column="0" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center" >UserID:</Label>
             <TextBox Name="edtNickname" Grid.Column="1" Grid.Row="0" Margin="5,0,0,0" Height="26" HorizontalAlignment="Left" VerticalAlignment="Center" Width="160"></TextBox>
-            <Label Grid.Column="0" Grid.Row="1" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center">角色：</Label>
-            <ComboBox Name="cmbRole" Grid.Column="1" Grid.Row="1" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="160" Height="26" SelectedIndex="0">
-                <ComboBoxItem>坐席</ComboBoxItem>
-                <ComboBoxItem>客户</ComboBoxItem>
-            </ComboBox>
-            <Button Name="btnLogin"  Grid.Column="1" Grid.Row="2" Margin="5"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="160" Height="32" FontSize="16"  Click="btnLogin_Click" Style="{StaticResource HighlightBtn}">登陆</Button>
-            <Button Name="btnSet"  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,70,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" BorderBrush="Transparent" Click="btnSet_Click" >服务器设置</Button>
+            <Button Name="btnLogin"  Grid.Column="1" Grid.Row="1" Margin="4.8,10.4,0,11.2"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="160" Height="32" FontSize="16"  Click="btnLogin_Click" Style="{StaticResource HighlightBtn}">登陆</Button>
+            <Button Name="btnSet"  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,70,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" BorderBrush="Transparent" Click="btnSet_Click" RenderTransformOrigin="0.952,0.761" >服务器设置</Button>
         </Grid>
     </Grid>
 </Window>

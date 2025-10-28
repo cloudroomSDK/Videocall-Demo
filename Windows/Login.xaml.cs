@@ -22,6 +22,7 @@ namespace SDKDemo
         private VideoSessionWin mVideoSession;             //视频会话界面
         private string mActiveXVersion = "1.4";             //程序使用的ocx组件版本
         private string mUserID = "";
+        private int roleType = 1;      //1坐席，2客户
 
         public Login()
         {
@@ -31,9 +32,6 @@ namespace SDKDemo
 
             IniFile iniFile = new IniFile(Directory.GetCurrentDirectory() + "/VideoCall.ini");  //获取当前根目录
             edtNickname.Text = iniFile.ReadValue("Cfg", "LastUser", "");
-            string role = iniFile.ReadValue("Cfg", "lastRole", "0");
-            cmbRole.SelectedIndex = Convert.ToInt32(role);
-
         }
 
         public static Login Instance
@@ -70,11 +68,11 @@ namespace SDKDemo
 
         public bool IsServiceRole()
         {
-            return cmbRole.SelectedIndex == 0;  //坐席
+            return roleType==1;
         }
         
         //开始会话
-        public void startVideoSession(string sessionCallID, string peerUserID)
+        public void startVideoSession(string sessionCallID, string peerUserID, int meetingID)
         {
             if (mVideoSession!=null)
             {
@@ -82,9 +80,9 @@ namespace SDKDemo
                 GC.Collect();
             }
             mVideoSession = new VideoSessionWin();
-            mVideoSession.initSessionInfo(peerUserID, sessionCallID);
+            mVideoSession.initSessionInfo(peerUserID, sessionCallID, meetingID);
 
-            if (cmbRole.SelectedIndex == 0)  //加载专家坐席数据
+            if (IsServiceRole())  //加载专家坐席数据
             {
                 mVideoSession.Owner = mService;
                 mService.Hide();
@@ -97,7 +95,7 @@ namespace SDKDemo
                         
             mVideoSession.ShowDialog();
 
-            if (cmbRole.SelectedIndex == 0)
+            if (IsServiceRole())
             {
                 mService.Show();
             }
@@ -107,7 +105,7 @@ namespace SDKDemo
             }
         }
 
-        public void startVideoSession_callDirect(string sessionCallID, string peerUserID)
+        public void startVideoSession_callDirect(string sessionCallID, string peerUserID, int meetingID)
         {
             if (mVideoSession != null)
             {
@@ -115,7 +113,7 @@ namespace SDKDemo
                 GC.Collect();
             }
             mVideoSession = new VideoSessionWin();
-            mVideoSession.initSessionInfo(peerUserID, sessionCallID);
+            mVideoSession.initSessionInfo(peerUserID, sessionCallID, meetingID);
 
             mCallDirect.Hide();
 
@@ -137,7 +135,7 @@ namespace SDKDemo
                 mVideoSession = null;
             }
 
-            if (cmbRole.SelectedIndex == 0)
+            if (IsServiceRole())
             {
                 mService.Show();
             }
@@ -234,7 +232,7 @@ namespace SDKDemo
             App.CRVideoCall.VideoSDK.setSDKParams(sdkParamJsonStr);
 
 
-            App.CRVideoCall.VideoSDK.serverAddr = iniFile.ReadValue("Cfg", "LastServer", "sdk.cloudroom.com");
+            App.CRVideoCall.VideoSDK.serverAddr = iniFile.ReadValue("Cfg", "LastServer", AccountInfo.TEST_Server);
             string account = iniFile.ReadValue("Cfg", "LastAccount", AccountInfo.TEST_AppID);
             string password = iniFile.ReadValue("Cfg", "LastPwd", App.getMD5Value(AccountInfo.TEST_AppSecret));
             mUserID = edtNickname.Text.Trim();
@@ -255,7 +253,8 @@ namespace SDKDemo
             btnLogin.IsEnabled = true;
             this.Hide();
 
-            SelectPage page = new SelectPage();
+            //选择功能
+            SelectPage page = new SelectPage(SelectPage.Type.TP_FUNC);
             page.ShowDialog();
             if(page.getRslt().HasValue == false)
             {
@@ -264,17 +263,27 @@ namespace SDKDemo
                 return;
             }
 
-            if(page.getRslt() == 2)
+            if(page.getRslt() == 1)
             {
-                App.CRVideoCall.VideoSDK.initQueueDat("");  //初始化专家坐席用户队列
+                //选择角色
+                SelectPage rolPage = new SelectPage(SelectPage.Type.TP_ROLE);
+                rolPage.ShowDialog();
+                if( rolPage.getRslt().HasValue == false)
+                {
+                    App.CRVideoCall.VideoSDK.logout();
+                    this.Show();
+                    return;
+                }
+                roleType = (int)rolPage.getRslt();
 
-                if (cmbRole.SelectedIndex == 0)  //坐席
+                App.CRVideoCall.VideoSDK.initQueueDat("");  //初始化队列信息
+                if (IsServiceRole())  //坐席
                 {
                     mService = new ServiceWin();
                     mService.Owner = this;
                     mService.ShowDialog();
                 }
-                else if (cmbRole.SelectedIndex == 1) //客户
+                else
                 {
                     mClient = new ClientWin();
                     mClient.Owner = this;
@@ -317,7 +326,7 @@ namespace SDKDemo
                 if (MessageBox.Show("是否恢复意外关闭的视频会话？", "提示", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     App.CRVideoCall.VideoSDK.enterMeeting3(sessionInfo.meetingID);
-                    startVideoSession(sessionInfo.callID, sessionInfo.peerID);
+                    startVideoSession(sessionInfo.callID, sessionInfo.peerID, sessionInfo.meetingID);
                 }
                 else //结束上次的会话，准备新的会话
                 {
@@ -326,12 +335,12 @@ namespace SDKDemo
             }
 
             List<QueueInfo> queues = JsonConvert.DeserializeObject<List<QueueInfo>>(App.CRVideoCall.VideoSDK.getAllQueueInfo());
-            if (cmbRole.SelectedIndex == 0)  //加载专家坐席数据
+            if (IsServiceRole())  //加载专家坐席数据
             {
                 mService.setNickName(edtNickname.Text.Trim());
                 mService.setQueues(queues);
             }
-            else if (cmbRole.SelectedIndex == 1) //加载用户数据
+            else
             {
                 mClient.setNickName(edtNickname.Text.Trim());
                 mClient.setQueues(queues);
@@ -388,7 +397,7 @@ namespace SDKDemo
             if (mVideoSession != null)
             {                
                 endVideoSession("");    //关闭会话窗口，对方通知挂断，会话由其结束，自己只需要关闭会话窗口
-                MessageBox.Show(mVideoSession, "对方已挂断会话");
+                MessageBox.Show("对方已挂断会话");
             }
         }
 
@@ -423,7 +432,7 @@ namespace SDKDemo
                     if (MessageBox.Show("启动视频会话失败，是否重试？", "警告", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
                         App.CRVideoCall.VideoSDK.enterMeeting3(sessionInfo.meetingID);
-                        startVideoSession(sessionInfo.callID, sessionInfo.peerID);
+                        startVideoSession(sessionInfo.callID, sessionInfo.peerID, sessionInfo.meetingID);
                     }
                     else
                     {

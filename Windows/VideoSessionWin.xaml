@@ -1,6 +1,7 @@
 ﻿<Window x:Class="SDKDemo.VideoSessionWin"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
     xmlns:y="clr-namespace:SDKDemo"         
     Title="你正在进入和【XXX】视频会话中…" Height="720" Width="1280" ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen"
         Closed="Window_Closed" ContentRendered="Window_ContentRendered">
@@ -143,20 +144,20 @@
             <Button Grid.Row="2" Grid.Column="2" Height="26" Margin="7,0,7,0" Style="{StaticResource HighlightBtn}" Name="btnMicOpr" Click="btnMicOpr_Click">打开</Button>
 
             <TextBlock Grid.Row="3" Grid.Column="0" Height="18" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center">视频尺寸</TextBlock>
-            <ComboBox Grid.Row="3" Grid.Column="1" Margin="0" HorizontalAlignment="Left" Width="100" Height="26" Name="cmbVideoSize" SelectionChanged="cmbVideoSize_SelectionChanged">
-                <ComboBoxItem>144*80</ComboBoxItem>
-                <ComboBoxItem>224*128</ComboBoxItem>
-                <ComboBoxItem>288*160</ComboBoxItem>
-                <ComboBoxItem>336*192</ComboBoxItem>
-                <ComboBoxItem>448*256</ComboBoxItem>
-                <ComboBoxItem>512*288</ComboBoxItem>
-                <ComboBoxItem>576*320</ComboBoxItem>
-                <ComboBoxItem>640*360</ComboBoxItem>
-                <ComboBoxItem>720*400</ComboBoxItem>
-                <ComboBoxItem>848*480</ComboBoxItem>
-                <ComboBoxItem>1024*576</ComboBoxItem>
-                <ComboBoxItem>1280*720</ComboBoxItem>
-                <ComboBoxItem>1920*1080</ComboBoxItem>
+            <ComboBox Grid.Row="3" Grid.Column="1" Margin="0" HorizontalAlignment="Left" Width="100" Height="26" x:Name="cmbVideoSize" SelectionChanged="cmbVideoSize_SelectionChanged">
+                <System:String>144*80</System:String>
+                <System:String>224*128</System:String>
+                <System:String>288*160</System:String>
+                <System:String>336*192</System:String>
+                <System:String>448*256</System:String>
+                <System:String>512*288</System:String>
+                <System:String>576*320</System:String>
+                <System:String>640*360</System:String>
+                <System:String>720*400</System:String>
+                <System:String>848*480</System:String>
+                <System:String>1024*576</System:String>
+                <System:String>1280*720</System:String>
+                <System:String>1920*1080</System:String>
             </ComboBox>
             <TextBlock Grid.Row="3" Grid.Column="1" Height="18" Margin="110,0,0,0" HorizontalAlignment="Left">视频帧率</TextBlock>
             <Slider Grid.Row="3" Grid.Column="1" Width="120" Margin="170,0,0,0" HorizontalAlignment="Left" IsSnapToTickEnabled="True" Minimum="5" Maximum="30" Value="15" Name="FPSBar" Thumb.DragCompleted="FPSBar_DragCompleted"></Slider>

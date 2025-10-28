@@ -231,7 +231,7 @@ namespace SDKDemo
 
             MeetObj meet = JsonConvert.DeserializeObject<MeetObj>(e.p_meetObj);
             App.CRVideoCall.VideoSDK.enterMeeting3(meet.ID);
-            Login.Instance.startVideoSession(e.p_callID, mPeerUser.usrID);            
+            Login.Instance.startVideoSession(e.p_callID, mPeerUser.usrID, meet.ID);            
         }
         //对方拒绝会话邀请，本demo中对方默认直接接受，所有此委托不会被调用
         public void notifyCallRejected(object sender, ICloudroomVideoSDKEvents_notifyCallRejectedEvent e)

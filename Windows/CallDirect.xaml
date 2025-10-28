@@ -37,21 +37,28 @@
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
-                </Trigger>  
+                </Trigger>
             </Style.Triggers>
         </Style>
 
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Label  Height="50"  VerticalContentAlignment="Center"  Content="被叫ID:"></Label>
-            <TextBox Width="200" Height="50" Name="textUsrID" ></TextBox>
-        </StackPanel>
-        <Button Name="btnCall" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top" Height="50" Width="200" Content="呼叫" Style="{DynamicResource ButtonStyle_call}" Click="btn_call_click">
-        </Button>
+        <Label x:Name="myUserIDLab" Grid.Row="0"  VerticalContentAlignment="Bottom" HorizontalContentAlignment="Center" Content="我的ID："/>
+        <Border Grid.Row="1" Width="250" Height="40" BorderBrush="#808080" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label VerticalContentAlignment="Center"  Content="被叫ID：" Grid.Column="0"/>
+                <TextBox Name="textUsrID" Grid.Column="1" BorderThickness="0"/>
+            </Grid>
+        </Border>
+        <Button x:Name="btnCall" Grid.Row="2" VerticalAlignment="Top" Width="200" Height="50" Content="呼叫" Style="{DynamicResource ButtonStyle_call}" Click="btn_call_click"/>
     </Grid>
 </Window>

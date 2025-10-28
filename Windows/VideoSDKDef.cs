@@ -54,23 +54,6 @@ namespace SDKDemo
         VCALLSDK_RESOURCEALLOCATEERROR,     //分配会议资源失败
     };
 
-    enum VIDEO_SHOW_SIZE //设置视频尺寸
-    {
-        VSIZE_SZ_80 = 0,    //144*80,   缺省：56kbps
-        VSIZE_SZ_128,       //224*128,  缺省：72kbps
-        VSIZE_SZ_160,       //288*160,  缺省：100kbps
-        VSIZE_SZ_192,       //336*192,  缺省：150kbps
-        VSIZE_SZ_256,       //448*256,  缺省：200kbps
-        VSIZE_SZ_288,       //512*288,  缺省：250kbps
-        VSIZE_SZ_320,       //576*320,  缺省：300kbps
-        VSIZE_SZ_360,       //640*360,  缺省：350kbps
-        VSIZE_SZ_400,       //720*400,  缺省：420kbps
-        VSIZE_SZ_480,       //848*480,  缺省：500kbps
-        VSIZE_SZ_576,       //1024*576,  缺省：650kbps
-        VSIZE_SZ_720,       //1280*720,  缺省：1mbps
-        VSIZE_SZ_1080,      //1920*1080, 缺省：2mbps
-    };
-
     enum MIXER_STATE //录制状态
     {
         MST_NULL = 0,

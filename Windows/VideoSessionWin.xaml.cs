@@ -52,6 +52,7 @@ namespace SDKDemo
     {        
         private string mSessionID;
         private string mPeerUserId;
+        private int mMeetingID;
         private DispatcherTimer mTickTimer = new DispatcherTimer();
         private int mSessionTick;
 
@@ -132,17 +133,28 @@ namespace SDKDemo
             }
         }
 
-        public void initSessionInfo(string peerUserID, string sessionID)
+        public string peerUserId
+        {
+            get { return mPeerUserId; }
+        }
+        public int meetingID
+        {
+            get { return mMeetingID; }
+        }
+
+
+        public void initSessionInfo(string peerUserID, string sessionID, int meetID)
         {
             mSessionID = sessionID;
             mPeerUserId = peerUserID;
+            mMeetingID = meetID;
         }
         //登陆会话成功，初始化下相关设备
         public void initVideoSession()
         {
             initDevs(DEVTYPE.ALL);
             //设置视频尺寸            
-            cmbVideoSize.SelectedIndex = (int)VIDEO_SHOW_SIZE.VSIZE_SZ_360;
+            cmbVideoSize.Text = "640*360";
             //打开设备
             btnCameraOpr.Content = "打开";
             App.CRVideoCall.VideoSDK.openVideo(Login.Instance.SelfUserId);
@@ -496,7 +508,7 @@ namespace SDKDemo
             }
 
             string picName = picDir + DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + mPeerUserId + ".bmp";
-            int errCode = videoUI_peer.UI.savePic(picName);
+            int errCode = videoUI_peer.UI.savePicToFile(picName);
             if (errCode == 0)
             {
                 System.Windows.MessageBox.Show(this, "截图成功，保存至：\n" + picName);
@@ -591,7 +603,7 @@ namespace SDKDemo
         private void updateVideoCfg()
         {
             VideoCfg cfg = new VideoCfg();
-            cfg.size = cmbVideoSize.Text;
+            cfg.size = (string)cmbVideoSize.SelectedItem;
             if (cfg.size.Length <= 0)
                 return;
 
@@ -643,7 +655,7 @@ namespace SDKDemo
         {
             if(mRecordWin == null)
             {
-                mRecordWin = new RecordWin(mPeerUserId, this);
+                mRecordWin = new RecordWin(this);
                 mRecordWin.Owner = this;
                 mRecordWin.Show();
                 return;

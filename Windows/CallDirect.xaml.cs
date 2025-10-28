@@ -26,7 +26,8 @@ namespace SDKDemo
         public CallDirect()
         {
             InitializeComponent();
-            this.Title = string.Format("直呼(我的ID:{0})", Login.Instance.SelfUserId);
+            this.Title = "直接呼叫";
+            myUserIDLab.Content = string.Format("我的ID：{0}", Login.Instance.SelfUserId);
             initServiceDelegate(true);
         }
 
@@ -106,7 +107,7 @@ namespace SDKDemo
             mCallID = e.p_callID;
             MeetObj meet = JsonConvert.DeserializeObject<MeetObj>(e.p_meetObj);
             App.CRVideoCall.VideoSDK.enterMeeting3(meet.ID);
-            Login.Instance.startVideoSession_callDirect(e.p_callID, mOtherUsrID);
+            Login.Instance.startVideoSession_callDirect(e.p_callID, mOtherUsrID, meet.ID);
             btnCall.IsEnabled = true;
 
         }
@@ -123,7 +124,7 @@ namespace SDKDemo
             mConnectWin = new ConnectWin();
             mConnectWin.Owner = this;
             mConnectWin.setTitle("用户呼叫");
-            mConnectWin.setUser(e.p_callerID);
+            mConnectWin.setUser_call(e.p_callerID);
             btnCall.IsEnabled = false;
             mConnectWin.ShowDialog();
             btnCall.IsEnabled = true;
@@ -151,7 +152,7 @@ namespace SDKDemo
 
             this.Dispatcher.BeginInvoke((Action)delegate()
             {
-                Login.Instance.startVideoSession_callDirect(e.p_callID, mOtherUsrID);
+                Login.Instance.startVideoSession_callDirect(e.p_callID, mOtherUsrID, meet.ID);
             });
             //打开会话界面
         }

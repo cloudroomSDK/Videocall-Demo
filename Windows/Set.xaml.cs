@@ -19,7 +19,7 @@ namespace SDKDemo
             ShowInTaskbar = false;
 
             IniFile iniFile = new IniFile(Directory.GetCurrentDirectory() + "/VideoCall.ini");  //获取当前根目录
-            edtServer.Text = iniFile.ReadValue("Cfg", "LastServer", "sdk.cloudroom.com");
+            edtServer.Text = iniFile.ReadValue("Cfg", "LastServer", AccountInfo.TEST_Server);
             cbHttpType.SelectedIndex = Convert.ToInt32(iniFile.ReadValue("Cfg", "HttpType", "1"));
             edtAccount.Text = iniFile.ReadValue("Cfg", "LastAccount", "");
             edtPassword.Password = iniFile.ReadValue("Cfg", "LastPwd", "");
@@ -41,14 +41,14 @@ namespace SDKDemo
             else
             {
                 edtAccount.Text = "默认APPID";
-                edtPassword.Password = "*";
+                edtPassword.Password = "\x1\x1\x1\x1\x1\x1";
             }
         }
 
         //默认设置
         private void btnSet_Clicked(object sender, RoutedEventArgs e)
         {
-            edtServer.Text = "sdk.cloudroom.com";
+            edtServer.Text = AccountInfo.TEST_Server;
             cbHttpType.SelectedIndex = 1;
             setDefAcnt();
 
@@ -83,16 +83,18 @@ namespace SDKDemo
             iniFile.WriteValue("Cfg", "LastServer", edtServer.Text);
             iniFile.WriteValue("Cfg", "HttpType", cbHttpType.SelectedIndex.ToString());
 
+            string acnt = null;
+            string pswd = null;
             if (edtAccount.Text != "默认APPID")
             {
-                iniFile.WriteValue("Cfg", "LastAccount", edtAccount.Text);
-                iniFile.WriteValue("Cfg", "LastPwd", mIsPasswrodChanged ? App.getMD5Value(edtPassword.Password) : edtPassword.Password);
+                acnt = edtAccount.Text;
             }
-            else
+            if (edtPassword.Password != "\x1\x1\x1\x1\x1\x1")
             {
-                iniFile.WriteValue("Cfg", "LastAccount", null);
-                iniFile.WriteValue("Cfg", "LastPwd", null);
+                pswd = mIsPasswrodChanged ? App.getMD5Value(edtPassword.Password) : edtPassword.Password;
             }
+            iniFile.WriteValue("Cfg", "LastAccount", acnt);
+            iniFile.WriteValue("Cfg", "LastPwd", pswd);
         }
     }
 }

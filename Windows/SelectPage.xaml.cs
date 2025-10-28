@@ -18,23 +18,39 @@ namespace SDKDemo
     /// </summary>
     public partial class SelectPage : Window
     {
+        public enum Type{
+            TP_FUNC,
+            TP_ROLE
+        }
         private int? m_rslt = null;
-        public SelectPage()
+        public SelectPage(Type t)
         {
             InitializeComponent();
+            if (t == Type.TP_FUNC)
+            {
+                this.Title = "功能选择";
+                btn1.Content = "排队叫号";
+                btn2.Content = "直接呼叫";
+            }
+            else
+            {
+                this.Title = "角色选择";
+                btn1.Content = "座席";
+                btn2.Content = "客户";
+            }
         }
 
         public int? getRslt()
         {
             return m_rslt;
         }
-        private void btn_direct_call_click(object sender, RoutedEventArgs e)
+        private void btn1_click(object sender, RoutedEventArgs e)
         {
             m_rslt = 1;
             Close();
         }
 
-        private void btn_queue_call_click(object sender, RoutedEventArgs e)
+        private void btn2_click(object sender, RoutedEventArgs e)
         {
             m_rslt = 2;
             Close();
