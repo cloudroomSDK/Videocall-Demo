@@ -477,12 +477,6 @@ if (window.location.href.includes('videoCall')) {
         videoCall.que.initQueue('reLogin'); // 初始化队列
         return;
       }
-      if (videoCall.login.loginIdent === 1) {
-        // 客户身份
-        $('.choose-btn.btn2').html('等待坐席呼叫');
-      } else {
-        $('.choose-btn.btn2').html('直接呼叫');
-      }
       $('.call-page').show().siblings().hide(); // 显示呼叫模式选择界面
     }
     // 登录失败的回调
@@ -539,17 +533,26 @@ if (window.location.href.includes('videoCall')) {
       }
       videoCall.alertLayer(`登录失败！${errMsg}`);
     }
-    // 选择进入队列页面按钮
-    onClickShowQuePageBtn() {
-      videoCall.que.showQuePage(); // 显示队列页面
+    // 选择排队叫号
+    onClickQueueBtn() {
+      $('.identity-page').show().siblings().hide(); // 显示身份选择界面
     }
     // 选择直接呼叫按钮
     onClickDirectCallBtn() {
-      if (videoCall.login.loginIdent === 1) return;
+      $('#myID').text(videoCall.login.userID);
       $('.call-box').css({
         visibility: 'visible',
         opacity: 1,
       });
+    }
+    // 选择身份
+    chooseIdentity(identity) {
+      if (identity === 'seat') {
+        videoCall.login.loginIdent = 0;
+      } else {
+        videoCall.login.loginIdent = 1;
+      }
+      videoCall.que.showQuePage(); // 显示队列页面
     }
     // 点击直接呼叫盒子的呼叫按钮
     onClickCallBtn(btnDom) {
@@ -1154,6 +1157,11 @@ if (window.location.href.includes('videoCall')) {
       };
       // SDK接口：通知 收到对方发来的呼叫
       win.CRVideo_NotifyCallIn.callback = (callID, CRVideo_MeetInfoObj, callerID, userExtDat) => {
+        $('.call-box').css({
+          // 隐藏面板
+          visibility: 'hidden',
+          opacity: 0,
+        });
         // this.otherUserInfo.userID = callerID;
         this.callerInfo.userID = callerID;
         this.beCalledInfo.userID = videoCall.login.userID;
@@ -1289,6 +1297,7 @@ if (window.location.href.includes('videoCall')) {
     notifyCallAcceptedHandler(callID, meetInfoObj) {
       videoCall.meetMgr.meetInfo = meetInfoObj;
       videoCall.meetMgr.enterMeetFn(); // 进入房间
+      videoCall.login.loginIdent = 0; // 设置主叫端为坐席身份
     }
     // 通知我呼叫被对方拒绝了
     notifyCallRejectHandler(callID, sdkErr, userExtDat) {
@@ -1307,11 +1316,11 @@ if (window.location.href.includes('videoCall')) {
       const that = this;
       videoCall.meetMgr.meetInfo = CRVideo_MeetInfoObj;
       $('#cancelQueuingBtn').click(); // 取消排队
-      console.log(`收到呼叫：${userExtDat}`);
+      console.log(`收到 ${this.callerInfo.userID} 呼叫：${userExtDat}`);
       if (userExtDat.includes('直接呼叫')) {
         // 手动接受呼叫
-        videoCall.modalLayer('坐席呼叫', `收到坐席呼叫，是否接通？`, {
-          btns: ['接受', '拒绝'],
+        videoCall.modalLayer('呼叫', `收到 ${this.callerInfo.userID} 呼叫，是否接通？`, {
+          btns: ['接通', '拒绝'],
           btn1Callback: function () {
             console.log('接受呼叫');
             clearInterval(videoCall.que.queuingTimer); // 清除排队定时器
@@ -1342,6 +1351,7 @@ if (window.location.href.includes('videoCall')) {
     acceptCallSuccesCallback(callId, cookie) {
       console.log(`接受呼叫成功：${callId}, cookie:${cookie}`);
       videoCall.meetMgr.enterMeetFn(); // 进入房间
+      videoCall.login.loginIdent = 1; // 设置主叫端为客户身份
     }
     // 接受对方呼叫失败的回调
     acceptCallFailCallback(callId, sdkErr, cookie) {

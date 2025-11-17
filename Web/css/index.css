@@ -226,11 +226,12 @@ select {
   position: relative;
   width: 100%;
   height: 100%;
-  background: url("../image/ycBg.jpg") no-repeat center center;
+  background: url("../image/ycBg.jpg") no-repeat center center / cover;
 }
 .login-page .login-box {
   top: 2rem;
   width: 4.2rem;
+  height: 4.7rem;
   padding: 0.2rem 0.5rem 0.4rem;
   border-radius: 0.08rem;
   background-color: #fff;
@@ -241,7 +242,7 @@ select {
 .login-page .login-box .login-box-header {
   position: relative;
   margin-bottom: 0.1rem;
-  height: 1.8rem;
+  height: 2.5rem;
 }
 .login-page .login-box .login-box-header > img {
   top: 0;
@@ -251,7 +252,7 @@ select {
 }
 .login-page .login-box .login-box-header > span.title {
   position: absolute;
-  bottom: 0.1rem;
+  bottom: 0.5rem;
   height: 0.4rem;
   width: 100%;
   line-height: 0.4rem;
@@ -335,10 +336,10 @@ select {
   padding: 0.1rem 0.2rem;
 }
 .login-page .login-box .login-setting-box .set-form .layui-form-pane .layui-form-item {
-  margin-bottom: 0.05rem;
+  margin-bottom: 0.03rem;
 }
 .login-page .login-box .login-setting-box .set-form .layui-form-pane .layui-form-item .layui-form-label {
-  height: 0.35rem;
+  height: 0.3rem;
   line-height: 0.35rem;
   padding: 0;
   text-align: right;
@@ -351,7 +352,7 @@ select {
 }
 .login-page .login-box .login-setting-box .set-form .layui-form-pane .layui-form-item .layui-input-block .layui-input,
 .login-page .login-box .login-setting-box .set-form .layui-form-pane .layui-form-item .layui-input-block .layui-select {
-  height: 0.35rem;
+  height: 0.3rem;
   font-size: 0.14rem;
 }
 .login-page .login-box .login-setting-box .set-form .layui-form-pane .layui-form-item .layui-input-block .layui-form-select dl dd.layui-this {
@@ -428,15 +429,27 @@ select {
 .login-page .login-box .login-setting-box .sdk-ver span {
   font-size: 12px;
 }
-.call-page {
+.call-page,
+.identity-page {
   display: none;
   position: relative;
   width: 100%;
   height: 100%;
   text-align: center;
-  background: url("../image/ycBg.jpg") no-repeat center center;
+  background: url("../image/ycBg.jpg") no-repeat center center / cover;
 }
-.call-page .main-box {
+.call-page .title,
+.identity-page .title {
+  position: absolute;
+  top: 0.14rem;
+  left: 0;
+  width: 100%;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  font-size: 0.2rem;
+}
+.call-page .main-box,
+.identity-page .main-box {
   top: 2rem;
   width: 4.2rem;
   height: 4.7rem;
@@ -446,22 +459,34 @@ select {
   user-select: none;
   overflow: hidden;
 }
-.call-page .main-box .logout-btn {
+.call-page .main-box .back-btn,
+.identity-page .main-box .back-btn {
+  position: absolute;
+  left: 0.3rem;
+  top: 0.27rem;
+  height: 0.22rem;
+  background: url("../image/返回.svg") no-repeat center center / 100% 100%;
+  z-index: 10;
+}
+.call-page .main-box .logout-btn,
+.identity-page .main-box .logout-btn {
   position: absolute;
   padding: 0.03rem 0.15rem;
   right: 0.2rem;
   top: 0.2rem;
   line-height: 0.3rem;
-  font-size: 0.14rem;
+  font-size: 0.16rem;
   z-index: 99;
 }
-.call-page .main-box .half {
+.call-page .main-box .half,
+.identity-page .main-box .half {
   float: left;
   position: relative;
   width: 100%;
   height: 50%;
 }
-.call-page .main-box .half .choose-btn {
+.call-page .main-box .half .choose-btn,
+.identity-page .main-box .half .choose-btn {
   height: 1rem;
   width: 2rem;
   background-color: #FD6F3F;
@@ -472,75 +497,100 @@ select {
   color: #fff;
   transition: all 0.2s;
 }
-.call-page .main-box .half .btn1 {
+.call-page .main-box .half .btn1,
+.identity-page .main-box .half .btn1 {
   margin-top: 0.3rem;
 }
-.call-page .main-box .half .btn1:hover {
+.call-page .main-box .half .btn1:hover,
+.identity-page .main-box .half .btn1:hover {
   background-color: #f5470d;
 }
-.call-page .main-box .half .btn2 {
+.call-page .main-box .half .btn2,
+.identity-page .main-box .half .btn2 {
   margin-top: -0.3rem;
   background-color: #61ACEE;
 }
-.call-page .main-box .half .btn2:hover {
+.call-page .main-box .half .btn2:hover,
+.identity-page .main-box .half .btn2:hover {
   background-color: #1797F3;
 }
-.call-page .main-box .call-box {
+.call-page .main-box .call-box,
+.identity-page .main-box .call-box {
   visibility: hidden;
   opacity: 0;
-  margin-top: -0.8rem;
-  height: 1.5rem;
+  margin-top: 0.1rem;
+  height: 3rem;
   width: 3rem;
   z-index: 9;
   border-radius: 0.05rem;
   background-color: #f3f3f3;
   transition: all 0.3s;
 }
-.call-page .main-box .call-box .call-text {
+.call-page .main-box .call-box .my-id,
+.identity-page .main-box .call-box .my-id {
+  height: 0.4rem;
+  line-height: 0.4rem;
+  margin: 0.3rem 0 0.3rem;
+}
+.call-page .main-box .call-box .my-id #myID,
+.identity-page .main-box .call-box .my-id #myID {
+  user-select: all;
+}
+.call-page .main-box .call-box .call-text,
+.identity-page .main-box .call-box .call-text {
   padding-left: 0.3rem;
   height: 0.5rem;
   width: 100%;
-  line-height: 0.7rem;
+  line-height: 0.5rem;
+  font-size: 0.14rem;
   text-align: left;
 }
-.call-page .main-box .call-box .call-input {
-  height: 0.5rem;
+.call-page .main-box .call-box .call-input,
+.identity-page .main-box .call-box .call-input {
+  height: 0.7rem;
   width: 100%;
 }
-.call-page .main-box .call-box .call-input input {
-  width: 80%;
-  height: 0.3rem;
-  line-height: 0.3rem;
+.call-page .main-box .call-box .call-input input,
+.identity-page .main-box .call-box .call-input input {
   padding: 0 0.1rem;
+  width: 80%;
+  height: 0.4rem;
+  line-height: 0.4rem;
+  font-size: 0.14rem;
   border: 1px solid #FD6F3F;
   border-radius: 0.05rem;
 }
-.call-page .main-box .call-box .call-btns {
+.call-page .main-box .call-box .call-btns,
+.identity-page .main-box .call-box .call-btns {
   height: 0.5rem;
   width: 100%;
 }
-.call-page .main-box .call-box .call-btns .cr-btn {
+.call-page .main-box .call-box .call-btns .cr-btn,
+.identity-page .main-box .call-box .call-btns .cr-btn {
   float: left;
   padding: 0;
   width: 1.1rem;
-  height: 0.3rem;
-  line-height: 0.3rem;
+  height: 0.4rem;
+  line-height: 0.4rem;
 }
-.call-page .main-box .call-box .call-btns .btn1 {
+.call-page .main-box .call-box .call-btns .btn1,
+.identity-page .main-box .call-box .call-btns .btn1 {
   margin-left: -0.65rem;
 }
-.call-page .main-box .call-box .call-btns .btn2 {
+.call-page .main-box .call-box .call-btns .btn2,
+.identity-page .main-box .call-box .call-btns .btn2 {
   background-color: #61ACEE;
   margin-left: 0.65rem;
 }
-.call-page .main-box .call-box .call-btns .btn2:hover {
+.call-page .main-box .call-box .call-btns .btn2:hover,
+.identity-page .main-box .call-box .call-btns .btn2:hover {
   background-color: #1797F3;
 }
 .seat-que-page {
   display: none;
   height: 100%;
   width: 100%;
-  background: url("../image/ycBg.jpg") no-repeat center center;
+  background: url("../image/ycBg.jpg") no-repeat center center / cover;
 }
 .seat-que-page .main-box {
   width: 9rem;
@@ -708,7 +758,7 @@ select {
   display: none;
   height: 100%;
   width: 100%;
-  background: url("../image/ycBg.jpg") no-repeat center center;
+  background: url("../image/ycBg.jpg") no-repeat center center / cover;
 }
 .user-que-page .main-box {
   height: 5.6rem;
@@ -1388,7 +1438,7 @@ select {
 }
 .meeting-page .main > .right .layer-box .set-box .set-main .layui-form-item {
   position: relative;
-  margin-bottom: 0.14rem;
+  margin-bottom: 0.1rem;
 }
 .meeting-page .main > .right .layer-box .set-box .set-main .layui-form-item .layui-form-label {
   width: 1.2rem;

@@ -111,16 +111,7 @@
             <div class="login-box-form layui-form" lay-filter="loginPageBox">
                 <div class="login-form-item">
                     <label for="loginNickname">昵称：</label>
-                    <input type="text" class="login-input" name="loginName" id="nicknameInput" placeholder="请输入登录昵称" onchange="videoCall.login.onNicknameInput()">
-                </div>
-                <div class="login-form-item login-item-indent layui-form-item">
-                    <label for="loginIdent">身份：</label>
-                    <div class="layui-input-block login-input">
-                        <select lay-filter="loginIdent" name="loginIdentify">
-                            <option value=0>坐席</option>
-                            <option value=1>客户</option>
-                        </select>
-                    </div>
+                    <input type="text" class="login-input" name="loginName" id="nicknameInput" placeholder="请输入昵称" onchange="videoCall.login.onNicknameInput()">
                 </div>
             </div>
             <div class="login-btn cr-btn" id="loginBtn" onclick="videoCall.login.onClickLoginBtn()">登录</div>
@@ -167,7 +158,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">流媒体协议：</label>
                             <div class="layui-input-block msprotocal">
-                                <input type="radio" name="protocol" value="0" title="UDP/TCP" checked>
+                                <input type="radio" name="protocol" value="0" title="自动" checked>
                                 <input type="radio" name="protocol" value="1" title="UDP">
                                 <input type="radio" name="protocol" value="2" title="TCP">
                             </div>
@@ -204,18 +195,33 @@
         <div class="main-box h-pa-center">
             <div class="cr-btn logout-btn" onclick="videoCall.login.onClickLogoutBtn()">注销</div>
             <div class="top-half half">
-                <span class="choose-btn btn1 pa-center" onclick="videoCall.login.onClickShowQuePageBtn()">排队叫号</span>
+                <span class="choose-btn btn1 pa-center" onclick="videoCall.login.onClickQueueBtn()">排队叫号</span>
             </div>
             <div class="bottom-half half">
                 <span class="choose-btn btn2 pa-center" onclick="videoCall.login.onClickDirectCallBtn()">直接呼叫</span>
             </div>
             <div class="call-box pa-center">
-                <div class="call-text fl">请输入对方ID：</div>
-                <div class="call-input fl"><input type="text" id="callUserID"></div>
+                <div class="my-id">我的ID：<span id="myID"></span></div>
+                <div class="call-text fl">请输入对方ID或等待对方呼叫：</div>
+                <div class="call-input fl"><input type="text" id="callUserID" placeholder="输入对方ID"></div>
                 <div class="call-btns fl">
                     <div class="cr-btn btn1 h-pa-center" onclick="videoCall.login.onClickCallBtn()">呼叫</div>
                     <div class="cr-btn btn2 h-pa-center" onclick="$('.call-box').css({'visibility':'hidden','opacity':0})">取消</div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <!-- 身份选择页 -->
+    <div class="identity-page">
+        <div class="main-box h-pa-center">
+            <div class="cr-btn back-btn" onclick="$('.identity-page').hide();$('.call-page').show()"></div>
+            <div class="cr-btn logout-btn" onclick="videoCall.login.onClickLogoutBtn()">注销</div>
+            <div class="title">请选择您的身份</div>
+            <div class="top-half half">
+                <span class="choose-btn btn1 pa-center" onclick="videoCall.login.chooseIdentity('seat')">坐席</span>
+            </div>
+            <div class="bottom-half half">
+                <span class="choose-btn btn2 pa-center" onclick="videoCall.login.chooseIdentity('user')">客户</span>
             </div>
         </div>
     </div>
