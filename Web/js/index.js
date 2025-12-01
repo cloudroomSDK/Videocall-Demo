@@ -53,7 +53,7 @@ if (window.location.href.includes('videoCall')) {
       // 会议中确认关闭页面之后销毁会议（主要是为了结束云端录制）、退出登录
       window.addEventListener('unload', (e) => {
         if (!!videoCall.login.isLogin) {
-          !!videoCall.call.callID && CRVideo_HangupCall(videoCall.call.callID, '正常挂断'); // SDK接口：挂断呼叫
+          !!videoCall.call.callID && CRVideo_HangupCall(videoCall.call.callID); // SDK接口：挂断呼叫
           // win.CRVideo_Logout(); // SDK接口：退出登录
           if (!!videoCall.meetMgr.isMeeting) {
             win.CRVideo_ExitMeeting('refresh'); // SDK接口：退出房间
@@ -1317,14 +1317,15 @@ if (window.location.href.includes('videoCall')) {
       videoCall.meetMgr.meetInfo = CRVideo_MeetInfoObj;
       $('#cancelQueuingBtn').click(); // 取消排队
       console.log(`收到 ${this.callerInfo.userID} 呼叫：${userExtDat}`);
-      if (userExtDat.includes('直接呼叫')) {
+      const callType = JSON.parse(userExtDat).type || '';
+      if (callType.includes('直接呼叫')) {
         // 手动接受呼叫
         videoCall.modalLayer('呼叫', `收到 ${this.callerInfo.userID} 呼叫，是否接通？`, {
           btns: ['接通', '拒绝'],
           btn1Callback: function () {
             console.log('接受呼叫');
             clearInterval(videoCall.que.queuingTimer); // 清除排队定时器
-            win.CRVideo_AcceptCall(that.callID, CRVideo_MeetInfoObj); // SDK接口：接受呼叫
+            that.acceptCallFn(that.callID, CRVideo_MeetInfoObj); // 接受呼叫
           },
           btn2Callback: function () {
             console.log('拒绝呼叫');
@@ -1332,11 +1333,10 @@ if (window.location.href.includes('videoCall')) {
             win.CRVideo_RejectCall(that.callID); // SDK接口：拒绝呼叫
           },
         });
-        
       } else {
         videoCall.tipLayer(`收到坐席呼叫，正在进入房间...`);
         // 自动接受呼叫
-        this.acceptCallFn(that.callID, CRVideo_MeetInfoObj, '拓展数据', 'cookie'); // 接受呼叫
+        this.acceptCallFn(that.callID, CRVideo_MeetInfoObj); // 接受呼叫
       }
     }
     // 被叫自己创建房间成功
@@ -1363,7 +1363,7 @@ if (window.location.href.includes('videoCall')) {
       videoCall.modalLayer('挂断', `是否结束本次通话？`, {
         btns: ['结束', '取消'],
         btn1Callback() {
-          CRVideo_HangupCall(videoCall.call.callID, '正常挂断'); // SDK接口：挂断呼叫
+          CRVideo_HangupCall(videoCall.call.callID); // SDK接口：挂断呼叫
         },
         btn2Callback() {
           return;
@@ -1481,8 +1481,8 @@ if (window.location.href.includes('videoCall')) {
     createMeetSuccessCallback(CRVideo_MeetInfoObj, cookie) {
       console.log(`创建房间成功，开始呼叫... ${JSON.stringify(CRVideo_MeetInfoObj)}`);
       videoCall.tipLayer('创建房间成功，开始呼叫...');
-      const userExDat = cookie.includes('直接呼叫') ? '直接呼叫' : '排队呼叫';
-      videoCall.call.callFn(videoCall.call.beCalledInfo.userID, CRVideo_MeetInfoObj, userExDat, '我是cookie');
+      const userExDat = cookie.includes('直接呼叫') ? { type: '直接呼叫' } : { type: '排队呼叫' };
+      videoCall.call.callFn(videoCall.call.beCalledInfo.userID, CRVideo_MeetInfoObj, JSON.stringify(userExDat), '我是cookie');
     }
     // 房间创建失败的回调
     createMeetFailCallback(sdkErr, cookie) {
@@ -1512,9 +1512,6 @@ if (window.location.href.includes('videoCall')) {
           videoCall.meeting.showMeetingPage(); // 显示客户通话界面
         }
         videoCall.mediaShare.createMediaUIObj(); // 创建影音共享组件
-
-        // 只有默认账号下才展示录像文件管理界面
-        document.querySelector('#recordTab').style.display = videoCall.login.appID == '默认' || videoCall.login.appID == 'demo' ? 'block' : 'none';
       } else {
         this.isMeeting = false;
         console.log(`进入房间失败，errCode:${sdkErr}，cookie:${cookie}`);
@@ -2413,29 +2410,36 @@ if (window.location.href.includes('videoCall')) {
     }
     // 查询录像信息
     getRecordFileInfo(filePathName) {
-      let CompID = 1;
-      let CompSecret = 1;
-
-      if(videoCall.login.appID === '默认') {
-        // 内网25环境
-        if(videoCall.login.server.indexOf('crlab') > -1) {
-          CompID = 213213;
-          CompSecret = '7859f2ee1064f3fac228b1792f8ca48b'
-        } else {
-          // 公有云环境
-          CompID = 213213;
-          CompSecret = '1hm4fn0lop79oyz7kjorzp0szis95uia'
-        }
-      }
-
       // 接口用法请参考SDK开发文档-服务端API
       const url = `https://${videoCall.login.server}/CLOUDMEETING-API/netDisk/query`;
       const data = {
         RequestId: new Date().getTime(),
-        CompID: CompID, // CompID和CompSecret在管理后台右上角【WEB API】获取，每个账号都不一样，请替换为实际值
-        SecretKey: md5(`${CompID}&${CompSecret}`), // SecretKey=MD5(CompID+'&'+CompSecret)
         FileName: filePathName,
       };
+
+      // appID为‘默认’的情况下，要用compID和compSecret鉴权
+      if (videoCall.login.appID === '默认') {
+        // 自建环境CompID和CompSecret默认都是1
+        let CompID = 1;
+        let CompSecret = 1;
+        if (videoCall.login.server.includes('crlab.cloudr')) {
+          // 内网25环境
+          CompID = 213213;
+          CompSecret = '7859f2ee1064f3fac228b1792f8ca48b';
+        } else if (videoCall.login.server.includes('sdk.cloudr')) {
+          // 公有云环境
+          CompID = 213213;
+          CompSecret = '1hm4fn0lop79oyz7kjorzp0szis95uia';
+        }
+        data['CompID'] = CompID;
+        data['SecretKey'] = md5(`${CompID}&${CompSecret}`);
+
+        // appID不为‘默认’的情况下，可以用userName和userPswd鉴权
+      } else {
+        data['UserName'] = videoCall.login.appID;
+        data['UserPswd'] = md5(videoCall.login.appSecret);
+      }
+
       $.ajax({
         url: url,
         data: data,
@@ -2447,14 +2451,15 @@ if (window.location.href.includes('videoCall')) {
               const fileInfo = res.Data.fileList[0];
               console.log(fileInfo.downUrl);
               videoCall.svrMixerMgr.recordFileInfoList.push(fileInfo);
-              $('.list-record ul').append(`
-                            <li>
-                                <div class="name">${videoCall.svrMixerMgr.recordFileInfoList.length}、${fileInfo.fileName}</div>
-                                <div class="play-btns">
-                                <span class="play icon" onclick="videoCall.svrMixerMgr.onClickPlayBtn(this,'play',${fileInfo.id})"></span>
-                                    <span class="stop icon" onclick="videoCall.svrMixerMgr.onClickPlayBtn(this,'stop',${fileInfo.id})"></span>
-                                </div>
-                            </li>`);
+              $('.list-record ul').append(
+                `<li>
+                    <div class="name">${videoCall.svrMixerMgr.recordFileInfoList.length}、${fileInfo.fileName}</div>
+                    <div class="play-btns">
+                    <span class="play icon record-play-btn" onclick="videoCall.svrMixerMgr.onClickPlayBtn(this,'play',${fileInfo.id})"></span>
+                        <span class="stop icon" onclick="videoCall.svrMixerMgr.onClickPlayBtn(this,'stop',${fileInfo.id})"></span>
+                    </div>
+                </li>`
+              );
             }
           }
         },
@@ -2467,8 +2472,11 @@ if (window.location.href.includes('videoCall')) {
     onClickPlayBtn(dom, type, id) {
       if (type === 'play') {
         // 点击的是播放按钮
-        // if ($(dom).hasClass('pause')) return;
-        if ($('.record-play-btn').hasClass('pause')) return; // 已经有录像在播放了，只能先停止，才能播放
+        if ($('.record-play-btn').hasClass('pause')) {
+          // 已经有录像在播放了，只能先停止，才能播放
+          videoCall.tipLayer(`当前正在播放录像回放，请先停止！`);
+          return; 
+        } 
         let url;
         this.recordFileInfoList.forEach((item) => {
           if (item.id === id) {
@@ -2701,7 +2709,7 @@ if (window.location.href.includes('videoCall')) {
     stopMediaShare(isNotify = false) {
       if (this.isMySharing === false) return;
       $('.playpuse-btn').addClass('play').removeClass('play-pause').removeClass('pause');
-      if(!isNotify) win.CRVideo_StopPlayMedia(); // SDK接口：停止影音共享
+      if (!isNotify) win.CRVideo_StopPlayMedia(); // SDK接口：停止影音共享
       this.isPlayingMedia = false;
       this.isMySharing = false;
     }
